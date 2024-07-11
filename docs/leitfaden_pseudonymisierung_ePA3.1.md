@@ -8,9 +8,9 @@ Herausgeber: [gematik GmbH](https://www.gematik.de/)
 
 Allgemeine Fragen und Kommentare zum Leitfaden bitte über das [Anfragenportal](https://service.gematik.de/servicedesk/customer/portal/13/user/login?nokerberos&destination=portal%2F13) einreichen. Falls kein Zugang besteht, senden Sie bitte eine E-Mail an "patientteam [ at ] gematik.de" mit dem Betreff "Anfragenportal Zugang".
 
-# Pseudonymisierung von FHIR-Ressourcen zur Ausleitung an das Forschungsdatenzentrum
+# Pseudonymisierung von FHIR-Ressourcen zur Ausleitung an das Forschungsdatenzentrum Gesundheit
 ## Scope
-Daten der ePA werden pseudonymisiert an das Forschungsdatenzentrum (FDZ) der nationalen Datenzugangs- und Koordinierungsstelle für Gesundheitsdaten am BfArM (Bundesinstitut für Arzneimittel und Medizinprodukte) ausgeleitet.
+Daten der ePA werden pseudonymisiert an das Forschungsdatenzentrum Gesundheit (FDZ) der nationalen Datenzugangs- und Koordinierungsstelle für Gesundheitsdaten am BfArM (Bundesinstitut für Arzneimittel und Medizinprodukte) ausgeleitet.
 
 In diesem Leitfaden wird die ressourcenbasierte Pseudonymisierung von FHIR-Daten beschrieben. 
 
