@@ -53,7 +53,7 @@ Nach erfolgreicher Pseudonymisierung wird in der Ressourcen-Instanz das Security
 
 ## "Privacy Label" Extension
 
-Eine sogenannte Privacy Label Extension ist an einer `ElementDefinition` im Rahmen der `StructureDefinition` des P-Profils angegeben und zeigt durch den entsprechenden Code-Wert an, wie das FHIR-Element für die Pseudonymisierung zu bearbeiten ist. Sie kann über die angegebene url https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension erkannt werden.
+Eine sogenannte Privacy Label Extension ist an einer `ElementDefinition` im Rahmen der `StructureDefinition` des P-Profils angegeben und zeigt durch den entsprechenden Code-Wert an, wie das FHIR-Element für die Pseudonymisierung zu bearbeiten ist. Sie kann über die angegebene canonical url https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension erkannt werden.
 
 Die Regeln der Pseudonymisierung werden über die Werte aus dem ValueSet
 ObligationPolicy spezifiziert: `http://terminology.hl7.org/ValueSet/v3-ObligationPolicy`
