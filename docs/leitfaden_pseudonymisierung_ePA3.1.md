@@ -6,7 +6,6 @@ Veröffentlichung vom 15.07.2024
 
 Herausgeber: [gematik GmbH](https://www.gematik.de/)
 
-**Kontakt**
 Allgemeine Fragen und Kommentare zum Leitfaden bitte über das [Anfragenportal](https://service.gematik.de/servicedesk/customer/portal/13/user/login?nokerberos&destination=portal%2F13) einreichen. Falls kein Zugang besteht, senden Sie bitte eine E-Mail an "patientteam [ at ] gematik.de" mit dem Betreff "Anfragenportal Zugang".
 
 # Pseudonymisierung von FHIR-Ressourcen zur Ausleitung an das Forschungsdatenzentrum
