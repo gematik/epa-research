@@ -44,7 +44,7 @@ Ein P-Profil bildet das Profil der zu pseudonymisierenden FHIR-Ressource mit fol
 - falls benötigt: Änderungen von Kardinalitäten 
 - Ergänzung folgender FHIR-Elemente:
 -- Security Label als Metadatum
--- "Privacy Label" Extension für jedes in der Pseudonymisierung zu bearbeitende FHIR-Element 
+-- Eine Extension für jedes in der Pseudonymisierung zu bearbeitende FHIR-Element. Diese Extension wird hier als "Privacy Label" bezeichnet.
 
 Das Security Label und die Privacy Labels bilden Code-Werte der ValueSets ObligationPolicy bzw. ObservationValue ab.
 
@@ -53,7 +53,7 @@ Nach erfolgreicher Pseudonymisierung wird in der Ressourcen-Instanz das Security
 
 ## "Privacy Label" Extension
 
-Eine privacy label extension wird an einer `ElementDefinition` im Rahmen der `StructureDefinition` des P-Profils angegeben und zeigt durch den entsprechenden Code-Wert an, wie das FHIR-Element für die Pseudonymisierung zu bearbeiten ist.
+Eine sogenannte Privacy Label Extension ist an einer `ElementDefinition` im Rahmen der `StructureDefinition` des P-Profils angegeben und zeigt durch den entsprechenden Code-Wert an, wie das FHIR-Element für die Pseudonymisierung zu bearbeiten ist. Sie kann über die angegebene url https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension erkannt werden.
 
 Die Regeln der Pseudonymisierung werden über die Werte aus dem ValueSet
 ObligationPolicy spezifiziert: `http://terminology.hl7.org/ValueSet/v3-ObligationPolicy`
