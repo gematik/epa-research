@@ -2,7 +2,7 @@
   "resourceType": "StructureDefinition",
   "id": "epa-research-medication-request",
   "url": "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-request",
-  "version": "0.1.0",
+  "version": "1.0.0-rc1",
   "name": "EPAResearchMedicationRequest",
   "status": "draft",
   "fhirVersion": "4.0.1",
@@ -234,6 +234,60 @@
             ]
           }
         ]
+      },
+      {
+        "id": "MedicationRequest.requester",
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+          },
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "REDACT",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
+          }
+        ],
+        "path": "MedicationRequest.requester",
+        "max": "0"
+      },
+      {
+        "id": "MedicationRequest.note",
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+          },
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "REDACT",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
+          }
+        ],
+        "path": "MedicationRequest.note",
+        "max": "0"
       }
     ]
   }

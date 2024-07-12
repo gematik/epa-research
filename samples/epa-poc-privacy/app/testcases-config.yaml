@@ -47,9 +47,6 @@ testCaseList:
       - title: Privacy Rule Sets
         path: input/fsh/PrivacyRulesets.fsh
         language: fsh
-      - title: Profile EPAResearchMedicationStatement
-        path: input/fsh/profiles/EPAResearchMedicationStatement.fsh
-        language: fsh
       - title: Example ePA Medication Statement
         path: input/fsh/examples/ExampleEPAMedicationStatement.fsh
         language: fsh

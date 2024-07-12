@@ -61,12 +61,7 @@
         <tbody>
         
             <tr>
-                <td>MedicationDispense.id</td>
-                <td class="INFO">Pseudonymize</td>
-            </tr>
-        
-            <tr>
-                <td>MedicationDispense.identifier</td>
+                <td>MedicationDispense.subject.reference</td>
                 <td class="INFO">Redact</td>
             </tr>
         
@@ -77,6 +72,21 @@
         
             <tr>
                 <td>MedicationDispense.performer</td>
+                <td class="INFO">Redact</td>
+            </tr>
+        
+            <tr>
+                <td>MedicationDispense.location</td>
+                <td class="INFO">Redact</td>
+            </tr>
+        
+            <tr>
+                <td>MedicationDispense.destination</td>
+                <td class="INFO">Redact</td>
+            </tr>
+        
+            <tr>
+                <td>MedicationDispense.note</td>
                 <td class="INFO">Redact</td>
             </tr>
         
@@ -93,12 +103,7 @@
         <tbody>
         
             <tr>
-                <td>8a6af75b-e86d-4c4a-a0b1-8a7289289def</td>
-                <td>cd6c2892-eef2-4eed-8b82-1b15e8e0fd4f</td>
-            </tr>
-        
-            <tr>
-                <td>1eea11b1-56e9-4ea1-bfe0-ac47203b6cbe</td>
+                <td>036ee0fc-9f8e-478f-8766-436c3dbd016e</td>
                 <td>X123456789</td>
             </tr>
         
@@ -110,7 +115,7 @@
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', () => {
-            const diffString = "--- FHIR.json\n+++ FHIR.json\n@@ -1,84 +1,63 @@\n {\n   \"resourceType\": \"Bundle\",\n   \"id\": \"ExampleEPAMedicationDispenseBundle\",\n   \"type\": \"collection\",\n   \"entry\": [ {\n     \"resource\": {\n       \"resourceType\": \"MedicationDispense\",\n-      \"id\": \"cd6c2892-eef2-4eed-8b82-1b15e8e0fd4f\",\n+      \"id\": \"8a6af75b-e86d-4c4a-a0b1-8a7289289def\",\n       \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense\" ]\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-dispense\" ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense\"\n+        } ]\n       },\n       \"status\": \"completed\",\n       \"medicationReference\": {\n         \"reference\": \"Medication/6b0350b6-f5ab-495b-9aeb-1806170a814f\"\n       },\n       \"subject\": {\n         \"identifier\": {\n-          \"system\": \"http://fhir.de/sid/gkv/kvid-10\",\n-          \"value\": \"X123456789\"\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/job-number-identifier\",\n+          \"value\": \"1eea11b1-56e9-4ea1-bfe0-ac47203b6cbe\"\n         }\n       },\n-      \"performer\": [ {\n-        \"actor\": {\n-          \"reference\": \"Organization/e6b0cd54-a6f2-4b8c-ad68-76c3ae953b3e\"\n-        }\n-      } ],\n       \"whenHandedOver\": \"2025-01-15\"\n     }\n   }, {\n     \"resource\": {\n       \"resourceType\": \"Medication\",\n       \"id\": \"6b0350b6-f5ab-495b-9aeb-1806170a814f\",\n       \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication\" ]\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication\" ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication\"\n+        } ]\n       },\n       \"extension\": [ {\n         \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension\",\n         \"valueIdentifier\": {\n           \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier\",\n           \"value\": \"160.153.303.257.459_20240122\"\n         }\n       } ],\n       \"identifier\": [ {\n         \"system\": \"https://gematik.de/fhir/epa-medication/sid/epa-medication-unique-identifier\",\n         \"value\": \"583DC39E2BFFBFD6C05AE0AC404516309F56729EA44813F9FB881C73EE58EA5D\"\n       }, {\n         \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier\",\n         \"value\": \"6ae6a7ca-c9b5-46bf-9411-2ba49d96f988_160.153.303.257.459\"\n       } ],\n       \"code\": {\n         \"coding\": [ {\n           \"system\": \"http://fhir.de/CodeSystem/ask\",\n           \"code\": \"5682\",\n           \"display\": \"Ibuprofen\"\n         } ]\n       },\n       \"status\": \"active\"\n     }\n-  }, {\n-    \"resource\": {\n-      \"resourceType\": \"Organization\",\n-      \"id\": \"e6b0cd54-a6f2-4b8c-ad68-76c3ae953b3e\",\n-      \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/directory/StructureDefinition/OrganizationDirectory\" ],\n-        \"tag\": [ {\n-          \"system\": \"https://gematik.de/fhir/directory/CodeSystem/Origin\",\n-          \"code\": \"ldap\"\n-        } ]\n-      },\n-      \"identifier\": [ {\n-        \"system\": \"https://gematik.de/fhir/sid/telematik-id\",\n-        \"value\": \"3-21234567890\"\n-      } ],\n-      \"type\": [ {\n-        \"coding\": [ {\n-          \"system\": \"https://gematik.de/fhir/directory/CodeSystem/OrganizationProfessionOID\",\n-          \"code\": \"1.2.276.0.76.4.54\",\n-          \"display\": \"Öffentliche Apotheke\"\n-        } ]\n-      } ],\n-      \"name\": \"Example EPA Pharmacy\"\n-    }\n   } ]\n }";
+            const diffString = "--- FHIR.json\n+++ FHIR.json\n@@ -1,84 +1,63 @@\n {\n   \"resourceType\": \"Bundle\",\n   \"id\": \"ExampleEPAMedicationDispenseBundle\",\n   \"type\": \"collection\",\n   \"entry\": [ {\n     \"resource\": {\n       \"resourceType\": \"MedicationDispense\",\n       \"id\": \"cd6c2892-eef2-4eed-8b82-1b15e8e0fd4f\",\n       \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense\" ]\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-dispense\" ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense\"\n+        } ]\n       },\n       \"status\": \"completed\",\n       \"medicationReference\": {\n         \"reference\": \"Medication/6b0350b6-f5ab-495b-9aeb-1806170a814f\"\n       },\n       \"subject\": {\n         \"identifier\": {\n-          \"system\": \"http://fhir.de/sid/gkv/kvid-10\",\n-          \"value\": \"X123456789\"\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/job-number-identifier\",\n+          \"value\": \"036ee0fc-9f8e-478f-8766-436c3dbd016e\"\n         }\n       },\n-      \"performer\": [ {\n-        \"actor\": {\n-          \"reference\": \"Organization/e6b0cd54-a6f2-4b8c-ad68-76c3ae953b3e\"\n-        }\n-      } ],\n       \"whenHandedOver\": \"2025-01-15\"\n     }\n   }, {\n     \"resource\": {\n       \"resourceType\": \"Medication\",\n       \"id\": \"6b0350b6-f5ab-495b-9aeb-1806170a814f\",\n       \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication\" ]\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication\" ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication\"\n+        } ]\n       },\n       \"extension\": [ {\n         \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension\",\n         \"valueIdentifier\": {\n           \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier\",\n           \"value\": \"160.153.303.257.459_20240122\"\n         }\n       } ],\n       \"identifier\": [ {\n         \"system\": \"https://gematik.de/fhir/epa-medication/sid/epa-medication-unique-identifier\",\n         \"value\": \"583DC39E2BFFBFD6C05AE0AC404516309F56729EA44813F9FB881C73EE58EA5D\"\n       }, {\n         \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier\",\n         \"value\": \"6ae6a7ca-c9b5-46bf-9411-2ba49d96f988_160.153.303.257.459\"\n       } ],\n       \"code\": {\n         \"coding\": [ {\n           \"system\": \"http://fhir.de/CodeSystem/ask\",\n           \"code\": \"5682\",\n           \"display\": \"Ibuprofen\"\n         } ]\n       },\n       \"status\": \"active\"\n     }\n-  }, {\n-    \"resource\": {\n-      \"resourceType\": \"Organization\",\n-      \"id\": \"e6b0cd54-a6f2-4b8c-ad68-76c3ae953b3e\",\n-      \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/directory/StructureDefinition/OrganizationDirectory\" ],\n-        \"tag\": [ {\n-          \"system\": \"https://gematik.de/fhir/directory/CodeSystem/Origin\",\n-          \"code\": \"ldap\"\n-        } ]\n-      },\n-      \"identifier\": [ {\n-        \"system\": \"https://gematik.de/fhir/sid/telematik-id\",\n-        \"value\": \"3-21234567890\"\n-      } ],\n-      \"type\": [ {\n-        \"coding\": [ {\n-          \"system\": \"https://gematik.de/fhir/directory/CodeSystem/OrganizationProfessionOID\",\n-          \"code\": \"1.2.276.0.76.4.54\",\n-          \"display\": \"Öffentliche Apotheke\"\n-        } ]\n-      } ],\n-      \"name\": \"Example EPA Pharmacy\"\n-    }\n   } ]\n }";
             const targetElement = document.getElementById('bundleDiff');
             var configuration = {
                 drawFileList: false,
@@ -182,13 +187,22 @@ Parent: MedicationDispense
 
 * insert MetaSourceProfile
   
-* id
-  * insert PrivacyLabelPseudonymize
-* identifier
-  * insert PrivacyLabelRedact  
+* note 0..0
+  * insert PrivacyLabelRedact
 * subject.identifier
   * insert PrivacyLabelPseudonymize
+* subject.reference 0..0
+  * insert PrivacyLabelRedact
 * performer 0..0
+  * insert PrivacyLabelRedact
+* location 0..0
+  * insert PrivacyLabelRedact
+* destination 0..0
+  * insert PrivacyLabelRedact
+
+// Extensiona
+* extension contains RxPrescriptionProcessIdentifierExtension named rxPrescriptionProcessIdentifier 0..1
+* extension[rxPrescriptionProcessIdentifier].value[x]
 </code></pre>
             </div>
         

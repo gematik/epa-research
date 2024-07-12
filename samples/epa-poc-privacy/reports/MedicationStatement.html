@@ -60,21 +60,6 @@
         </thead>
         <tbody>
         
-            <tr>
-                <td>MedicationStatement.subject.reference</td>
-                <td class="INFO">Redact</td>
-            </tr>
-        
-            <tr>
-                <td>MedicationStatement.subject.identifier</td>
-                <td class="INFO">Pseudonymize</td>
-            </tr>
-        
-            <tr>
-                <td>MedicationStatement.informationSource</td>
-                <td class="INFO">Redact</td>
-            </tr>
-        
         </tbody>
     </table>
     <h3 class="mt-4">Job Numbers (Arbeitsnummer)</h3>
@@ -87,11 +72,6 @@
         </thead>
         <tbody>
         
-            <tr>
-                <td>bc46c330-1264-4994-a847-290cfe6da509</td>
-                <td>X123456789</td>
-            </tr>
-        
         </tbody>
     </table>
 
@@ -100,7 +80,7 @@
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', () => {
-            const diffString = "--- FHIR.json\n+++ FHIR.json\n@@ -1,85 +1,86 @@\n {\n   \"resourceType\": \"Bundle\",\n   \"id\": \"ExampleEPAMedicationStatementBundle\",\n   \"type\": \"collection\",\n   \"entry\": [ {\n     \"resource\": {\n       \"resourceType\": \"MedicationStatement\",\n       \"id\": \"0b152eb2-6d0a-48e9-839b-5ee3023f2ad4\",\n       \"meta\": {\n         \"versionId\": \"1\",\n         \"lastUpdated\": \"2025-07-22T14:43:33.244Z\",\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-statement\" ]\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-statement\" ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-statement\"\n+        } ]\n       },\n       \"status\": \"active\",\n       \"medicationReference\": {\n         \"reference\": \"ExampleEpaMedication1\"\n       },\n       \"subject\": {\n         \"identifier\": {\n-          \"system\": \"http://fhir.de/sid/gkv/kvid-10\",\n-          \"value\": \"X123456789\"\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/job-number-identifier\",\n+          \"value\": \"bc46c330-1264-4994-a847-290cfe6da509\"\n         }\n       },\n       \"effectivePeriod\": {\n         \"start\": \"2025-07-22\"\n       },\n       \"dateAsserted\": \"2025-07-22\",\n-      \"informationSource\": {\n-        \"reference\": \"Practitioner/ed1e019f-d50f-4c89-ace9-b54c588662c1\"\n-      },\n       \"note\": [ {\n         \"text\": \"Unbedingt eine halbe Stunde vor dem Frühstück einnehmen, Herr Mustermann!\"\n       } ],\n       \"dosage\": [ {\n         \"timing\": {\n           \"repeat\": {\n             \"boundsDuration\": {\n               \"value\": 7,\n               \"unit\": \"Week\",\n               \"system\": \"http://unitsofmeasure.org\",\n               \"code\": \"wk\"\n             },\n             \"frequency\": 1,\n             \"period\": 1,\n             \"periodUnit\": \"d\",\n             \"when\": [ \"NIGHT\" ]\n           }\n         },\n         \"asNeededBoolean\": false,\n         \"doseAndRate\": [ {\n           \"doseQuantity\": {\n             \"value\": 1,\n             \"unit\": \"Stück\",\n             \"system\": \"https://fhir.kbv.de/ValueSet/KBV_CS_SFHIR_BMP_DOSIEREINHEIT\",\n             \"code\": \"1\"\n           }\n         } ]\n       }, {\n         \"timing\": {\n           \"repeat\": {\n             \"boundsDuration\": {\n               \"value\": 7,\n               \"unit\": \"Week\",\n               \"system\": \"http://unitsofmeasure.org\",\n               \"code\": \"wk\"\n             },\n             \"frequency\": 1,\n             \"period\": 1,\n             \"periodUnit\": \"d\",\n             \"when\": [ \"MORN\" ]\n           }\n         },\n         \"asNeededBoolean\": false,\n         \"doseAndRate\": [ {\n           \"doseQuantity\": {\n             \"value\": 2,\n             \"unit\": \"Stück\",\n             \"system\": \"https://fhir.kbv.de/ValueSet/KBV_CS_SFHIR_BMP_DOSIEREINHEIT\",\n             \"code\": \"1\"\n           }\n         } ]\n       } ]\n     }\n   } ]\n }";
+            const diffString = "";
             const targetElement = document.getElementById('bundleDiff');
             var configuration = {
                 drawFileList: false,
@@ -164,7 +144,42 @@
         <div class="col-xl-6">
             <h4>Validation after filter</h4>
             
-                <p class="text-success">Bundle is valid</p>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Severity</th>
+                        <th>Location</th>
+                        <th>Message</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    
+                        <tr>
+                            <td class="ERROR">ERROR</td>
+                            <td>MedicationStatement.dosage[0].timing.repeat.when[0]</td>
+                            <td>Slicing cannot be evaluated: Problem evaluating slicing expression for element in profile https://gematik.de/fhir/epa-medication/StructureDefinition/epa-dosage path MedicationStatement.dosage[0].timing.repeat.when[0] (fhirPath = true and ($this memberOf 'https://gematik.de/fhir/epa-medication/ValueSet/epa-event-timing-vs')): HAPI-0663: </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="ERROR">ERROR</td>
+                            <td>MedicationStatement.dosage[0].timing.repeat.when[0]</td>
+                            <td>Slicing cannot be evaluated: Problem evaluating slicing expression for element in profile https://gematik.de/fhir/epa-medication/StructureDefinition/epa-dosage path MedicationStatement.dosage[0].timing.repeat.when[0] (fhirPath = true and ($this memberOf 'https://gematik.de/fhir/epa-medication/ValueSet/epa-timing-event-vs')): HAPI-0663: </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="ERROR">ERROR</td>
+                            <td>MedicationStatement.dosage[1].timing.repeat.when[0]</td>
+                            <td>Slicing cannot be evaluated: Problem evaluating slicing expression for element in profile https://gematik.de/fhir/epa-medication/StructureDefinition/epa-dosage path MedicationStatement.dosage[1].timing.repeat.when[0] (fhirPath = true and ($this memberOf 'https://gematik.de/fhir/epa-medication/ValueSet/epa-event-timing-vs')): HAPI-0663: </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="ERROR">ERROR</td>
+                            <td>MedicationStatement.dosage[1].timing.repeat.when[0]</td>
+                            <td>Slicing cannot be evaluated: Problem evaluating slicing expression for element in profile https://gematik.de/fhir/epa-medication/StructureDefinition/epa-dosage path MedicationStatement.dosage[1].timing.repeat.when[0] (fhirPath = true and ($this memberOf 'https://gematik.de/fhir/epa-medication/ValueSet/epa-timing-event-vs')): HAPI-0663: </td>
+                        </tr>
+                    
+                    </tbody>
+                </table>
             
 
         </div>
@@ -197,20 +212,6 @@ RuleSet: PrivacyLabelAnonymizeString(dummyValue)
 RuleSet: PrivacyLabelRedact
 * ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#REDACT
 </code></pre>
-            </div>
-        
-            <h3>Profile EPAResearchMedicationStatement</h3>
-            <div>
-                <pre><code class="language-vbnet">Profile: EPAResearchMedicationStatement
-Id: epa-research-medication-statement
-Parent: MedicationStatement
-
-* insert MetaSourceProfile
-
-* subject.identifier only EPAResearchJobNumberIdentifier
-  * insert PrivacyLabelPseudonymize
-* subject.reference 0..0
-* informationSource 0..0</code></pre>
             </div>
         
             <h3>Example ePA Medication Statement</h3>
