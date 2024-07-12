@@ -1,0 +1,69 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "PrivacyLabelExtension",
+  "url": "https://gematik.de/fhir/privacy/StructureDefinition/PrivacyLabelExtension",
+  "name": "PrivacyLabelExtension",
+  "status": "draft",
+  "fhirVersion": "4.0.1",
+  "kind": "complex-type",
+  "abstract": false,
+  "context": [
+    {
+      "expression": "ElementDefinition",
+      "type": "element"
+    }
+  ],
+  "type": "Extension",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Extension",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Extension.extension",
+        "path": "Extension.extension",
+        "min": 1
+      },
+      {
+        "id": "Extension.extension:obligationPolicy",
+        "path": "Extension.extension",
+        "sliceName": "obligationPolicy",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "Extension.extension:obligationPolicy.extension",
+        "path": "Extension.extension.extension",
+        "max": "0"
+      },
+      {
+        "id": "Extension.extension:obligationPolicy.url",
+        "path": "Extension.extension.url",
+        "fixedUri": "obligationPolicy"
+      },
+      {
+        "id": "Extension.extension:obligationPolicy.value[x]",
+        "path": "Extension.extension.value[x]",
+        "type": [
+          {
+            "code": "Coding"
+          }
+        ],
+        "binding": {
+          "strength": "required",
+          "valueSet": "http://terminology.hl7.org/ValueSet/v3-ObligationPolicy"
+        }
+      },
+      {
+        "id": "Extension.url",
+        "path": "Extension.url",
+        "fixedUri": "https://gematik.de/fhir/privacy/StructureDefinition/PrivacyLabelExtension"
+      },
+      {
+        "id": "Extension.value[x]",
+        "path": "Extension.value[x]",
+        "max": "0"
+      }
+    ]
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "epa-research-medication",
+  "url": "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication",
+  "version": "0.1.0",
+  "name": "EPAResearchMedication",
+  "status": "draft",
+  "fhirVersion": "4.0.1",
+  "kind": "resource",
+  "abstract": false,
+  "type": "Medication",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Medication",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Medication.extension:rxPrescriptionProcessIdentifier",
+        "path": "Medication.extension",
+        "sliceName": "rxPrescriptionProcessIdentifier",
+        "min": 0,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Medication.extension:isVaccine",
+        "path": "Medication.extension",
+        "sliceName": "isVaccine",
+        "min": 0,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "https://gematik.de/fhir/epa-medication/StructureDefinition/medication-id-vaccine-extension"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Medication.extension:isVaccine.value[x]",
+        "path": "Medication.extension.value[x]",
+        "mustSupport": true
+      },
+      {
+        "id": "Medication.extension:drugCategory",
+        "path": "Medication.extension",
+        "sliceName": "drugCategory",
+        "min": 0,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "https://gematik.de/fhir/epa-medication/StructureDefinition/drug-category-extension"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Medication.extension:drugCategory.value[x]",
+        "path": "Medication.extension.value[x]",
+        "mustSupport": true
+      },
+      {
+        "id": "Medication.extension:drugCategory.value[x].system",
+        "path": "Medication.extension.value[x].system",
+        "mustSupport": true
+      },
+      {
+        "id": "Medication.extension:drugCategory.value[x].code",
+        "path": "Medication.extension.value[x].code",
+        "mustSupport": true
+      },
+      {
+        "id": "Medication.extension:normSizeCode",
+        "path": "Medication.extension",
+        "sliceName": "normSizeCode",
+        "short": "Package size according to N-designation",
+        "definition": "Description of the therapy-appropriate package size (e.g., N1)",
+        "min": 0,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "http://fhir.de/StructureDefinition/normgroesse"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Medication.extension:normSizeCode.value[x]",
+        "path": "Medication.extension.value[x]",
+        "mustSupport": true
+      },
+      {
+        "id": "Medication.extension:packaging",
+        "path": "Medication.extension",
+        "sliceName": "packaging",
+        "min": 0,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "https://gematik.de/fhir/epa-medication/StructureDefinition/medication-formulation-packaging-extension"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Medication.extension:packaging.value[x]",
+        "path": "Medication.extension.value[x]",
+        "mustSupport": true
+      },
+      {
+        "id": "Medication.extension:manufacturingInstructions",
+        "path": "Medication.extension",
+        "sliceName": "manufacturingInstructions",
+        "min": 0,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "https://gematik.de/fhir/epa-medication/StructureDefinition/medication-manufacturing-instructions-extension"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Medication.extension:manufacturingInstructions.value[x]",
+        "path": "Medication.extension.value[x]",
+        "mustSupport": true
+      },
+      {
+        "id": "Medication.extension:type",
+        "path": "Medication.extension",
+        "sliceName": "type",
+        "min": 0,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-type-extension"
+            ]
+          }
+        ],
+        "mustSupport": true
+      }
+    ]
+  }
+}

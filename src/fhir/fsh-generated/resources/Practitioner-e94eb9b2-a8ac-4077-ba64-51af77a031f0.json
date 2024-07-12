@@ -1,0 +1,60 @@
+{
+  "resourceType": "Practitioner",
+  "id": "e94eb9b2-a8ac-4077-ba64-51af77a031f0",
+  "meta": {
+    "tag": [
+      {
+        "system": "https://gematik.de/fhir/directory/CodeSystem/Origin",
+        "code": "ldap"
+      }
+    ],
+    "profile": [
+      "https://gematik.de/fhir/directory/StructureDefinition/PractitionerDirectory"
+    ]
+  },
+  "identifier": [
+    {
+      "system": "https://gematik.de/fhir/sid/telematik-id",
+      "value": "1-1012345678"
+    },
+    {
+      "system": "https://fhir.kbv.de/NamingSystem/KBV_NS_Base_ANR",
+      "value": "123456789"
+    }
+  ],
+  "name": [
+    {
+      "prefix": [
+        "Dr."
+      ],
+      "given": [
+        "Max",
+        "Manfred"
+      ],
+      "family": "Musterman",
+      "text": "Dr. Max Manfred Mustermann"
+    }
+  ],
+  "qualification": [
+    {
+      "code": {
+        "coding": [
+          {
+            "code": "010",
+            "system": "urn:oid:1.2.276.0.76.5.114"
+          }
+        ]
+      }
+    },
+    {
+      "code": {
+        "coding": [
+          {
+            "code": "1.2.276.0.76.4.30",
+            "system": "https://gematik.de/fhir/directory/CodeSystem/PractitionerProfessionOID"
+          }
+        ]
+      }
+    }
+  ]
+}

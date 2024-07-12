@@ -1,0 +1,240 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "epa-research-medication-request",
+  "url": "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-request",
+  "version": "0.1.0",
+  "name": "EPAResearchMedicationRequest",
+  "status": "draft",
+  "fhirVersion": "4.0.1",
+  "kind": "resource",
+  "abstract": false,
+  "type": "MedicationRequest",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "MedicationRequest.meta.tag",
+        "path": "MedicationRequest.meta.tag",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "value",
+              "path": "system"
+            }
+          ],
+          "rules": "open"
+        },
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.meta.tag:TagSourceProfile",
+        "path": "MedicationRequest.meta.tag",
+        "sliceName": "TagSourceProfile",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.meta.tag:TagSourceProfile.system",
+        "path": "MedicationRequest.meta.tag.system",
+        "min": 1,
+        "patternUri": "https://gematik.de/fhir/epa-research/sid/source-profile"
+      },
+      {
+        "id": "MedicationRequest.extension:medicationRequestLinkedStatement",
+        "path": "MedicationRequest.extension",
+        "sliceName": "medicationRequestLinkedStatement",
+        "min": 0,
+        "max": "*",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "https://gematik.de/fhir/epa-medication/StructureDefinition/medication-request-linked-statement-extension"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription",
+        "path": "MedicationRequest.extension",
+        "sliceName": "multiplePrescription",
+        "min": 0,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "https://gematik.de/fhir/epa-medication/StructureDefinition/multiple-prescription-extension"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription.extension:indicator",
+        "path": "MedicationRequest.extension.extension",
+        "sliceName": "indicator"
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription.extension:indicator.value[x]",
+        "path": "MedicationRequest.extension.extension.value[x]",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription.extension:counter",
+        "path": "MedicationRequest.extension.extension",
+        "sliceName": "counter"
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription.extension:counter.value[x]",
+        "path": "MedicationRequest.extension.extension.value[x]",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription.extension:counter.value[x].numerator",
+        "path": "MedicationRequest.extension.extension.value[x].numerator",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription.extension:counter.value[x].numerator.value",
+        "path": "MedicationRequest.extension.extension.value[x].numerator.value",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription.extension:counter.value[x].denominator",
+        "path": "MedicationRequest.extension.extension.value[x].denominator",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription.extension:counter.value[x].denominator.value",
+        "path": "MedicationRequest.extension.extension.value[x].denominator.value",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription.extension:period",
+        "path": "MedicationRequest.extension.extension",
+        "sliceName": "period"
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription.extension:period.value[x]",
+        "path": "MedicationRequest.extension.extension.value[x]",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription.extension:period.value[x].start",
+        "path": "MedicationRequest.extension.extension.value[x].start",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription.extension:period.value[x].end",
+        "path": "MedicationRequest.extension.extension.value[x].end",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription.extension:id",
+        "path": "MedicationRequest.extension.extension",
+        "sliceName": "id"
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription.extension:id.value[x]",
+        "path": "MedicationRequest.extension.extension.value[x]",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription.extension:id.value[x].system",
+        "path": "MedicationRequest.extension.extension.value[x].system",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.extension:multiplePrescription.extension:id.value[x].value",
+        "path": "MedicationRequest.extension.extension.value[x].value",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.extension:isBvg",
+        "path": "MedicationRequest.extension",
+        "sliceName": "isBvg",
+        "min": 0,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "https://gematik.de/fhir/epa-medication/StructureDefinition/indicator-bvg-extension"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.extension:isBvg.value[x]",
+        "path": "MedicationRequest.extension.value[x]",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.subject.reference",
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+          },
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "REDACT",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
+          }
+        ],
+        "path": "MedicationRequest.subject.reference",
+        "max": "0"
+      },
+      {
+        "id": "MedicationRequest.subject.identifier",
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+          },
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "PSEUD",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
+          }
+        ],
+        "path": "MedicationRequest.subject.identifier",
+        "type": [
+          {
+            "code": "Identifier",
+            "profile": [
+              "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-job-number-identifier"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

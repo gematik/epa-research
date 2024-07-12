@@ -1,0 +1,41 @@
+{
+  "resourceType": "Patient",
+  "id": "ExampleConfidentialPatient1",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/epa-poc-privacy/StructureDefinition/ConfidentialPatient"
+    ]
+  },
+  "identifier": [
+    {
+      "system": "http://fhir.de/sid/gkv/kvid-10",
+      "value": "X123456789"
+    }
+  ],
+  "name": [
+    {
+      "given": [
+        "Daffy"
+      ],
+      "family": "Duck"
+    }
+  ],
+  "contact": [
+    {
+      "name": {
+        "given": [
+          "Daffy"
+        ],
+        "family": "Duck"
+      },
+      "address": {
+        "line": [
+          "123 Main St"
+        ],
+        "city": "Acmetropolis",
+        "state": "CA",
+        "postalCode": "90210"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+.ERROR {
+    color: rgb(var(--bs-danger-rgb)) !important;
+}
+
+.INFO {
+    color: rgb(var(--bs-success-rgb)) !important;
+}
+
+.WARNING {
+    color: rgb(var(--bs-warning-rgb)) !important;
+}
+
+pre {
+    overflow-x: scroll;
+}

@@ -1,0 +1,358 @@
+
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Test case</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/diff2html/bundles/js/diff2html-ui.min.js"></script>
+    
+    <link rel="stylesheet" href="reports.css">
+
+</head>
+<body>
+
+<div class="container my-5 centered-container">
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">gematik</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Privacy test cases
+                    </a>
+                    <ul class="dropdown-menu">
+                        
+                        <li><a class="dropdown-item" href="index.html">Privacy filter PoC: Medication Request</a></li>
+                        
+                        <li><a class="dropdown-item" href="MedicationDispense.html">Privacy filter PoC: Medication Dispense</a></li>
+                        
+                        <li><a class="dropdown-item" href="MedicationStatement.html">Privacy filter PoC: Medication Statement</a></li>
+                        
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<h2 class="mt-4 mb-4">Privacy filter PoC: Medication Statement</h2>
+
+    <h3 class="mt-4">Filtered values</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Path</th>
+            <th>Privacy Filter</th>
+        </tr>
+        </thead>
+        <tbody>
+        
+            <tr>
+                <td>MedicationStatement.subject.reference</td>
+                <td class="INFO">Redact</td>
+            </tr>
+        
+            <tr>
+                <td>MedicationStatement.subject.identifier</td>
+                <td class="INFO">Pseudonymize</td>
+            </tr>
+        
+            <tr>
+                <td>MedicationStatement.informationSource</td>
+                <td class="INFO">Redact</td>
+            </tr>
+        
+        </tbody>
+    </table>
+    <h3 class="mt-4">Job Numbers (Arbeitsnummer)</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Job Number</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        
+            <tr>
+                <td>bc46c330-1264-4994-a847-290cfe6da509</td>
+                <td>X123456789</td>
+            </tr>
+        
+        </tbody>
+    </table>
+
+    <div id="bundleDiff" class="mt-4">
+    </div>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            const diffString = "--- FHIR.json\n+++ FHIR.json\n@@ -1,85 +1,86 @@\n {\n   \"resourceType\": \"Bundle\",\n   \"id\": \"ExampleEPAMedicationStatementBundle\",\n   \"type\": \"collection\",\n   \"entry\": [ {\n     \"resource\": {\n       \"resourceType\": \"MedicationStatement\",\n       \"id\": \"0b152eb2-6d0a-48e9-839b-5ee3023f2ad4\",\n       \"meta\": {\n         \"versionId\": \"1\",\n         \"lastUpdated\": \"2025-07-22T14:43:33.244Z\",\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-statement\" ]\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-statement\" ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-statement\"\n+        } ]\n       },\n       \"status\": \"active\",\n       \"medicationReference\": {\n         \"reference\": \"ExampleEpaMedication1\"\n       },\n       \"subject\": {\n         \"identifier\": {\n-          \"system\": \"http://fhir.de/sid/gkv/kvid-10\",\n-          \"value\": \"X123456789\"\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/job-number-identifier\",\n+          \"value\": \"bc46c330-1264-4994-a847-290cfe6da509\"\n         }\n       },\n       \"effectivePeriod\": {\n         \"start\": \"2025-07-22\"\n       },\n       \"dateAsserted\": \"2025-07-22\",\n-      \"informationSource\": {\n-        \"reference\": \"Practitioner/ed1e019f-d50f-4c89-ace9-b54c588662c1\"\n-      },\n       \"note\": [ {\n         \"text\": \"Unbedingt eine halbe Stunde vor dem Frühstück einnehmen, Herr Mustermann!\"\n       } ],\n       \"dosage\": [ {\n         \"timing\": {\n           \"repeat\": {\n             \"boundsDuration\": {\n               \"value\": 7,\n               \"unit\": \"Week\",\n               \"system\": \"http://unitsofmeasure.org\",\n               \"code\": \"wk\"\n             },\n             \"frequency\": 1,\n             \"period\": 1,\n             \"periodUnit\": \"d\",\n             \"when\": [ \"NIGHT\" ]\n           }\n         },\n         \"asNeededBoolean\": false,\n         \"doseAndRate\": [ {\n           \"doseQuantity\": {\n             \"value\": 1,\n             \"unit\": \"Stück\",\n             \"system\": \"https://fhir.kbv.de/ValueSet/KBV_CS_SFHIR_BMP_DOSIEREINHEIT\",\n             \"code\": \"1\"\n           }\n         } ]\n       }, {\n         \"timing\": {\n           \"repeat\": {\n             \"boundsDuration\": {\n               \"value\": 7,\n               \"unit\": \"Week\",\n               \"system\": \"http://unitsofmeasure.org\",\n               \"code\": \"wk\"\n             },\n             \"frequency\": 1,\n             \"period\": 1,\n             \"periodUnit\": \"d\",\n             \"when\": [ \"MORN\" ]\n           }\n         },\n         \"asNeededBoolean\": false,\n         \"doseAndRate\": [ {\n           \"doseQuantity\": {\n             \"value\": 2,\n             \"unit\": \"Stück\",\n             \"system\": \"https://fhir.kbv.de/ValueSet/KBV_CS_SFHIR_BMP_DOSIEREINHEIT\",\n             \"code\": \"1\"\n           }\n         } ]\n       } ]\n     }\n   } ]\n }";
+            const targetElement = document.getElementById('bundleDiff');
+            var configuration = {
+                drawFileList: false,
+                fileListToggle: false,
+                fileListStartVisible: false,
+                fileContentToggle: false,
+                matching: 'lines',
+                outputFormat: 'side-by-side',
+                synchronisedScroll: true,
+                highlight: true,
+                colorScheme: 'dark',
+                renderNothingWhenEmpty: false,
+              };
+            const diff2htmlUi = new Diff2HtmlUI(targetElement, diffString, configuration);
+            diff2htmlUi.draw();
+            diff2htmlUi.highlightCode();
+        });
+    </script>
+    <div class="row">
+        <div class="col-xl-6">
+            <h4>Validation before filter</h4>
+            
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Severity</th>
+                        <th>Location</th>
+                        <th>Message</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    
+                        <tr>
+                            <td class="ERROR">ERROR</td>
+                            <td>MedicationStatement.dosage[0].timing.repeat.when[0]</td>
+                            <td>Slicing cannot be evaluated: Problem evaluating slicing expression for element in profile https://gematik.de/fhir/epa-medication/StructureDefinition/epa-dosage path MedicationStatement.dosage[0].timing.repeat.when[0] (fhirPath = true and ($this memberOf 'https://gematik.de/fhir/epa-medication/ValueSet/epa-event-timing-vs')): HAPI-0663: </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="ERROR">ERROR</td>
+                            <td>MedicationStatement.dosage[0].timing.repeat.when[0]</td>
+                            <td>Slicing cannot be evaluated: Problem evaluating slicing expression for element in profile https://gematik.de/fhir/epa-medication/StructureDefinition/epa-dosage path MedicationStatement.dosage[0].timing.repeat.when[0] (fhirPath = true and ($this memberOf 'https://gematik.de/fhir/epa-medication/ValueSet/epa-timing-event-vs')): HAPI-0663: </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="ERROR">ERROR</td>
+                            <td>MedicationStatement.dosage[1].timing.repeat.when[0]</td>
+                            <td>Slicing cannot be evaluated: Problem evaluating slicing expression for element in profile https://gematik.de/fhir/epa-medication/StructureDefinition/epa-dosage path MedicationStatement.dosage[1].timing.repeat.when[0] (fhirPath = true and ($this memberOf 'https://gematik.de/fhir/epa-medication/ValueSet/epa-event-timing-vs')): HAPI-0663: </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="ERROR">ERROR</td>
+                            <td>MedicationStatement.dosage[1].timing.repeat.when[0]</td>
+                            <td>Slicing cannot be evaluated: Problem evaluating slicing expression for element in profile https://gematik.de/fhir/epa-medication/StructureDefinition/epa-dosage path MedicationStatement.dosage[1].timing.repeat.when[0] (fhirPath = true and ($this memberOf 'https://gematik.de/fhir/epa-medication/ValueSet/epa-timing-event-vs')): HAPI-0663: </td>
+                        </tr>
+                    
+                    </tbody>
+                </table>
+            
+        </div>
+        <div class="col-xl-6">
+            <h4>Validation after filter</h4>
+            
+                <p class="text-success">Bundle is valid</p>
+            
+
+        </div>
+
+        <h2 class="mt-4 mb-4">Sources</h2>
+        
+            <h3>Privacy Label Extension</h3>
+            <div>
+                <pre><code class="language-vbnet">Extension: PrivacyLabelExtension
+Id: privacy-label-extension
+Context: ElementDefinition
+
+* extension contains
+    obligationPolicy 1..1 MS and
+    dummyValue 0..1 MS
+* extension[obligationPolicy].value[x] only Coding
+* extension[obligationPolicy].value[x] from $vs-v3-ObligationPolicy
+</code></pre>
+            </div>
+        
+            <h3>Privacy Rule Sets</h3>
+            <div>
+                <pre><code class="language-vbnet">RuleSet: PrivacyLabelPseudonymize
+* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#PSEUD
+
+RuleSet: PrivacyLabelAnonymizeString(dummyValue)
+* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#ANONY
+* ^extension[PrivacyLabelExtension].extension[dummyValue].valueString = {dummyValue}
+
+RuleSet: PrivacyLabelRedact
+* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#REDACT
+</code></pre>
+            </div>
+        
+            <h3>Profile EPAResearchMedicationStatement</h3>
+            <div>
+                <pre><code class="language-vbnet">Profile: EPAResearchMedicationStatement
+Id: epa-research-medication-statement
+Parent: MedicationStatement
+
+* insert MetaSourceProfile
+
+* subject.identifier only EPAResearchJobNumberIdentifier
+  * insert PrivacyLabelPseudonymize
+* subject.reference 0..0
+* informationSource 0..0</code></pre>
+            </div>
+        
+            <h3>Example ePA Medication Statement</h3>
+            <div>
+                <pre><code class="language-vbnet">Instance: ExampleEPAMedicationStatement
+InstanceOf: EPAMedicationStatement
+Usage: #example
+* meta
+  * versionId = "1"
+  * lastUpdated = "2025-07-22T14:43:33.244Z"
+
+* id = "0b152eb2-6d0a-48e9-839b-5ee3023f2ad4"
+
+* status = #active
+* medicationReference = Reference(ExampleEpaMedication1)
+* subject.identifier.value = "X123456789"
+* effectivePeriod.start = "2025-07-22"
+* dateAsserted = "2025-07-22"
+* informationSource = Reference(Practitioner/ed1e019f-d50f-4c89-ace9-b54c588662c1)
+* dosage[+].timing.repeat.frequency = 1
+* dosage[=].timing.repeat.period = 1.0
+* dosage[=].timing.repeat.periodUnit = #d
+* dosage[=].timing.repeat.when = #NIGHT
+* dosage[=].timing.repeat.boundsDuration = 7.0 $cs-ucum#wk "Week"
+* dosage[=].asNeededBoolean = false
+* dosage[=].doseAndRate.doseQuantity = 1 $cs-kbv-sfhir-bmp-dosiereinheit#1 "Stück"
+* dosage[+].timing.repeat.frequency = 1
+* dosage[=].timing.repeat.period = 1.0
+* dosage[=].timing.repeat.periodUnit = #d
+* dosage[=].timing.repeat.when = #MORN
+* dosage[=].timing.repeat.boundsDuration = 7.0 $cs-ucum#wk "Week"
+* dosage[=].asNeededBoolean = false
+* dosage[=].doseAndRate.doseQuantity = 2 $cs-kbv-sfhir-bmp-dosiereinheit#1 "Stück"
+* note[+].text = "Unbedingt eine halbe Stunde vor dem Frühstück einnehmen, Herr Mustermann!"
+
+
+Instance: ExampleEPAMedicationStatementBundle
+InstanceOf: Bundle
+Usage: #example
+
+* type = #collection
+* entry[+].resource = ExampleEPAMedicationStatement
+</code></pre>
+            </div>
+        
+
+        <h3 class="mt-4 mb-4">ePA Resources</h3>
+        <pre><code class="language-json">{
+  "resourceType": "Bundle",
+  "id": "ExampleEPAMedicationStatementBundle",
+  "type": "collection",
+  "entry": [ {
+    "resource": {
+      "resourceType": "MedicationStatement",
+      "id": "0b152eb2-6d0a-48e9-839b-5ee3023f2ad4",
+      "meta": {
+        "versionId": "1",
+        "lastUpdated": "2025-07-22T14:43:33.244Z",
+        "profile": [ "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-statement" ]
+      },
+      "status": "active",
+      "medicationReference": {
+        "reference": "ExampleEpaMedication1"
+      },
+      "subject": {
+        "identifier": {
+          "system": "http://fhir.de/sid/gkv/kvid-10",
+          "value": "X123456789"
+        }
+      },
+      "effectivePeriod": {
+        "start": "2025-07-22"
+      },
+      "dateAsserted": "2025-07-22",
+      "informationSource": {
+        "reference": "Practitioner/ed1e019f-d50f-4c89-ace9-b54c588662c1"
+      },
+      "note": [ {
+        "text": "Unbedingt eine halbe Stunde vor dem Frühstück einnehmen, Herr Mustermann!"
+      } ],
+      "dosage": [ {
+        "timing": {
+          "repeat": {
+            "boundsDuration": {
+              "value": 7,
+              "unit": "Week",
+              "system": "http://unitsofmeasure.org",
+              "code": "wk"
+            },
+            "frequency": 1,
+            "period": 1,
+            "periodUnit": "d",
+            "when": [ "NIGHT" ]
+          }
+        },
+        "asNeededBoolean": false,
+        "doseAndRate": [ {
+          "doseQuantity": {
+            "value": 1,
+            "unit": "Stück",
+            "system": "https://fhir.kbv.de/ValueSet/KBV_CS_SFHIR_BMP_DOSIEREINHEIT",
+            "code": "1"
+          }
+        } ]
+      }, {
+        "timing": {
+          "repeat": {
+            "boundsDuration": {
+              "value": 7,
+              "unit": "Week",
+              "system": "http://unitsofmeasure.org",
+              "code": "wk"
+            },
+            "frequency": 1,
+            "period": 1,
+            "periodUnit": "d",
+            "when": [ "MORN" ]
+          }
+        },
+        "asNeededBoolean": false,
+        "doseAndRate": [ {
+          "doseQuantity": {
+            "value": 2,
+            "unit": "Stück",
+            "system": "https://fhir.kbv.de/ValueSet/KBV_CS_SFHIR_BMP_DOSIEREINHEIT",
+            "code": "1"
+          }
+        } ]
+      } ]
+    }
+  } ]
+}</code></pre>
+
+    </div>
+
+    
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>hljs.highlightAll();</script>
+
+</body>
+</html>

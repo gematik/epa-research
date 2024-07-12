@@ -1,0 +1,23 @@
+{
+  "resourceType": "PractitionerRole",
+  "id": "115aceb7-d4a9-4843-aa6a-96a6999a803c",
+  "meta": {
+    "tag": [
+      {
+        "system": "https://gematik.de/fhir/directory/CodeSystem/Origin",
+        "code": "ldap"
+      }
+    ],
+    "profile": [
+      "https://gematik.de/fhir/directory/StructureDefinition/PractitionerRoleDirectory"
+    ]
+  },
+  "practitioner": {
+    "reference": "Practitioner/e94eb9b2-a8ac-4077-ba64-51af77a031f0"
+  },
+  "location": [
+    {
+      "reference": "Location/5541eeb9-4b4f-4f0c-bdd3-53dc0280898b"
+    }
+  ]
+}

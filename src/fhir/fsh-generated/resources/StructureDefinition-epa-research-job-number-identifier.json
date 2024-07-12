@@ -1,0 +1,30 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "epa-research-job-number-identifier",
+  "url": "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-job-number-identifier",
+  "version": "0.1.0",
+  "name": "EPAResearchJobNumberIdentifier",
+  "status": "draft",
+  "fhirVersion": "4.0.1",
+  "kind": "complex-type",
+  "abstract": false,
+  "type": "Identifier",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Identifier",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Identifier.system",
+        "path": "Identifier.system",
+        "min": 1,
+        "patternUri": "https://gematik.de/fhir/epa-research/sid/job-number-identifier",
+        "mustSupport": true
+      },
+      {
+        "id": "Identifier.value",
+        "path": "Identifier.value",
+        "min": 1
+      }
+    ]
+  }
+}

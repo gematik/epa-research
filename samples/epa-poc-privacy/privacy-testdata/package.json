@@ -1,0 +1,12 @@
+{
+  "name": "de.gematik.epa.poc.privacy",
+  "version": "0.1.0",
+  "author": "gematik",
+  "fhirVersions": [
+    "4.0.1"
+  ],
+  "dependencies": {
+    "hl7.fhir.r4.core": "4.0.1",
+    "de.basisprofil.r4": "1.4.0"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "resourceType": "MedicationDispense",
+  "id": "cd6c2892-eef2-4eed-8b82-1b15e8e0fd4f",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense"
+    ]
+  },
+  "subject": {
+    "identifier": {
+      "system": "http://fhir.de/sid/gkv/kvid-10",
+      "value": "X123456789"
+    }
+  },
+  "status": "completed",
+  "performer": [
+    {
+      "actor": {
+        "reference": "Organization/e6b0cd54-a6f2-4b8c-ad68-76c3ae953b3e"
+      }
+    }
+  ],
+  "medicationReference": {
+    "reference": "Medication/6b0350b6-f5ab-495b-9aeb-1806170a814f"
+  },
+  "whenHandedOver": "2025-01-15"
+}

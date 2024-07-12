@@ -1,0 +1,88 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "epa-research-medication-dispense",
+  "url": "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-dispense",
+  "version": "0.1.0",
+  "name": "EPAResearchMedicationDispense",
+  "status": "draft",
+  "fhirVersion": "4.0.1",
+  "kind": "resource",
+  "abstract": false,
+  "type": "MedicationDispense",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/MedicationDispense",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "MedicationDispense.meta.tag",
+        "path": "MedicationDispense.meta.tag",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "value",
+              "path": "system"
+            }
+          ],
+          "rules": "open"
+        },
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationDispense.meta.tag:TagSourceProfile",
+        "path": "MedicationDispense.meta.tag",
+        "sliceName": "TagSourceProfile",
+        "min": 1,
+        "max": "1",
+        "mustSupport": true
+      },
+      {
+        "id": "MedicationDispense.meta.tag:TagSourceProfile.system",
+        "path": "MedicationDispense.meta.tag.system",
+        "min": 1,
+        "patternUri": "https://gematik.de/fhir/epa-research/sid/source-profile"
+      },
+      {
+        "id": "MedicationDispense.extension:rxPrescriptionProcessIdentifier",
+        "path": "MedicationDispense.extension",
+        "sliceName": "rxPrescriptionProcessIdentifier",
+        "min": 0,
+        "max": "1",
+        "type": [
+          {
+            "code": "Extension",
+            "profile": [
+              "https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "MedicationDispense.subject.identifier",
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+          },
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "PSEUD",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
+          }
+        ],
+        "path": "MedicationDispense.subject.identifier"
+      }
+    ]
+  }
+}

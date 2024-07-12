@@ -1,0 +1,56 @@
+testCaseList:
+  - id: index
+    title: "Privacy filter PoC: Medication Request"
+    sushiProjectPath: ../../../src/fhir
+    bundlePath: fsh-generated/resources/Bundle-ExampleEPAMedicationRequestBundle.json
+    sources:
+      - title: Privacy Label Extension
+        path: input/fsh/extensions/PrivacyLabelExtension.fsh
+        language: fsh
+      - title: Privacy Rule Sets
+        path: input/fsh/PrivacyRulesets.fsh
+        language: fsh
+      - title: Profile EPAResearchMedicationRequest
+        path: input/fsh/profiles/EPAResearchMedicationRequest.fsh
+        language: fsh
+      - title: Example EPAMedicationRequest
+        path: input/fsh/examples/ExampleEPAMedicationRequest.fsh
+        language: fsh
+      - title: Example EPAPractioner
+        path: input/fsh/examples/ExampleEPAPractitioner.fsh
+        language: fsh
+  - id: MedicationDispense
+    title: "Privacy filter PoC: Medication Dispense"
+    sushiProjectPath: ../../../src/fhir
+    bundlePath: fsh-generated/resources/Bundle-ExampleEPAMedicationDispenseBundle.json
+    sources:
+      - title: Privacy Label Extension
+        path: input/fsh/extensions/PrivacyLabelExtension.fsh
+        language: fsh
+      - title: Privacy Rule Sets
+        path: input/fsh/PrivacyRulesets.fsh
+        language: fsh
+      - title: Profile EPAResearchMedicationDispense
+        path: input/fsh/profiles/EPAResearchMedicationDispense.fsh
+        language: fsh
+      - title: Example EPAMedicationDispense
+        path: input/fsh/examples/ExampleEPAMedicationDispense.fsh
+        language: fsh
+  - id: MedicationStatement
+    title: "Privacy filter PoC: Medication Statement"
+    sushiProjectPath: ../../../src/fhir
+    bundlePath: fsh-generated/resources/Bundle-ExampleEPAMedicationStatementBundle.json
+    sources:
+      - title: Privacy Label Extension
+        path: input/fsh/extensions/PrivacyLabelExtension.fsh
+        language: fsh
+      - title: Privacy Rule Sets
+        path: input/fsh/PrivacyRulesets.fsh
+        language: fsh
+      - title: Profile EPAResearchMedicationStatement
+        path: input/fsh/profiles/EPAResearchMedicationStatement.fsh
+        language: fsh
+      - title: Example ePA Medication Statement
+        path: input/fsh/examples/ExampleEPAMedicationStatement.fsh
+        language: fsh
+

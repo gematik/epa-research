@@ -1,0 +1,403 @@
+
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Test case</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/diff2html/bundles/js/diff2html-ui.min.js"></script>
+    
+    <link rel="stylesheet" href="reports.css">
+
+</head>
+<body>
+
+<div class="container my-5 centered-container">
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">gematik</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Privacy test cases
+                    </a>
+                    <ul class="dropdown-menu">
+                        
+                        <li><a class="dropdown-item" href="index.html">Privacy filter PoC: Medication Request</a></li>
+                        
+                        <li><a class="dropdown-item" href="MedicationDispense.html">Privacy filter PoC: Medication Dispense</a></li>
+                        
+                        <li><a class="dropdown-item" href="MedicationStatement.html">Privacy filter PoC: Medication Statement</a></li>
+                        
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<h2 class="mt-4 mb-4">Privacy filter PoC: Medication Request</h2>
+
+    <h3 class="mt-4">Filtered values</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Path</th>
+            <th>Privacy Filter</th>
+        </tr>
+        </thead>
+        <tbody>
+        
+            <tr>
+                <td>MedicationRequest.subject.reference</td>
+                <td class="INFO">Redact</td>
+            </tr>
+        
+            <tr>
+                <td>MedicationRequest.subject.identifier</td>
+                <td class="INFO">Pseudonymize</td>
+            </tr>
+        
+            <tr>
+                <td>MedicationRequest.requester</td>
+                <td class="INFO">Redact</td>
+            </tr>
+        
+        </tbody>
+    </table>
+    <h3 class="mt-4">Job Numbers (Arbeitsnummer)</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Job Number</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        
+            <tr>
+                <td>b5dbde8b-98c7-4860-b9b3-2998bc25498f</td>
+                <td>X123456789</td>
+            </tr>
+        
+        </tbody>
+    </table>
+
+    <div id="bundleDiff" class="mt-4">
+    </div>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            const diffString = "--- FHIR.json\n+++ FHIR.json\n@@ -1,124 +1,71 @@\n {\n   \"resourceType\": \"Bundle\",\n   \"id\": \"ExampleEPAMedicationRequestBundle\",\n   \"type\": \"collection\",\n   \"entry\": [ {\n     \"resource\": {\n       \"resourceType\": \"MedicationRequest\",\n       \"id\": \"bf1b08e5-5cfe-4ec0-b6b3-580d4bdc7975\",\n       \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-request\" ]\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-request\" ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-request\"\n+        } ]\n       },\n       \"status\": \"active\",\n       \"intent\": \"plan\",\n       \"medicationReference\": {\n         \"reference\": \"Medication/50438bb0-34cd-4e48-a311-af6357f38681\"\n       },\n       \"subject\": {\n         \"identifier\": {\n-          \"system\": \"http://fhir.de/sid/gkv/kvid-10\",\n-          \"value\": \"X123456789\"\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/job-number-identifier\",\n+          \"value\": \"b5dbde8b-98c7-4860-b9b3-2998bc25498f\"\n         }\n       },\n       \"authoredOn\": \"2024-07-01\",\n-      \"requester\": {\n-        \"reference\": \"PractitionerRole/115aceb7-d4a9-4843-aa6a-96a6999a803c\"\n-      },\n       \"dispenseRequest\": {\n         \"quantity\": {\n           \"value\": 3,\n           \"system\": \"http://unitsofmeasure.org\",\n           \"code\": \"{Package}\"\n         }\n       }\n     }\n   }, {\n     \"resource\": {\n       \"resourceType\": \"Medication\",\n       \"id\": \"50438bb0-34cd-4e48-a311-af6357f38681\",\n       \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication\" ]\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication\" ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication\"\n+        } ]\n       },\n       \"extension\": [ {\n         \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension\",\n         \"valueIdentifier\": {\n           \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier\",\n           \"value\": \"160.153.303.257.459_20240122\"\n         }\n       } ],\n       \"identifier\": [ {\n         \"system\": \"https://gematik.de/fhir/epa-medication/sid/epa-medication-unique-identifier\",\n         \"value\": \"583DC39E2BFFBFD6C05AE0AC404516309F56729EA44813F9FB881C73EE58EA5D\"\n       }, {\n         \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier\",\n         \"value\": \"6ae6a7ca-c9b5-46bf-9411-2ba49d96f988_160.153.303.257.459\"\n       } ],\n       \"code\": {\n         \"coding\": [ {\n           \"system\": \"http://fhir.de/CodeSystem/ask\",\n           \"code\": \"5682\",\n           \"display\": \"Ibuprofen\"\n         } ]\n       },\n       \"status\": \"active\"\n     }\n-  }, {\n-    \"resource\": {\n-      \"resourceType\": \"PractitionerRole\",\n-      \"id\": \"115aceb7-d4a9-4843-aa6a-96a6999a803c\",\n-      \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/directory/StructureDefinition/PractitionerRoleDirectory\" ],\n-        \"tag\": [ {\n-          \"system\": \"https://gematik.de/fhir/directory/CodeSystem/Origin\",\n-          \"code\": \"ldap\"\n-        } ]\n-      },\n-      \"practitioner\": {\n-        \"reference\": \"Practitioner/e94eb9b2-a8ac-4077-ba64-51af77a031f0\"\n-      },\n-      \"location\": [ {\n-        \"reference\": \"Location/5541eeb9-4b4f-4f0c-bdd3-53dc0280898b\"\n-      } ]\n-    }\n-  }, {\n-    \"resource\": {\n-      \"resourceType\": \"Practitioner\",\n-      \"id\": \"e94eb9b2-a8ac-4077-ba64-51af77a031f0\",\n-      \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/directory/StructureDefinition/PractitionerDirectory\" ],\n-        \"tag\": [ {\n-          \"system\": \"https://gematik.de/fhir/directory/CodeSystem/Origin\",\n-          \"code\": \"ldap\"\n-        } ]\n-      },\n-      \"identifier\": [ {\n-        \"system\": \"https://gematik.de/fhir/sid/telematik-id\",\n-        \"value\": \"1-1012345678\"\n-      }, {\n-        \"system\": \"https://fhir.kbv.de/NamingSystem/KBV_NS_Base_ANR\",\n-        \"value\": \"123456789\"\n-      } ],\n-      \"name\": [ {\n-        \"text\": \"Dr. Max Manfred Mustermann\",\n-        \"family\": \"Musterman\",\n-        \"given\": [ \"Max\", \"Manfred\" ],\n-        \"prefix\": [ \"Dr.\" ]\n-      } ],\n-      \"qualification\": [ {\n-        \"code\": {\n-          \"coding\": [ {\n-            \"system\": \"urn:oid:1.2.276.0.76.5.114\",\n-            \"code\": \"010\"\n-          } ]\n-        }\n-      }, {\n-        \"code\": {\n-          \"coding\": [ {\n-            \"system\": \"https://gematik.de/fhir/directory/CodeSystem/PractitionerProfessionOID\",\n-            \"code\": \"1.2.276.0.76.4.30\"\n-          } ]\n-        }\n-      } ]\n-    }\n   } ]\n }";
+            const targetElement = document.getElementById('bundleDiff');
+            var configuration = {
+                drawFileList: false,
+                fileListToggle: false,
+                fileListStartVisible: false,
+                fileContentToggle: false,
+                matching: 'lines',
+                outputFormat: 'side-by-side',
+                synchronisedScroll: true,
+                highlight: true,
+                colorScheme: 'dark',
+                renderNothingWhenEmpty: false,
+              };
+            const diff2htmlUi = new Diff2HtmlUI(targetElement, diffString, configuration);
+            diff2htmlUi.draw();
+            diff2htmlUi.highlightCode();
+        });
+    </script>
+    <div class="row">
+        <div class="col-xl-6">
+            <h4>Validation before filter</h4>
+            
+                <p class="text-success">Bundle is valid</p>
+            
+        </div>
+        <div class="col-xl-6">
+            <h4>Validation after filter</h4>
+            
+                <p class="text-success">Bundle is valid</p>
+            
+
+        </div>
+
+        <h2 class="mt-4 mb-4">Sources</h2>
+        
+            <h3>Privacy Label Extension</h3>
+            <div>
+                <pre><code class="language-vbnet">Extension: PrivacyLabelExtension
+Id: privacy-label-extension
+Context: ElementDefinition
+
+* extension contains
+    obligationPolicy 1..1 MS and
+    dummyValue 0..1 MS
+* extension[obligationPolicy].value[x] only Coding
+* extension[obligationPolicy].value[x] from $vs-v3-ObligationPolicy
+</code></pre>
+            </div>
+        
+            <h3>Privacy Rule Sets</h3>
+            <div>
+                <pre><code class="language-vbnet">RuleSet: PrivacyLabelPseudonymize
+* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#PSEUD
+
+RuleSet: PrivacyLabelAnonymizeString(dummyValue)
+* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#ANONY
+* ^extension[PrivacyLabelExtension].extension[dummyValue].valueString = {dummyValue}
+
+RuleSet: PrivacyLabelRedact
+* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#REDACT
+</code></pre>
+            </div>
+        
+            <h3>Profile EPAResearchMedicationRequest</h3>
+            <div>
+                <pre><code class="language-vbnet">Profile: EPAResearchMedicationRequest
+Id: epa-research-medication-request
+Parent: MedicationRequest
+
+* insert MetaSourceProfile
+
+* subject.identifier only EPAResearchJobNumberIdentifier
+  * insert PrivacyLabelPseudonymize
+* subject.reference 0..0
+* requester 0..0
+</code></pre>
+            </div>
+        
+            <h3>Example EPAMedicationRequest</h3>
+            <div>
+                <pre><code class="language-vbnet">Instance: ExampleEPAMedicationRequestMedication
+InstanceOf: EPAMedication
+Usage: #example
+* id = "50438bb0-34cd-4e48-a311-af6357f38681"
+* extension[rxPrescriptionProcessIdentifier].valueIdentifier.value = "160.153.303.257.459_20240122"
+* identifier[EPAMedicationUniqueIdentifier].value = "583DC39E2BFFBFD6C05AE0AC404516309F56729EA44813F9FB881C73EE58EA5D"
+* identifier[RxOriginatorProcessIdentifier].value = "6ae6a7ca-c9b5-46bf-9411-2ba49d96f988_160.153.303.257.459"
+* status = #active
+* code.coding
+  * system = $cs-ask
+  * code = #5682
+  * display = "Ibuprofen"
+
+Instance: ExampleEPAMedicationRequest
+InstanceOf: EPAMedicationRequest
+Usage: #example
+
+* id = "bf1b08e5-5cfe-4ec0-b6b3-580d4bdc7975"
+* status = medicationrequest-status#active
+* intent = http://hl7.org/fhir/CodeSystem/medicationrequest-intent#plan
+* medicationReference = Reference(ExampleEPAMedicationRequestMedication)
+* subject.identifier.value = "X123456789"
+* authoredOn = 2024-07-01
+* dispenseRequest.quantity.value = 3
+* requester = Reference(ExampleEPAPractitionerRole)
+
+Instance: ExampleEPAMedicationRequestBundle
+InstanceOf: Bundle
+Usage: #example
+
+* type = #collection
+* entry[+].resource = ExampleEPAMedicationRequest
+* entry[+].resource = ExampleEPAMedicationRequestMedication
+* entry[+].resource = ExampleEPAPractitionerRole
+* entry[+].resource = ExampleEPAPractitioner
+</code></pre>
+            </div>
+        
+            <h3>Example EPAPractioner</h3>
+            <div>
+                <pre><code class="language-vbnet">Instance: ExampleEPAPractitioner
+InstanceOf: PractitionerDirectory
+
+* meta.tag[Origin] = Origin#ldap
+* id = "e94eb9b2-a8ac-4077-ba64-51af77a031f0"
+* identifier[TelematikID].value = "1-1012345678"
+* identifier[LANR].value = "123456789"
+* name
+  * prefix = "Dr."
+  * given[+] = "Max"
+  * given[+] = "Manfred"
+  * family = "Musterman"
+  * text = "Dr. Max Manfred Mustermann"
+* qualification[+].code = urn:oid:1.2.276.0.76.5.114#010
+* qualification[+].code = PractitionerProfessionOID#1.2.276.0.76.4.30
+
+
+Instance: ExampleEPAPractitionerLocation
+InstanceOf: LocationDirectory
+
+* id = "5541eeb9-4b4f-4f0c-bdd3-53dc0280898b"
+* meta.tag[Origin] = Origin#ldap
+* address
+  * use = #work
+  * type = #both
+  * text = "Raiffeisenstr. 42&amp;#13;&amp;#10;10123 Berlin&amp;#13;&amp;#10;Berlin&amp;#13;&amp;#10;DE"
+  * line[+] = "Raiffeisenstr. 42"
+  * city = "Berlin"
+  * state = Region#Berlin
+  * postalCode = "10123"
+  * country = "DE"
+
+Instance: ExampleEPAPractitionerRole
+InstanceOf: PractitionerRoleDirectory
+
+* id = "115aceb7-d4a9-4843-aa6a-96a6999a803c"
+* meta.tag[Origin] = Origin#ldap
+* practitioner = Reference(ExampleEPAPractitioner)
+* location[+] = Reference(ExampleEPAPractitionerLocation)</code></pre>
+            </div>
+        
+
+        <h3 class="mt-4 mb-4">ePA Resources</h3>
+        <pre><code class="language-json">{
+  "resourceType": "Bundle",
+  "id": "ExampleEPAMedicationRequestBundle",
+  "type": "collection",
+  "entry": [ {
+    "resource": {
+      "resourceType": "MedicationRequest",
+      "id": "bf1b08e5-5cfe-4ec0-b6b3-580d4bdc7975",
+      "meta": {
+        "profile": [ "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-request" ]
+      },
+      "status": "active",
+      "intent": "plan",
+      "medicationReference": {
+        "reference": "Medication/50438bb0-34cd-4e48-a311-af6357f38681"
+      },
+      "subject": {
+        "identifier": {
+          "system": "http://fhir.de/sid/gkv/kvid-10",
+          "value": "X123456789"
+        }
+      },
+      "authoredOn": "2024-07-01",
+      "requester": {
+        "reference": "PractitionerRole/115aceb7-d4a9-4843-aa6a-96a6999a803c"
+      },
+      "dispenseRequest": {
+        "quantity": {
+          "value": 3,
+          "system": "http://unitsofmeasure.org",
+          "code": "{Package}"
+        }
+      }
+    }
+  }, {
+    "resource": {
+      "resourceType": "Medication",
+      "id": "50438bb0-34cd-4e48-a311-af6357f38681",
+      "meta": {
+        "profile": [ "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication" ]
+      },
+      "extension": [ {
+        "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension",
+        "valueIdentifier": {
+          "system": "https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier",
+          "value": "160.153.303.257.459_20240122"
+        }
+      } ],
+      "identifier": [ {
+        "system": "https://gematik.de/fhir/epa-medication/sid/epa-medication-unique-identifier",
+        "value": "583DC39E2BFFBFD6C05AE0AC404516309F56729EA44813F9FB881C73EE58EA5D"
+      }, {
+        "system": "https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier",
+        "value": "6ae6a7ca-c9b5-46bf-9411-2ba49d96f988_160.153.303.257.459"
+      } ],
+      "code": {
+        "coding": [ {
+          "system": "http://fhir.de/CodeSystem/ask",
+          "code": "5682",
+          "display": "Ibuprofen"
+        } ]
+      },
+      "status": "active"
+    }
+  }, {
+    "resource": {
+      "resourceType": "PractitionerRole",
+      "id": "115aceb7-d4a9-4843-aa6a-96a6999a803c",
+      "meta": {
+        "profile": [ "https://gematik.de/fhir/directory/StructureDefinition/PractitionerRoleDirectory" ],
+        "tag": [ {
+          "system": "https://gematik.de/fhir/directory/CodeSystem/Origin",
+          "code": "ldap"
+        } ]
+      },
+      "practitioner": {
+        "reference": "Practitioner/e94eb9b2-a8ac-4077-ba64-51af77a031f0"
+      },
+      "location": [ {
+        "reference": "Location/5541eeb9-4b4f-4f0c-bdd3-53dc0280898b"
+      } ]
+    }
+  }, {
+    "resource": {
+      "resourceType": "Practitioner",
+      "id": "e94eb9b2-a8ac-4077-ba64-51af77a031f0",
+      "meta": {
+        "profile": [ "https://gematik.de/fhir/directory/StructureDefinition/PractitionerDirectory" ],
+        "tag": [ {
+          "system": "https://gematik.de/fhir/directory/CodeSystem/Origin",
+          "code": "ldap"
+        } ]
+      },
+      "identifier": [ {
+        "system": "https://gematik.de/fhir/sid/telematik-id",
+        "value": "1-1012345678"
+      }, {
+        "system": "https://fhir.kbv.de/NamingSystem/KBV_NS_Base_ANR",
+        "value": "123456789"
+      } ],
+      "name": [ {
+        "text": "Dr. Max Manfred Mustermann",
+        "family": "Musterman",
+        "given": [ "Max", "Manfred" ],
+        "prefix": [ "Dr." ]
+      } ],
+      "qualification": [ {
+        "code": {
+          "coding": [ {
+            "system": "urn:oid:1.2.276.0.76.5.114",
+            "code": "010"
+          } ]
+        }
+      }, {
+        "code": {
+          "coding": [ {
+            "system": "https://gematik.de/fhir/directory/CodeSystem/PractitionerProfessionOID",
+            "code": "1.2.276.0.76.4.30"
+          } ]
+        }
+      } ]
+    }
+  } ]
+}</code></pre>
+
+    </div>
+
+    
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>hljs.highlightAll();</script>
+
+</body>
+</html>

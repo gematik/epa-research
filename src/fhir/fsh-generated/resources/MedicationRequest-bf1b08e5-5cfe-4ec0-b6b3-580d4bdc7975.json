@@ -1,0 +1,31 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "bf1b08e5-5cfe-4ec0-b6b3-580d4bdc7975",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-request"
+    ]
+  },
+  "subject": {
+    "identifier": {
+      "system": "http://fhir.de/sid/gkv/kvid-10",
+      "value": "X123456789"
+    }
+  },
+  "dispenseRequest": {
+    "quantity": {
+      "system": "http://unitsofmeasure.org",
+      "code": "{Package}",
+      "value": 3
+    }
+  },
+  "status": "active",
+  "intent": "plan",
+  "medicationReference": {
+    "reference": "Medication/50438bb0-34cd-4e48-a311-af6357f38681"
+  },
+  "authoredOn": "2024-07-01",
+  "requester": {
+    "reference": "PractitionerRole/115aceb7-d4a9-4843-aa6a-96a6999a803c"
+  }
+}

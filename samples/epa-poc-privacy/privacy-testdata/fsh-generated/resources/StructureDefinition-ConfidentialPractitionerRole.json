@@ -1,0 +1,61 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ConfidentialPractitionerRole",
+  "url": "https://gematik.de/fhir/epa-poc-privacy/StructureDefinition/ConfidentialPractitionerRole",
+  "name": "ConfidentialPractitionerRole",
+  "status": "draft",
+  "fhirVersion": "4.0.1",
+  "kind": "resource",
+  "abstract": false,
+  "type": "PractitionerRole",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/PractitionerRole",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "PractitionerRole.id",
+        "extension": [
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "PSEUD",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/privacy/StructureDefinition/PrivacyLabelExtension"
+          }
+        ],
+        "path": "PractitionerRole.id"
+      },
+      {
+        "id": "PractitionerRole.identifier",
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+          },
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "PSEUD",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/privacy/StructureDefinition/PrivacyLabelExtension"
+          }
+        ],
+        "path": "PractitionerRole.identifier"
+      }
+    ]
+  }
+}

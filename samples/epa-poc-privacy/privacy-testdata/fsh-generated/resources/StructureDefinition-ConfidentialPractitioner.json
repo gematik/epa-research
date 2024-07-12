@@ -1,0 +1,87 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ConfidentialPractitioner",
+  "url": "https://gematik.de/fhir/epa-poc-privacy/StructureDefinition/ConfidentialPractitioner",
+  "name": "ConfidentialPractitioner",
+  "status": "draft",
+  "fhirVersion": "4.0.1",
+  "kind": "resource",
+  "abstract": false,
+  "type": "Practitioner",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Practitioner",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Practitioner.id",
+        "extension": [
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "PSEUD",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/privacy/StructureDefinition/PrivacyLabelExtension"
+          }
+        ],
+        "path": "Practitioner.id"
+      },
+      {
+        "id": "Practitioner.identifier",
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+          },
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "PSEUD",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/privacy/StructureDefinition/PrivacyLabelExtension"
+          }
+        ],
+        "path": "Practitioner.identifier"
+      },
+      {
+        "id": "Practitioner.name",
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+          },
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "REDACT",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/privacy/StructureDefinition/PrivacyLabelExtension"
+          }
+        ],
+        "path": "Practitioner.name"
+      }
+    ]
+  }
+}

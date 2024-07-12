@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8" />
+        <title>{{ guide-title }}</title>
+
+        <!-- <link rel="icon" href="{{content}}/styles/common/favicon.ico" /> -->
+        <link rel="icon" href="{{content}}/{{style-folder}}/favicon.ico?v={{version}}" />
+        <script src="{{content}}/styles/common/jquery/jquery.min.js"></script>
+        <script src="{{content}}/styles/common/bootstrap/bootstrap.min.js"></script>
+
+        <link rel="stylesheet" href="{{content}}/styles/common/main.min.css" />
+        <link rel="stylesheet" href="{{content}}/styles/common/bootstrap/bootstrap.min.css" />
+        <link rel="stylesheet" href="{{content}}/styles/common/rendering/rendering.min.css" />
+
+        <script src="{{content}}/styles/common/rendering/stu3TreeTable.min.js"></script>
+        <script src="{{content}}/styles/common/rendering/baseTreetable.min.js"></script>
+
+        <link rel="stylesheet" href="{{content}}/{{style-folder}}/style.css?v={{version}}" />
+        <style>
+            .gem-headline-box {
+                background: url('{{content}}/{{style-folder}}/images/ePA_Headline.png?v={{version}}') no-repeat;
+                background-position: 90% -170px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="ig-viewer">
+            <div class="ig-view-content">
+                <div id="ig-view-twolevelmenu">
+                    <!-- Header -->
+
+                    <header class="header scroll">
+                        <nav class="navbar navbar-default">
+                            <div class="container">
+                                <div class="row">
+                                    <a href="#">
+                                        <img class="gem-logo" src="{{content}}/{{style-folder}}/images/Gematik_Logo_Flag.png?v={{version}}" alt="gematik GmbH">
+                                    </a>
+                                    {{ dropdown-navigation, show-title:no }}
+                                </div>
+                            </div>
+                        </nav>
+                    </header>
+
+                    <div class="content container-fluid gem-headline-box">
+                        <div class="row">
+                            <div class="col-lg-10 col-md-12">
+                                <div id="ig-headline">
+                                    <div class="ig-headline-title">
+                                        Implementation Guide<br>ePA Research Data
+                                    </div>
+                                    <div class="ig-headline-subtitle">
+                                        Version {{version}}<br>
+                                    </div>
+                                </div>
+                            </div>
+
+                            </div-->
+                        </div>
+                    </div>
+                    <!-- Content -->
+                    {{breadcrumbs}}
+                    <div class="content container gem-content" role="main" aria-label="Main content">
+                        {{page-with-children}}
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Footer -->
+
+            <div class="ig-view-footer" role="contentinfo" aria-label="Footer">
+                <div class="container">
+                    <div class="row">
+                        <p>gematik GmbH</p>
+                        <div>
+                            <!-- HL7® and FHIR® are the registered trademarks of Health Level Seven International -->
+                            HL7® und FHIR® sind eingetragene Marken von Health Level Seven International
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </body>
+
+</html>

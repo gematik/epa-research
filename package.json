@@ -1,0 +1,13 @@
+{
+    "name": "de.gematik.epa.research",
+    "version": "1.0.0",
+    "author": "gematik",
+    "fhirVersions": [
+      "4.0.1"
+    ],
+    "dependencies": {
+      "de.gematik.epa.medication": "1.0.2-rc1",
+      "de.basisprofil.r4": "1.5.0-ballot2",
+      "de.gematik.fhir.directory": "0.11.7"
+    }
+  }

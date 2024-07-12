@@ -1,0 +1,119 @@
+{
+  "resourceType": "Bundle",
+  "id": "ExampleConfidentialMedicationRequest1Bundle",
+  "type": "collection",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "id": "ExampleConfidentialMedicationRequest1",
+        "meta": {
+          "profile": [
+            "https://gematik.de/fhir/epa-poc-privacy/StructureDefinition/ConfidentialMedicationRequest"
+          ]
+        },
+        "status": "active",
+        "intent": "plan",
+        "medicationReference": {
+          "reference": "ExampleEpaMedication1"
+        },
+        "subject": {
+          "identifier": {
+            "value": "X123456789"
+          }
+        },
+        "authoredOn": "2024-05-04",
+        "dispenseRequest": {
+          "quantity": {
+            "value": 3
+          }
+        },
+        "requester": {
+          "reference": "PractitionerRole/ExampleConfidentialMedicationRequest1Requester"
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "ExampleConfidentialPatient1",
+        "meta": {
+          "profile": [
+            "https://gematik.de/fhir/epa-poc-privacy/StructureDefinition/ConfidentialPatient"
+          ]
+        },
+        "identifier": [
+          {
+            "system": "http://fhir.de/sid/gkv/kvid-10",
+            "value": "X123456789"
+          }
+        ],
+        "name": [
+          {
+            "given": [
+              "Daffy"
+            ],
+            "family": "Duck"
+          }
+        ],
+        "contact": [
+          {
+            "name": {
+              "given": [
+                "Daffy"
+              ],
+              "family": "Duck"
+            },
+            "address": {
+              "line": [
+                "123 Main St"
+              ],
+              "city": "Acmetropolis",
+              "state": "CA",
+              "postalCode": "90210"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "PractitionerRole",
+        "id": "ExampleConfidentialMedicationRequest1Requester",
+        "meta": {
+          "profile": [
+            "https://gematik.de/fhir/epa-poc-privacy/StructureDefinition/ConfidentialPractitionerRole"
+          ]
+        },
+        "practitioner": {
+          "reference": "Practitioner/ExampleConfidentialMedicationRequest1Practitioner"
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "ExampleConfidentialMedicationRequest1Practitioner",
+        "meta": {
+          "profile": [
+            "https://gematik.de/fhir/epa-poc-privacy/StructureDefinition/ConfidentialPractitioner"
+          ]
+        },
+        "identifier": [
+          {
+            "system": "https://gematik.de/fhir/sid/telematik-id",
+            "value": "1-10123456789"
+          }
+        ],
+        "name": [
+          {
+            "family": "Mustermann",
+            "given": [
+              "Max"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

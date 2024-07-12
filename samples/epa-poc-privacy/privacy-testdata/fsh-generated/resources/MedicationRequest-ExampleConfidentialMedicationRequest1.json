@@ -1,0 +1,28 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "ExampleConfidentialMedicationRequest1",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/epa-poc-privacy/StructureDefinition/ConfidentialMedicationRequest"
+    ]
+  },
+  "status": "active",
+  "intent": "plan",
+  "medicationReference": {
+    "reference": "ExampleEpaMedication1"
+  },
+  "subject": {
+    "identifier": {
+      "value": "X123456789"
+    }
+  },
+  "authoredOn": "2024-05-04",
+  "dispenseRequest": {
+    "quantity": {
+      "value": 3
+    }
+  },
+  "requester": {
+    "reference": "PractitionerRole/ExampleConfidentialMedicationRequest1Requester"
+  }
+}

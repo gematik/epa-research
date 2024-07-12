@@ -1,0 +1,23 @@
+{
+  "resourceType": "Practitioner",
+  "id": "ExampleConfidentialMedicationRequest1Practitioner",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/epa-poc-privacy/StructureDefinition/ConfidentialPractitioner"
+    ]
+  },
+  "identifier": [
+    {
+      "system": "https://gematik.de/fhir/sid/telematik-id",
+      "value": "1-10123456789"
+    }
+  ],
+  "name": [
+    {
+      "family": "Mustermann",
+      "given": [
+        "Max"
+      ]
+    }
+  ]
+}

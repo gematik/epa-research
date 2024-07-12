@@ -1,0 +1,224 @@
+@import de.gematik.epa.poc.privacy.TestCaseResult
+@import de.gematik.epa.poc.privacy.Config
+
+@param config: Config
+@param testCase: TestCaseResult
+
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Test case</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Highlight.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <!-- Diff2Html -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/diff2html/bundles/js/diff2html-ui.min.js"></script>
+    <!-- Custom -->
+    <link rel="stylesheet" href="reports.css">
+
+</head>
+<body>
+
+<div class="container my-5 centered-container">
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">gematik</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Privacy test cases
+                    </a>
+                    <ul class="dropdown-menu">
+                        @for (testCaseConfig in config.testCaseList)
+                        <li><a class="dropdown-item" href="${testCaseConfig.id}.html">${testCaseConfig.title}</a></li>
+                        @endfor
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<h2 class="mt-4 mb-4">${testCase.testCaseConfig.title}</h2>
+
+    <h3 class="mt-4">Filtered values</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Path</th>
+            <th>Privacy Filter</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for(message in testCase.filterLog)
+            <tr>
+                <td>${message.path}</td>
+                <td class="${message.severity}">${message.message}</td>
+            </tr>
+        @endfor
+        </tbody>
+    </table>
+    <h3 class="mt-4">Job Numbers (Arbeitsnummer)</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Job Number</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for(pseudonym in testCase.pseudonyms)
+            <tr>
+                <td>${pseudonym.value}</td>
+                <td>${pseudonym.key}</td>
+            </tr>
+        @endfor
+        </tbody>
+    </table>
+
+    <div id="bundleDiff" class="mt-4">
+    </div>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            const diffString = $unsafe{testCase.bundleDiff};
+            const targetElement = document.getElementById('bundleDiff');
+            var configuration = {
+                drawFileList: false,
+                fileListToggle: false,
+                fileListStartVisible: false,
+                fileContentToggle: false,
+                matching: 'lines',
+                outputFormat: 'side-by-side',
+                synchronisedScroll: true,
+                highlight: true,
+                colorScheme: 'dark',
+                renderNothingWhenEmpty: false,
+              };
+            const diff2htmlUi = new Diff2HtmlUI(targetElement, diffString, configuration);
+            diff2htmlUi.draw();
+            diff2htmlUi.highlightCode();
+        });
+    </script>
+    <div class="row">
+        <div class="col-xl-6">
+            <h4>Validation before filter</h4>
+            @if(testCase.validationMessages.isNotEmpty())
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Severity</th>
+                        <th>Location</th>
+                        <th>Message</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @for(message in testCase.validationMessages)
+                        <tr>
+                            <td class="${message.severity}">${message.severity}</td>
+                            <td>${message.location}</td>
+                            <td>${message.message}</td>
+                        </tr>
+                    @endfor
+                    </tbody>
+                </table>
+            @else
+                <p class="text-success">Bundle is valid</p>
+            @endif
+        </div>
+        <div class="col-xl-6">
+            <h4>Validation after filter</h4>
+            @if(testCase.filteredValidationMessages.isNotEmpty())
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Severity</th>
+                        <th>Location</th>
+                        <th>Message</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @for(message in testCase.filteredValidationMessages)
+                        <tr>
+                            <td class="${message.severity}">${message.severity}</td>
+                            <td>${message.location}</td>
+                            <td>${message.message}</td>
+                        </tr>
+                    @endfor
+                    </tbody>
+                </table>
+            @else
+                <p class="text-success">Bundle is valid</p>
+            @endif
+
+        </div>
+
+        <h2 class="mt-4 mb-4">Sources</h2>
+        @for (source in testCase.sources)
+            <h3>${source.title}</h3>
+            <div>
+                <pre><code class="language-vbnet">${source.content}</code></pre>
+            </div>
+        @endfor
+
+        <h3 class="mt-4 mb-4">ePA Resources</h3>
+        <pre><code class="language-json">${testCase.bundleJson}</code></pre>
+
+    </div>
+
+    <%--
+<h2 class="mt-4 mb-4">Profiles</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Path</th>
+        <th>Type</th>
+        <th>N..M</th>
+        <th>MS</th>
+        <th>Privacy Label</th>
+    </tr>
+    </thead>
+    <tbody>
+    @for(element in testCase.profile.snapshot.element)
+        <tr>
+            <td>${element.path}</td>
+            <td>${element.type.firstOrNull()?.code}</td>
+            <td>
+                @if(element.min > 0)
+                    <span class="text-success">${element.min}..${element.max}</span>
+                @else
+                    <span>${element.min}..${element.max}</span>
+                @endif
+            </td>
+            <td>
+                @if(element.mustSupport)
+                    <span class="text-success">MS</span>
+                @else
+                    <span></span>
+                @endif
+            </td>
+            <td>-</td>
+        </tr>
+    @endfor
+    </tbody>
+</table>
+--%>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>hljs.highlightAll();</script>
+
+</body>
+</html>

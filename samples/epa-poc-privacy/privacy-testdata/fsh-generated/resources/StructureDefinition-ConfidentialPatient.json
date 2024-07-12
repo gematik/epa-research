@@ -1,0 +1,147 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "ConfidentialPatient",
+  "url": "https://gematik.de/fhir/epa-poc-privacy/StructureDefinition/ConfidentialPatient",
+  "name": "ConfidentialPatient",
+  "status": "draft",
+  "description": "An example profile of the Patient resource.",
+  "fhirVersion": "4.0.1",
+  "kind": "resource",
+  "abstract": false,
+  "type": "Patient",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Patient",
+  "derivation": "constraint",
+  "differential": {
+    "element": [
+      {
+        "id": "Patient.id",
+        "extension": [
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "PSEUD",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/privacy/StructureDefinition/PrivacyLabelExtension"
+          }
+        ],
+        "path": "Patient.id"
+      },
+      {
+        "id": "Patient.identifier",
+        "path": "Patient.identifier",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "value",
+              "path": "system"
+            }
+          ],
+          "rules": "open"
+        },
+        "min": 1,
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.identifier:KVNR",
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+          },
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "PSEUD",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/privacy/StructureDefinition/PrivacyLabelExtension"
+          }
+        ],
+        "path": "Patient.identifier",
+        "sliceName": "KVNR",
+        "min": 1,
+        "max": "1",
+        "type": [
+          {
+            "code": "Identifier",
+            "profile": [
+              "http://fhir.de/StructureDefinition/identifier-kvid-10"
+            ]
+          }
+        ],
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.name",
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+          },
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "REDACT",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/privacy/StructureDefinition/PrivacyLabelExtension"
+          }
+        ],
+        "path": "Patient.name",
+        "mustSupport": true
+      },
+      {
+        "id": "Patient.contact",
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name",
+            "valueString": "Contact"
+          },
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "REDACT",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/privacy/StructureDefinition/PrivacyLabelExtension"
+          }
+        ],
+        "path": "Patient.contact",
+        "mustSupport": true
+      }
+    ]
+  }
+}

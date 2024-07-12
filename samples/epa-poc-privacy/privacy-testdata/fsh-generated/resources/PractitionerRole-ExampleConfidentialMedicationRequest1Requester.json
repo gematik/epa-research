@@ -1,0 +1,12 @@
+{
+  "resourceType": "PractitionerRole",
+  "id": "ExampleConfidentialMedicationRequest1Requester",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/epa-poc-privacy/StructureDefinition/ConfidentialPractitionerRole"
+    ]
+  },
+  "practitioner": {
+    "reference": "Practitioner/ExampleConfidentialMedicationRequest1Practitioner"
+  }
+}
