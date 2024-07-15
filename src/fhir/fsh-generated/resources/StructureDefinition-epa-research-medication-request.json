@@ -178,14 +178,6 @@
         "id": "MedicationRequest.subject.reference",
         "extension": [
           {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
-            "valueCode": "normative"
-          },
-          {
-            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
-            "valueCode": "4.0.0"
-          },
-          {
             "extension": [
               {
                 "url": "obligationPolicy",

@@ -1,13 +1,13 @@
 {
-  "updated": "2024-07-12T09:52:00.839964+02:00",
+  "updated": "2024-07-15T19:12:13.8005144+02:00",
   "dependencies": {
     "de.basisprofil.r4": "1.5.0",
     "hl7.fhir.r4.core": "4.0.1",
     "de.gematik.fhir.directory": "0.11.8",
     "de.ihe-d.terminology": "3.0.0",
-    "de.gematik.dev.epa.medication": "1.1.0-alpha.4",
+    "de.gematik.epa.medication": "1.1.0-rc1",
     "kbv.all.st": "1.3.1",
-    "de.gematik.dev.epa": "1.1.0-alpha.4"
+    "de.gematik.epa": "1.1.0-rc1"
   },
   "missing": {}
 }
