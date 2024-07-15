@@ -22,7 +22,7 @@ Für jeden zu pseudonymisierende FHIR-Ressource-Typ existiert versionsunabhängi
 
 Das Ergebnis einer ressourcenbasierten Pseudonymisierung sind 
 1. FHIR-Ressourcen-Instanzen, die keine personenbezogenen Daten enthalten, jedoch u. a. mittels eines Pseudonyms in der selben Ressource oder in einer referenzierten Ressource personenbeziehbare Daten enthalten. 
-1. eine Liste von zufällig generierten Arbeitsnummern als Ersatz der logischen Referenzen zur Krankenversichertennummer (KVNR). Die Methodik zur Generierung der Arbeitsnummer ist im Dokument des RKI "Pseudonymisierungskonzept zur Datenausleitung ePA zu Forschungszwecken" spezifiziert.
+1. eine Liste von zufällig generierten Arbeitsnummern als Ersatz der logischen Referenzen zur Krankenversichertennummer (KVNR). Die Methodik zur Generierung der Arbeitsnummer ist im Dokument des RKI (Robert Koch Institut) "Pseudonymisierungskonzept zur Datenausleitung ePA zu Forschungszwecken" spezifiziert.
 
 ## Non-Scope
 Die Bewertung des Re-Identifikationsrisiko der resultierenden pseudonymisierten Daten ist NICHT Teil des Pseudonymisierungs-Prozesses vor der Ausleitung an das FDZ.
