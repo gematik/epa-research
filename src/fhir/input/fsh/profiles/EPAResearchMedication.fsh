@@ -2,16 +2,20 @@ Profile: EPAResearchMedication
 Id: epa-research-medication
 Parent: Medication
 
+* insert Meta
+* insert MetaSourceProfile
+
 // Medication contains no privacy labels and will be transferred as is
 
 // Extensions
-* extension contains 
+* extension contains
     RxPrescriptionProcessIdentifierExtension named rxPrescriptionProcessIdentifier 0..1 MS and
-    MedicationIsVaccineExtension named isVaccine 0..1 MS and
-    DrugCategoryExtension named drugCategory 0..1 MS and
-    ExtensionNormgroesseDeBasis named normSizeCode 0..1 MS and
-    MedicationFormulationPackagingExtension named packaging 0..1 MS and
-    MedicationManufacturingInstructionsExtension named manufacturingInstructions 0..1 MS and
+    EPADispensationIdentifierExtension named epaDispensationIdentifier 0..1 MS and
+    MedicationIsVaccineExtension named isVaccine 0..1 and
+    DrugCategoryExtension named drugCategory 0..1 and
+    ExtensionNormgroesseDeBasis named normSizeCode 0..1 and
+    MedicationFormulationPackagingExtension named packaging 0..1 and
+    MedicationManufacturingInstructionsExtension named manufacturingInstructions 0..1 and
     EPAMedicationTypeExtension named type 0..1 MS
 * extension[isVaccine]
   * valueBoolean MS

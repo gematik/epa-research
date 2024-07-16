@@ -2,6 +2,7 @@ Profile: EPAResearchMedicationRequest
 Id: epa-research-medication-request
 Parent: MedicationRequest
 
+* insert Meta
 * insert MetaSourceProfile
 
 * note 0..0
@@ -14,10 +15,6 @@ Parent: MedicationRequest
   * insert PrivacyLabelRedact
 
 // Extensions
-* extension 0..
-  * ^slicing.discriminator.type = #value
-  * ^slicing.discriminator.path = "url"
-  * ^slicing.rules = #open
 * extension contains
     MedicationRequestLinkedStatementExtension named medicationRequestLinkedStatement 0.. and
     MultiplePrescriptionExtension named multiplePrescription 0..1 MS and

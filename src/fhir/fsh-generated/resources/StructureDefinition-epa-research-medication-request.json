@@ -2,9 +2,12 @@
   "resourceType": "StructureDefinition",
   "id": "epa-research-medication-request",
   "url": "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-request",
-  "version": "1.0.0-rc1",
+  "version": "1.0.0-cc1",
   "name": "EPAResearchMedicationRequest",
   "status": "draft",
+  "experimental": false,
+  "date": "2024-06-06",
+  "publisher": "gematik GmbH",
   "fhirVersion": "4.0.1",
   "kind": "resource",
   "abstract": false,
@@ -177,6 +180,14 @@
       {
         "id": "MedicationRequest.subject.reference",
         "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-standards-status",
+            "valueCode": "normative"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/structuredefinition-normative-version",
+            "valueCode": "4.0.0"
+          },
           {
             "extension": [
               {
