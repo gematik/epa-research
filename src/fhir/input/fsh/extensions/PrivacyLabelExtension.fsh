@@ -2,6 +2,8 @@ Extension: PrivacyLabelExtension
 Id: privacy-label-extension
 Context: ElementDefinition
 
+* insert Meta
+
 * extension contains
     obligationPolicy 1..1 MS and
     dummyValue 0..1 MS
