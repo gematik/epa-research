@@ -17,15 +17,15 @@
 This repository provides technical information for the Electronic Health Record (ePA) application as part of the Telematic Infrastructure (TI).
 
 This branch relates to a particular release in context of **ePA version 3** ('ePA für alle') 
-The provided content comprises normative and supplementary resources for the FHIR-based **Research Data**.
+The provided content comprises normative and supplementary resources for the FHIR-based **Data Submission Service**.
 
-For resources related to ePA document management and basic services see further associated repositories:
+For resources related to further ePA associated repositories:</br>
+(follow links in [Branchinformation.md](./Branchinformation.md))
+- **ePA-Medication** medication related resources</br>
+- **ePA-XDS-Document** xds document related resources</br>
+- **ePA-Basic** basic services related resources</br>
 
-[**ePA-XDS-Document**](https://github.com/gematik/epa-xds-document/tree/ePA-3.0)<br/>
-[**ePA-Basic**](https://github.com/gematik/epa-basic/tree/ePA-3.0)<br/>
-[**ePA-Medication**](https://github.com/gematik/epa-medication/tree/ePA-3.0)
-
-FHIR profiles of the Research Data are available on</br>
+FHIR profiles for Data Submission are available on</br>
 [**Simplifier**](https://simplifier.net/epa-research)
 
 

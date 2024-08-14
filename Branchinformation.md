@@ -6,17 +6,16 @@
 |:----|----|
 | Context| __ePA 3.1 (ePA für alle)__|
 | Designation  | __Release 3.1.0__  |
-| Current status | __pre-released__ |
-| Release date   | __2024-07-15__  |
-| Specifications| __pending__ |
-| Previous release| __Release 3.0.1__|
-| Previous branch | [Fachportal gematik: ePA 3.0.1: ePA für alle](https://fachportal.gematik.de/schnelleinstieg/downloadcenter/releases#c7516) |
-| Follow-up | ePA-3.2.0 (planned)|
+| Current status | __released__ |
+| Release date   | __2024-08-14__  |
+| Specifications| [Spezifikation ePA für alle: ePA 3.1](https://fachportal.gematik.de/anwendungen/elektronische-patientenakte-fuer-alle#c10514)|
+| Previous release| n/a |
+| Previous branch | n/a |
+| Follow-up | not yet defined |
 | Associated repositories:||
-| Medication Service | [**ePA-Medication (3.1)**](https://github.com/gematik/epa-medication/tree/ePA-3.1) |
-| FHIR Profiles | [**Simplifier**](https://simplifier.net/epa) |
+| Medication Service | [**ePA-Medication (3.1.0 )**](https://github.com/gematik/epa-medication/tree/ePA-3.1.0) |
+| FHIR Resources | [**Pseudonymiszation of FHIR Resources**](https://simplifier.net/epa-research) |
 
-<br/>
 <br/>
 
 ## About releases and associated branches
