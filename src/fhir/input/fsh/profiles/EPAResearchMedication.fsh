@@ -12,6 +12,8 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedication für den ePA-Forsch
 * code.coding ^slicing.rules = #open
 
 * code.coding contains atc-de 0..0
+// Convention: attach PrivacyLabel to the slice itself
+* code.coding[atc-de]
   * insert PrivacyLabelRedact
 * code.coding[atc-de].system = "http://fhir.de/CodeSystem/bfarm/atc"
 
@@ -38,6 +40,7 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedication für den ePA-Forsch
 * ingredient.itemCodeableConcept.coding ^slicing.rules = #open
 
 * ingredient.itemCodeableConcept.coding contains atc-de 0..0
+* ingredient.itemCodeableConcept.coding[atc-de]
   * insert PrivacyLabelRedact
 * ingredient.itemCodeableConcept.coding[atc-de].system = "http://fhir.de/CodeSystem/bfarm/atc"
 

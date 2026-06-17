@@ -6,7 +6,7 @@ Description: "Full Maaloxan MedicationDispense — pre-redaction reference."
 
 // Explicitly defined extension slices are copied; others are filtered out.
 * extension[rxPrescriptionProcessIdentifier].valueIdentifier.value = "160.100.000.000.010.12_20251027"
-* extension[renderedDosageInstruction].valueMarkdown = "1-0-0-0 Stück"
+* extension[renderedDosageInstruction].valueMarkdown = "Morgens 1 Tablette einnehmen, mit etwas Wasser."
 * extension[generatedDosageInstructionsMeta]
   * extension[algorithmVersion].valueString = "1.0.1"
   * extension[language].valueCode = #de-DE
