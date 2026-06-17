@@ -1,6 +1,8 @@
 Extension: PrivacyLabelExtension
 Id: privacy-label-extension
 Context: ElementDefinition
+Title: "Privacy Label Extension"
+Description: "Element-Ebene-Annotation zur Deklaration der Pseudonymisierungs-Behandlung eines FHIR-Elements innerhalb eines P-Profils. Trägt einen obligationPolicy-Code (PSEUD / REDACT / ANONY aus HL7 v3) und einen optionalen dummyValue für die Anonymisierung primitiver Elemente. Erscheint ausschließlich in StructureDefinitions, niemals in Instanzdaten."
 
 * insert Meta
 
