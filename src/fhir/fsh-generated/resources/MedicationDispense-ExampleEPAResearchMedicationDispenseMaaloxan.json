@@ -1,0 +1,52 @@
+{
+  "resourceType": "MedicationDispense",
+  "id": "ExampleEPAResearchMedicationDispenseMaaloxan",
+  "meta": {
+    "tag": [
+      {
+        "system": "https://gematik.de/fhir/epa-research/sid/source-profile",
+        "code": "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense"
+      }
+    ],
+    "security": [
+      {
+        "code": "PSEUDED",
+        "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationValue",
+        "display": "pseudonymized"
+      }
+    ],
+    "profile": [
+      "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-dispense"
+    ]
+  },
+  "performer": [
+    {
+      "actor": {
+        "display": "ANONYMIZED"
+      }
+    }
+  ],
+  "subject": {
+    "identifier": {
+      "system": "https://gematik.de/fhir/epa-research/sid/job-number-identifier",
+      "value": "PSEUDO-X110411319-9F2C"
+    }
+  },
+  "status": "completed",
+  "medicationReference": {
+    "reference": "Medication/ExampleEPAResearchMedicationMaaloxan"
+  },
+  "authorizingPrescription": [
+    {
+      "reference": "MedicationRequest/ExampleEPAResearchMedicationRequestMaaloxan"
+    }
+  ],
+  "quantity": {
+    "value": 1,
+    "unit": "Packung"
+  },
+  "whenHandedOver": "2025-10-29",
+  "substitution": {
+    "wasSubstituted": false
+  }
+}

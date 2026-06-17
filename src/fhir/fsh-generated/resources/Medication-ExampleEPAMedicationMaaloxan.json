@@ -1,0 +1,172 @@
+{
+  "resourceType": "Medication",
+  "id": "ExampleEPAMedicationMaaloxan",
+  "meta": {
+    "profile": [
+      "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication"
+    ]
+  },
+  "extension": [
+    {
+      "valueIdentifier": {
+        "system": "https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier",
+        "value": "160.100.000.000.011.09_20250906"
+      },
+      "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension"
+    },
+    {
+      "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/medication-id-vaccine-extension",
+      "valueBoolean": false
+    },
+    {
+      "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/drug-category-extension",
+      "valueCoding": {
+        "system": "https://gematik.de/fhir/epa-medication/CodeSystem/epa-drug-category-cs",
+        "code": "00"
+      }
+    },
+    {
+      "url": "http://fhir.de/StructureDefinition/normgroesse",
+      "valueCode": "N1"
+    },
+    {
+      "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-type-extension",
+      "valueCoding": {
+        "system": "http://snomed.info/sct",
+        "code": "781405001",
+        "display": "Medicinal product package"
+      }
+    },
+    {
+      "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/medication-formulation-packaging-extension",
+      "valueString": "Packung mit 30 Kautabletten"
+    },
+    {
+      "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/medication-manufacturing-instructions-extension",
+      "valueString": "Bei Raumtemperatur trocken lagern."
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://fhir.de/CodeSystem/ifa/pzn",
+        "code": "9717395",
+        "display": "Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon"
+      },
+      {
+        "system": "http://fhir.de/CodeSystem/bfarm/atc",
+        "version": "2024",
+        "code": "A02AD10",
+        "display": "Aluminiumoxid in Kombination mit Magnesiumhydroxid"
+      },
+      {
+        "system": "http://fhir.de/CodeSystem/ask",
+        "code": "02250",
+        "display": "Magnesiumhydroxid"
+      }
+    ],
+    "text": "Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon"
+  },
+  "status": "active",
+  "manufacturer": {
+    "display": "Sanofi-Aventis Deutschland GmbH"
+  },
+  "form": {
+    "coding": [
+      {
+        "system": "https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_KBV_DARREICHUNGSFORM",
+        "code": "KTA",
+        "display": "Kautabletten"
+      },
+      {
+        "system": "http://standardterms.edqm.eu",
+        "code": "10219000",
+        "display": "Chewable tablet"
+      }
+    ]
+  },
+  "amount": {
+    "numerator": {
+      "value": 30,
+      "unit": "Tabletten",
+      "system": "http://unitsofmeasure.org",
+      "code": "{Tabletten}"
+    },
+    "denominator": {
+      "value": 1,
+      "unit": "Package",
+      "system": "http://unitsofmeasure.org",
+      "code": "{Package}"
+    }
+  },
+  "ingredient": [
+    {
+      "itemCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://fhir.de/CodeSystem/ask",
+            "code": "2250",
+            "display": "Magnesiumhydroxid"
+          },
+          {
+            "system": "http://fhir.de/CodeSystem/bfarm/atc",
+            "version": "2024",
+            "code": "A02AA04",
+            "display": "Magnesiumhydroxid"
+          }
+        ],
+        "text": "Magnesiumhydroxid 400 mg"
+      },
+      "strength": {
+        "numerator": {
+          "value": 400,
+          "unit": "milligramm",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg"
+        },
+        "denominator": {
+          "value": 1,
+          "unit": "Tabletten",
+          "system": "http://unitsofmeasure.org",
+          "code": "{Tabletten}"
+        }
+      }
+    },
+    {
+      "itemCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://fhir.de/CodeSystem/ask",
+            "code": "01253",
+            "display": "Algeldrat"
+          },
+          {
+            "system": "http://fhir.de/CodeSystem/bfarm/atc",
+            "version": "2024",
+            "code": "A02AB01",
+            "display": "Aluminiumhydroxid"
+          }
+        ],
+        "text": "Algeldrat 400 mg"
+      },
+      "strength": {
+        "numerator": {
+          "value": 400,
+          "unit": "milligramm",
+          "system": "http://unitsofmeasure.org",
+          "code": "mg"
+        },
+        "denominator": {
+          "value": 1,
+          "unit": "Tabletten",
+          "system": "http://unitsofmeasure.org",
+          "code": "{Tabletten}"
+        }
+      }
+    }
+  ],
+  "batch": {
+    "lotNumber": "LOT-2024-A0042",
+    "expirationDate": "2026-12-31"
+  }
+}
