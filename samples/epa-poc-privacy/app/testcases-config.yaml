@@ -1,8 +1,39 @@
 testCaseList:
   - id: index
-    title: "Privacy filter PoC: Medication Request"
+    title: "Maaloxan Medication"
     sushiProjectPath: ../../../src/fhir
-    bundlePath: fsh-generated/resources/Bundle-ExampleEPAMedicationRequestBundle.json
+    resourcePaths:
+      - fsh-generated/resources/Medication-ExampleEPAMedicationMaaloxan.json
+    expectedResearchPaths:
+      - fsh-generated/resources/Medication-ExampleEPAResearchMedicationMaaloxan.json
+    pseudonyms:
+      X110411319: PSEUDO-X110411319-9F2C
+    sources:
+      - title: Privacy Label Extension
+        path: input/fsh/extensions/PrivacyLabelExtension.fsh
+        language: fsh
+      - title: Privacy Rule Sets
+        path: input/fsh/PrivacyRulesets.fsh
+        language: fsh
+      - title: Profile EPAResearchMedication
+        path: input/fsh/profiles/EPAResearchMedication.fsh
+        language: fsh
+      - title: Example EPAMedicationMaaloxan (source)
+        path: input/fsh/examples/ExampleEPAMedicationMaaloxan.fsh
+        language: fsh
+      - title: Example EPAResearchMedicationMaaloxan (expected)
+        path: input/fsh/examples/ExampleEPAResearchMedicationMaaloxan.fsh
+        language: fsh
+
+  - id: MedicationRequest
+    title: "Maaloxan MedicationRequest"
+    sushiProjectPath: ../../../src/fhir
+    resourcePaths:
+      - fsh-generated/resources/MedicationRequest-ExampleEPAMedicationRequestMaaloxan.json
+    expectedResearchPaths:
+      - fsh-generated/resources/MedicationRequest-ExampleEPAResearchMedicationRequestMaaloxan.json
+    pseudonyms:
+      X110411319: PSEUDO-X110411319-9F2C
     sources:
       - title: Privacy Label Extension
         path: input/fsh/extensions/PrivacyLabelExtension.fsh
@@ -13,16 +44,25 @@ testCaseList:
       - title: Profile EPAResearchMedicationRequest
         path: input/fsh/profiles/EPAResearchMedicationRequest.fsh
         language: fsh
-      - title: Example EPAMedicationRequest
-        path: input/fsh/examples/ExampleEPAMedicationRequest.fsh
+      - title: Datatype EPAResearchJobNumberIdentifier
+        path: input/fsh/datatypes/EPAResearchJobNumberIdentifier.fsh
         language: fsh
-      - title: Example EPAPractioner
-        path: input/fsh/examples/ExampleEPAPractitioner.fsh
+      - title: Example EPAMedicationRequestMaaloxan (source)
+        path: input/fsh/examples/ExampleEPAMedicationRequestMaaloxan.fsh
         language: fsh
+      - title: Example EPAResearchMedicationRequestMaaloxan (expected)
+        path: input/fsh/examples/ExampleEPAResearchMedicationRequestMaaloxan.fsh
+        language: fsh
+
   - id: MedicationDispense
-    title: "Privacy filter PoC: Medication Dispense"
+    title: "Maaloxan MedicationDispense"
     sushiProjectPath: ../../../src/fhir
-    bundlePath: fsh-generated/resources/Bundle-ExampleEPAMedicationDispenseBundle.json
+    resourcePaths:
+      - fsh-generated/resources/MedicationDispense-ExampleEPAMedicationDispenseMaaloxan.json
+    expectedResearchPaths:
+      - fsh-generated/resources/MedicationDispense-ExampleEPAResearchMedicationDispenseMaaloxan.json
+    pseudonyms:
+      X110411319: PSEUDO-X110411319-9F2C
     sources:
       - title: Privacy Label Extension
         path: input/fsh/extensions/PrivacyLabelExtension.fsh
@@ -33,21 +73,12 @@ testCaseList:
       - title: Profile EPAResearchMedicationDispense
         path: input/fsh/profiles/EPAResearchMedicationDispense.fsh
         language: fsh
-      - title: Example EPAMedicationDispense
-        path: input/fsh/examples/ExampleEPAMedicationDispense.fsh
+      - title: Datatype EPAResearchJobNumberIdentifier
+        path: input/fsh/datatypes/EPAResearchJobNumberIdentifier.fsh
         language: fsh
-  - id: MedicationStatement
-    title: "Privacy filter PoC: Medication Statement"
-    sushiProjectPath: ../../../src/fhir
-    bundlePath: fsh-generated/resources/Bundle-ExampleEPAMedicationStatementBundle.json
-    sources:
-      - title: Privacy Label Extension
-        path: input/fsh/extensions/PrivacyLabelExtension.fsh
+      - title: Example EPAMedicationDispenseMaaloxan (source)
+        path: input/fsh/examples/ExampleEPAMedicationDispenseMaaloxan.fsh
         language: fsh
-      - title: Privacy Rule Sets
-        path: input/fsh/PrivacyRulesets.fsh
+      - title: Example EPAResearchMedicationDispenseMaaloxan (expected)
+        path: input/fsh/examples/ExampleEPAResearchMedicationDispenseMaaloxan.fsh
         language: fsh
-      - title: Example ePA Medication Statement
-        path: input/fsh/examples/ExampleEPAMedicationStatement.fsh
-        language: fsh
-

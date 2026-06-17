@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Test case</title>
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <!-- Highlight.js -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
@@ -51,49 +51,127 @@
 
 <h2 class="mt-4 mb-4">${testCase.testCaseConfig.title}</h2>
 
-    <h3 class="mt-4">Filtered values</h3>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Path</th>
-            <th>Privacy Filter</th>
-        </tr>
-        </thead>
-        <tbody>
-        @for(message in testCase.filterLog)
-            <tr>
-                <td>${message.path}</td>
-                <td class="${message.severity}">${message.message}</td>
-            </tr>
-        @endfor
-        </tbody>
-    </table>
-    <h3 class="mt-4">Job Numbers (Arbeitsnummer)</h3>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Job Number</th>
-            <th>Value</th>
-        </tr>
-        </thead>
-        <tbody>
-        @for(pseudonym in testCase.pseudonyms)
-            <tr>
-                <td>${pseudonym.value}</td>
-                <td>${pseudonym.key}</td>
-            </tr>
-        @endfor
-        </tbody>
-    </table>
+    <ul class="nav nav-tabs" id="reportTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="diff-tab" data-bs-toggle="tab" data-bs-target="#diff" type="button" role="tab" aria-controls="diff" aria-selected="true">Diff</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="filter-tab" data-bs-toggle="tab" data-bs-target="#filter" type="button" role="tab" aria-controls="filter" aria-selected="false">P-Profile</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="validation-tab" data-bs-toggle="tab" data-bs-target="#validation" type="button" role="tab" aria-controls="validation" aria-selected="false">Validation</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="sources-tab" data-bs-toggle="tab" data-bs-target="#sources" type="button" role="tab" aria-controls="sources" aria-selected="false">Sources</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="resources-tab" data-bs-toggle="tab" data-bs-target="#resources" type="button" role="tab" aria-controls="resources" aria-selected="false">ePA Resources</button>
+        </li>
+    </ul>
 
-    <div id="bundleDiff" class="mt-4">
+    <div class="tab-content pt-4" id="reportTabsContent">
+        <div class="tab-pane fade" id="filter" role="tabpanel" aria-labelledby="filter-tab">
+            <h3>Filtered values</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Path</th>
+                    <th>Privacy Filter</th>
+                </tr>
+                </thead>
+                <tbody>
+                @for(message in testCase.filterLog)
+                    <tr>
+                        <td><code>${message.path}</code></td>
+                        <td class="${message.severity}">${message.message}</td>
+                    </tr>
+                @endfor
+                </tbody>
+            </table>
+            <h3 class="mt-4">Job Numbers (Arbeitsnummer)</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Job Number</th>
+                    <th>Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                @for(pseudonym in testCase.pseudonyms)
+                    <tr>
+                        <td>${pseudonym.value}</td>
+                        <td>${pseudonym.key}</td>
+                    </tr>
+                @endfor
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade show active" id="diff" role="tabpanel" aria-labelledby="diff-tab">
+            <div id="bundleDiff"></div>
+        </div>
+
+        <div class="tab-pane fade" id="validation" role="tabpanel" aria-labelledby="validation-tab">
+            <div class="row">
+                <div class="col-xl-6">
+                    <h4>Validation before filter</h4>
+                    @if(testCase.validationMessages.size > 0)
+                        <table class="table table-sm">
+                            <tbody>
+                            @for(message in testCase.validationMessages)
+                                <tr>
+                                    <td><span class="${message.severity}">${message.severity}</span> <code>${message.location}</code><br>${message.message}</td>
+                                </tr>
+                            @endfor
+                            </tbody>
+                        </table>
+                    @else
+                        <p class="text-success">Bundle is valid</p>
+                    @endif
+                </div>
+                <div class="col-xl-6">
+                    <h4>Validation after filter</h4>
+                    @if(testCase.filteredValidationMessages.size > 0)
+                        <table class="table table-sm">
+                            <tbody>
+                            @for(message in testCase.filteredValidationMessages)
+                                <tr>
+                                    <td><span class="${message.severity}">${message.severity}</span> <code>${message.location}</code><br>${message.message}</td>
+                                </tr>
+                            @endfor
+                            </tbody>
+                        </table>
+                    @else
+                        <p class="text-success">Bundle is valid</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="sources" role="tabpanel" aria-labelledby="sources-tab">
+            @for (source in testCase.sources)
+                <h3>${source.title}</h3>
+                <div>
+                    <pre><code class="language-vbnet">${source.content}</code></pre>
+                </div>
+            @endfor
+        </div>
+
+        <div class="tab-pane fade" id="resources" role="tabpanel" aria-labelledby="resources-tab">
+            <pre><code class="language-json">${testCase.bundleJson}</code></pre>
+        </div>
     </div>
 
     <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', () => {
-            const diffString = $unsafe{testCase.bundleDiff};
+        // Render the diff lazily the first time its tab is shown — diff2html needs the target
+        // element to be visible to size correctly.
+        let diffRendered = false;
+        function renderBundleDiff() {
+            if (diffRendered) return;
+            diffRendered = true;
             const targetElement = document.getElementById('bundleDiff');
-            var configuration = {
+            const diffString = $unsafe{testCase.bundleDiff};
+            const diff2htmlUi = new Diff2HtmlUI(targetElement, diffString, {
                 drawFileList: false,
                 fileListToggle: false,
                 fileListStartVisible: false,
@@ -104,77 +182,14 @@
                 highlight: true,
                 colorScheme: 'dark',
                 renderNothingWhenEmpty: false,
-              };
-            const diff2htmlUi = new Diff2HtmlUI(targetElement, diffString, configuration);
+            });
             diff2htmlUi.draw();
             diff2htmlUi.highlightCode();
-        });
+        }
+        document.getElementById('diff-tab').addEventListener('shown.bs.tab', renderBundleDiff);
+        // Diff is the default active tab — render immediately on load.
+        document.addEventListener('DOMContentLoaded', renderBundleDiff);
     </script>
-    <div class="row">
-        <div class="col-xl-6">
-            <h4>Validation before filter</h4>
-            @if(testCase.validationMessages.isNotEmpty())
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Severity</th>
-                        <th>Location</th>
-                        <th>Message</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @for(message in testCase.validationMessages)
-                        <tr>
-                            <td class="${message.severity}">${message.severity}</td>
-                            <td>${message.location}</td>
-                            <td>${message.message}</td>
-                        </tr>
-                    @endfor
-                    </tbody>
-                </table>
-            @else
-                <p class="text-success">Bundle is valid</p>
-            @endif
-        </div>
-        <div class="col-xl-6">
-            <h4>Validation after filter</h4>
-            @if(testCase.filteredValidationMessages.isNotEmpty())
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Severity</th>
-                        <th>Location</th>
-                        <th>Message</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @for(message in testCase.filteredValidationMessages)
-                        <tr>
-                            <td class="${message.severity}">${message.severity}</td>
-                            <td>${message.location}</td>
-                            <td>${message.message}</td>
-                        </tr>
-                    @endfor
-                    </tbody>
-                </table>
-            @else
-                <p class="text-success">Bundle is valid</p>
-            @endif
-
-        </div>
-
-        <h2 class="mt-4 mb-4">Sources</h2>
-        @for (source in testCase.sources)
-            <h3>${source.title}</h3>
-            <div>
-                <pre><code class="language-vbnet">${source.content}</code></pre>
-            </div>
-        @endfor
-
-        <h3 class="mt-4 mb-4">ePA Resources</h3>
-        <pre><code class="language-json">${testCase.bundleJson}</code></pre>
-
-    </div>
 
     <%--
 <h2 class="mt-4 mb-4">Profiles</h2>
@@ -217,7 +232,7 @@
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 <script>hljs.highlightAll();</script>
 
 </body>

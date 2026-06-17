@@ -48,7 +48,7 @@
     </div>
 </nav>
 
-<h2 class="mt-4 mb-4">Maaloxan MedicationDispense</h2>
+<h2 class="mt-4 mb-4">Maaloxan MedicationRequest</h2>
 
     <ul class="nav nav-tabs" id="reportTabs" role="tablist">
         <li class="nav-item" role="presentation">
@@ -81,32 +81,32 @@
                 <tbody>
                 
                     <tr>
-                        <td><code>MedicationDispense.subject</code></td>
+                        <td><code>MedicationRequest.subject.reference</code></td>
+                        <td class="INFO">Redact</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>MedicationRequest.subject.identifier</code></td>
                         <td class="INFO">Pseudonymize</td>
                     </tr>
                 
                     <tr>
-                        <td><code>MedicationDispense.performer.actor.reference</code></td>
+                        <td><code>MedicationRequest.requester</code></td>
                         <td class="INFO">Redact</td>
                     </tr>
                 
                     <tr>
-                        <td><code>MedicationDispense.performer.actor.identifier</code></td>
+                        <td><code>MedicationRequest.note</code></td>
                         <td class="INFO">Redact</td>
                     </tr>
                 
                     <tr>
-                        <td><code>MedicationDispense.performer.actor.display</code></td>
-                        <td class="INFO">Anonymize</td>
-                    </tr>
-                
-                    <tr>
-                        <td><code>MedicationDispense.dosageInstruction.text</code></td>
+                        <td><code>MedicationRequest.dosageInstruction.text</code></td>
                         <td class="INFO">Redact</td>
                     </tr>
                 
                     <tr>
-                        <td><code>MedicationDispense.dosageInstruction.patientInstruction</code></td>
+                        <td><code>MedicationRequest.dosageInstruction.patientInstruction</code></td>
                         <td class="INFO">Redact</td>
                     </tr>
                 
@@ -140,7 +140,15 @@
                 <div class="col-xl-6">
                     <h4>Validation before filter</h4>
                     
-                        <p class="text-success">Bundle is valid</p>
+                        <table class="table table-sm">
+                            <tbody>
+                            
+                                <tr>
+                                    <td><span class="WARNING">WARNING</span> <code>MedicationRequest.dosageInstruction[0]</code><br>Constraint failed: DosageStructuredOrFreeTextWarning: 'Die Dosierungsangabe darf entweder nur als Freitext oder nur als vollständige strukturierte Information erfolgen — eine Mischung ist nicht erlaubt.' (defined in http://ig.fhir.de/igs/medication/StructureDefinition/DosageDE)</td>
+                                </tr>
+                            
+                            </tbody>
+                        </table>
                     
                 </div>
                 <div class="col-xl-6">
@@ -186,29 +194,26 @@ RuleSet: PrivacyLabelRedact
 </code></pre>
                 </div>
             
-                <h3>Profile EPAResearchMedicationDispense</h3>
+                <h3>Profile EPAResearchMedicationRequest</h3>
                 <div>
-                    <pre><code class="language-vbnet">Profile: EPAResearchMedicationDispense
-Id: epa-research-medication-dispense
-Parent: MedicationDispense
-Title: "MedicationDispense-Profil für ePA-Forschungsdaten"
-Description: "Pseudonymisiertes Gegenstück zu EPAMedicationDispense für den ePA-Forschungsdatensatz. Patientenbezogene Referenzen werden pseudonymisiert; identifizierende Sub-Felder strukturell erhaltener Elemente werden anonymisiert oder entfernt; nur explizit deklarierte Extensions werden aus der Quellinstanz übernommen."
+                    <pre><code class="language-vbnet">Profile: EPAResearchMedicationRequest
+Id: epa-research-medication-request
+Parent: MedicationRequest
+Title: "MedicationRequest-Profil für ePA-Forschungsdaten"
+Description: "Pseudonymisiertes Gegenstück zu EPAMedicationRequest für den ePA-Forschungsdatensatz. Patientenbezogene Referenzen werden pseudonymisiert; identifizierende und freitextliche Elemente werden entfernt; nur explizit deklarierte Extensions werden aus der Quellinstanz übernommen."
 
 * insert Meta
 * insert MetaSourceProfile
 
-* subject
-  * insert PrivacyLabelPseudonymize
-* subject.identifier only EPAResearchJobNumberIdentifier
-
-// performer is 1..1 in upstream EPAMedicationDispense — cannot be redacted to absence.
-// Approach 1 (leaf-level ANONY): keep the Reference structure, anonymize the
-// human-readable display, and redact the identifying sub-fields.
-* performer.actor.display = "ANONYMIZED"
-  * insert PrivacyLabelAnonymizeString(ANONYMIZED)
-* performer.actor.reference 0..0
+* subject.reference 0..0
   * insert PrivacyLabelRedact
-* performer.actor.identifier 0..0
+* subject.identifier only EPAResearchJobNumberIdentifier
+  * insert PrivacyLabelPseudonymize
+
+* requester 0..0
+  * insert PrivacyLabelRedact
+
+* note 0..0
   * insert PrivacyLabelRedact
 
 * dosageInstruction.text 0..0
@@ -218,6 +223,9 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedicationDispense für den eP
   * insert PrivacyLabelRedact
 
 // Explicitly defined extension slices are copied; others are filtered out.
+* extension contains
+  MultiplePrescriptionExtension named multiplePrescription 0..1 MS and
+  IndicatorBVGExtension named isBvg 0..1 MS
 </code></pre>
                 </div>
             
@@ -237,24 +245,27 @@ Description: "Identifier-Profil zur Repräsentation der Arbeitsnummer, die im Ra
 </code></pre>
                 </div>
             
-                <h3>Example EPAMedicationDispenseMaaloxan (source)</h3>
+                <h3>Example EPAMedicationRequestMaaloxan (source)</h3>
                 <div>
-                    <pre><code class="language-vbnet">// Full MedicationDispense for Maaloxan — pre-redaction reference.
-Instance: ExampleEPAMedicationDispenseMaaloxan
-InstanceOf: EPAMedicationDispense
+                    <pre><code class="language-vbnet">// Full Maaloxan MedicationRequest — pre-redaction reference.
+Instance: ExampleEPAMedicationRequestMaaloxan
+InstanceOf: EPAMedicationRequest
 Usage: #example
-Description: "Full Maaloxan MedicationDispense — pre-redaction reference."
+Description: "Full Maaloxan MedicationRequest — pre-redaction reference."
 
 // Explicitly defined extension slices are copied; others are filtered out.
-* extension[rxPrescriptionProcessIdentifier].valueIdentifier.value = "160.100.000.000.010.12_20251027"
-* extension[renderedDosageInstruction].valueMarkdown = "Morgens 1 Tablette einnehmen, mit etwas Wasser."
+* extension[multiplePrescription].extension[indicator].valueBoolean = false
+* extension[isBvg].valueBoolean = false
+* extension[renderedDosageInstruction].valueMarkdown = "1-0-0-0 Stück"
 * extension[generatedDosageInstructionsMeta]
   * extension[algorithmVersion].valueString = "1.0.1"
   * extension[language].valueCode = #de-DE
 
-* identifier[RxOriginatorProcessIdentifier].value = "3a534e48-80e8-4bbb-a19e-43e83d6f3a3e_160.100.000.000.010.12"
+* identifier[RxPrescriptionProcessIdentifier].value = "160.100.000.000.011.09_20250906"
+* identifier[RxOriginatorProcessIdentifier].value = "59b9fa64-4ca1-4bd2-8388-652d0fec32b2_160.100.000.000.011.09"
 
 * status = #completed
+* intent = #filler-order
 
 * medicationReference = Reference(ExampleEPAMedicationMaaloxan)
 
@@ -262,57 +273,69 @@ Description: "Full Maaloxan MedicationDispense — pre-redaction reference."
 * subject.identifier.system = "http://fhir.de/sid/gkv/kvid-10"
 * subject.identifier.value = "X110411319"
 
-* performer.actor.reference = "Organization/151f1697-7512-4e21-9466-1b75207475d8"
-* performer.actor.identifier
-  * type.coding.system = "http://terminology.hl7.org/CodeSystem/v2-0203"
-  * type.coding.code = #PRN
-  * type.coding.display = "Provider number"
-  * system = "https://gematik.de/fhir/sid/telematik-id"
-  * value = "9-2.58.00000023"
-* performer.actor.display = "gematik Apotheke"
+* authoredOn = "2025-09-06"
 
-* authorizingPrescription = Reference(ExampleEPAMedicationRequestMaaloxan)
+* requester.reference = "PractitionerRole/73a551f8-d8cd-4b44-823d-ab5f8aeab1aa"
+* requester.display = "Dr. Max Manfred Mustermann / Praxis Dr. med. Max Mustermann"
 
-* quantity.value = 1
-* quantity.unit = "Packung"
+* dosageInstruction.text = "Morgens 1 Tablette einnehmen"
+* dosageInstruction.timing.repeat
+  * frequency = 1
+  * period = 1
+  * periodUnit = #d
+  * when = #MORN
+* dosageInstruction.doseAndRate.doseQuantity.value = 1
+* dosageInstruction.doseAndRate.doseQuantity.unit = "Stück"
+* dosageInstruction.doseAndRate.doseQuantity.system = "https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_BMP_DOSIEREINHEIT"
+* dosageInstruction.doseAndRate.doseQuantity.code = #1
 
-* whenHandedOver = "2025-10-29"
+* dispenseRequest.quantity.value = 1
+* dispenseRequest.quantity.unit = "Packung"
 
-* dosageInstruction.text = "Morgens 1 Tablette einnehmen, mit etwas Wasser."
+* substitution.allowedBoolean = true
 
-* substitution.wasSubstituted = false
+* note.text = "Verträglichkeitstest erforderlich."
 </code></pre>
                 </div>
             
-                <h3>Example EPAResearchMedicationDispenseMaaloxan (expected)</h3>
+                <h3>Example EPAResearchMedicationRequestMaaloxan (expected)</h3>
                 <div>
-                    <pre><code class="language-vbnet">// Redacted version of full EPA MedicationDispense
-Instance: ExampleEPAResearchMedicationDispenseMaaloxan
-InstanceOf: EPAResearchMedicationDispense
+                    <pre><code class="language-vbnet">// Redacted version of full EPA MedicationRequest
+Instance: ExampleEPAResearchMedicationRequestMaaloxan
+InstanceOf: EPAResearchMedicationRequest
 Usage: #example
-Description: "Maaloxan MedicationDispense after EPAResearchMedicationDispense redaction rules."
+Description: "Maaloxan MedicationRequest after EPAResearchMedicationRequest redaction rules."
 
-* meta.tag[TagSourceProfile].code = #"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense"
+* meta.tag[TagSourceProfile].code = #"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-request"
 * meta.security = http://terminology.hl7.org/CodeSystem/v3-ObservationValue#PSEUDED "pseudonymized"
 
+// Explicitly defined extension slices are copied; others are filtered out.
+* extension[multiplePrescription].extension[indicator].valueBoolean = false
+* extension[isBvg].valueBoolean = false
+
 * status = #completed
+* intent = #filler-order
 
 * medicationReference = Reference(ExampleEPAResearchMedicationMaaloxan)
 
-// performer is 1..1 in upstream — anonymized: actor.display fixed to
-// "ANONYMIZED" by the profile, identifying sub-fields removed.
-* performer.actor.display = "ANONYMIZED"
-
 * subject.identifier.value = "PSEUDO-X110411319-9F2C"
 
-* authorizingPrescription = Reference(ExampleEPAResearchMedicationRequestMaaloxan)
+* authoredOn = "2025-09-06"
 
-* quantity.value = 1
-* quantity.unit = "Packung"
+* dosageInstruction.timing.repeat
+  * frequency = 1
+  * period = 1
+  * periodUnit = #d
+  * when = #MORN
+* dosageInstruction.doseAndRate.doseQuantity.value = 1
+* dosageInstruction.doseAndRate.doseQuantity.unit = "Stück"
+* dosageInstruction.doseAndRate.doseQuantity.system = "https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_BMP_DOSIEREINHEIT"
+* dosageInstruction.doseAndRate.doseQuantity.code = #1
 
-* whenHandedOver = "2025-10-29"
+* dispenseRequest.quantity.value = 1
+* dispenseRequest.quantity.unit = "Packung"
 
-* substitution.wasSubstituted = false
+* substitution.allowedBoolean = true
 </code></pre>
                 </div>
             
@@ -324,20 +347,23 @@ Description: "Maaloxan MedicationDispense after EPAResearchMedicationDispense re
   "type": "collection",
   "entry": [ {
     "resource": {
-      "resourceType": "MedicationDispense",
-      "id": "ExampleEPAMedicationDispenseMaaloxan",
+      "resourceType": "MedicationRequest",
+      "id": "ExampleEPAMedicationRequestMaaloxan",
       "meta": {
-        "profile": [ "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense" ]
+        "profile": [ "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-request" ]
       },
       "extension": [ {
-        "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension",
-        "valueIdentifier": {
-          "system": "https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier",
-          "value": "160.100.000.000.010.12_20251027"
-        }
+        "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/multiple-prescription-extension",
+        "extension": [ {
+          "url": "indicator",
+          "valueBoolean": false
+        } ]
       }, {
-        "url": "http://hl7.org/fhir/5.0/StructureDefinition/extension-MedicationDispense.renderedDosageInstruction",
-        "valueMarkdown": "Morgens 1 Tablette einnehmen, mit etwas Wasser."
+        "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/indicator-bvg-extension",
+        "valueBoolean": false
+      }, {
+        "url": "http://hl7.org/fhir/5.0/StructureDefinition/extension-MedicationRequest.renderedDosageInstruction",
+        "valueMarkdown": "1-0-0-0 Stück"
       }, {
         "url": "http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta",
         "extension": [ {
@@ -349,10 +375,14 @@ Description: "Maaloxan MedicationDispense after EPAResearchMedicationDispense re
         } ]
       } ],
       "identifier": [ {
+        "system": "https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier",
+        "value": "160.100.000.000.011.09_20250906"
+      }, {
         "system": "https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier",
-        "value": "3a534e48-80e8-4bbb-a19e-43e83d6f3a3e_160.100.000.000.010.12"
+        "value": "59b9fa64-4ca1-4bd2-8388-652d0fec32b2_160.100.000.000.011.09"
       } ],
       "status": "completed",
+      "intent": "filler-order",
       "medicationReference": {
         "reference": "Medication/ExampleEPAMedicationMaaloxan"
       },
@@ -363,36 +393,41 @@ Description: "Maaloxan MedicationDispense after EPAResearchMedicationDispense re
           "value": "X110411319"
         }
       },
-      "performer": [ {
-        "actor": {
-          "reference": "Organization/151f1697-7512-4e21-9466-1b75207475d8",
-          "identifier": {
-            "type": {
-              "coding": [ {
-                "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
-                "code": "PRN",
-                "display": "Provider number"
-              } ]
-            },
-            "system": "https://gematik.de/fhir/sid/telematik-id",
-            "value": "9-2.58.00000023"
-          },
-          "display": "gematik Apotheke"
-        }
-      } ],
-      "authorizingPrescription": [ {
-        "reference": "MedicationRequest/ExampleEPAMedicationRequestMaaloxan"
-      } ],
-      "quantity": {
-        "value": 1,
-        "unit": "Packung"
+      "authoredOn": "2025-09-06",
+      "requester": {
+        "reference": "PractitionerRole/73a551f8-d8cd-4b44-823d-ab5f8aeab1aa",
+        "display": "Dr. Max Manfred Mustermann / Praxis Dr. med. Max Mustermann"
       },
-      "whenHandedOver": "2025-10-29",
-      "dosageInstruction": [ {
-        "text": "Morgens 1 Tablette einnehmen, mit etwas Wasser."
+      "note": [ {
+        "text": "Verträglichkeitstest erforderlich."
       } ],
+      "dosageInstruction": [ {
+        "text": "Morgens 1 Tablette einnehmen",
+        "timing": {
+          "repeat": {
+            "frequency": 1,
+            "period": 1,
+            "periodUnit": "d",
+            "when": [ "MORN" ]
+          }
+        },
+        "doseAndRate": [ {
+          "doseQuantity": {
+            "value": 1,
+            "unit": "Stück",
+            "system": "https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_BMP_DOSIEREINHEIT",
+            "code": "1"
+          }
+        } ]
+      } ],
+      "dispenseRequest": {
+        "quantity": {
+          "value": 1,
+          "unit": "Packung"
+        }
+      },
       "substitution": {
-        "wasSubstituted": false
+        "allowedBoolean": true
       }
     }
   } ]
@@ -408,7 +443,7 @@ Description: "Maaloxan MedicationDispense after EPAResearchMedicationDispense re
             if (diffRendered) return;
             diffRendered = true;
             const targetElement = document.getElementById('bundleDiff');
-            const diffString = "--- FHIR.json\n+++ FHIR.json\n@@ -1,78 +1,52 @@\n {\n   \"resourceType\": \"Bundle\",\n   \"type\": \"collection\",\n   \"entry\": [ {\n     \"resource\": {\n       \"resourceType\": \"MedicationDispense\",\n       \"id\": \"ExampleEPAMedicationDispenseMaaloxan\",\n       \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense\" ]\n-      },\n-      \"extension\": [ {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension\",\n-        \"valueIdentifier\": {\n-          \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier\",\n-          \"value\": \"160.100.000.000.010.12_20251027\"\n-        }\n-      }, {\n-        \"url\": \"http://hl7.org/fhir/5.0/StructureDefinition/extension-MedicationDispense.renderedDosageInstruction\",\n-        \"valueMarkdown\": \"Morgens 1 Tablette einnehmen, mit etwas Wasser.\"\n-      }, {\n-        \"url\": \"http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta\",\n-        \"extension\": [ {\n-          \"url\": \"language\",\n-          \"valueCode\": \"de-DE\"\n-        }, {\n-          \"url\": \"algorithmVersion\",\n-          \"valueString\": \"1.0.1\"\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-dispense\" ],\n+        \"security\": [ {\n+          \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ObservationValue\",\n+          \"code\": \"PSEUDED\",\n+          \"display\": \"pseudonymized\"\n+        } ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense\"\n         } ]\n-      } ],\n+      },\n       \"identifier\": [ {\n         \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier\",\n         \"value\": \"3a534e48-80e8-4bbb-a19e-43e83d6f3a3e_160.100.000.000.010.12\"\n       } ],\n       \"status\": \"completed\",\n       \"medicationReference\": {\n         \"reference\": \"Medication/ExampleEPAMedicationMaaloxan\"\n       },\n       \"subject\": {\n-        \"reference\": \"Patient/12c0c2a4-71a2-4d49-9e6f-9b7a3b4f0d11\",\n         \"identifier\": {\n-          \"system\": \"http://fhir.de/sid/gkv/kvid-10\",\n-          \"value\": \"X110411319\"\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/job-number-identifier\",\n+          \"value\": \"PSEUDO-X110411319-9F2C\"\n         }\n       },\n       \"performer\": [ {\n         \"actor\": {\n-          \"reference\": \"Organization/151f1697-7512-4e21-9466-1b75207475d8\",\n-          \"identifier\": {\n-            \"type\": {\n-              \"coding\": [ {\n-                \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n-                \"code\": \"PRN\",\n-                \"display\": \"Provider number\"\n-              } ]\n-            },\n-            \"system\": \"https://gematik.de/fhir/sid/telematik-id\",\n-            \"value\": \"9-2.58.00000023\"\n-          },\n-          \"display\": \"gematik Apotheke\"\n+          \"display\": \"ANONYMIZED\"\n         }\n       } ],\n       \"authorizingPrescription\": [ {\n         \"reference\": \"MedicationRequest/ExampleEPAMedicationRequestMaaloxan\"\n       } ],\n       \"quantity\": {\n         \"value\": 1,\n         \"unit\": \"Packung\"\n       },\n       \"whenHandedOver\": \"2025-10-29\",\n-      \"dosageInstruction\": [ {\n-        \"text\": \"Morgens 1 Tablette einnehmen, mit etwas Wasser.\"\n-      } ],\n       \"substitution\": {\n         \"wasSubstituted\": false\n       }\n     }\n   } ]\n }";
+            const diffString = "--- FHIR.json\n+++ FHIR.json\n@@ -1,90 +1,78 @@\n {\n   \"resourceType\": \"Bundle\",\n   \"type\": \"collection\",\n   \"entry\": [ {\n     \"resource\": {\n       \"resourceType\": \"MedicationRequest\",\n       \"id\": \"ExampleEPAMedicationRequestMaaloxan\",\n       \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-request\" ]\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-request\" ],\n+        \"security\": [ {\n+          \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ObservationValue\",\n+          \"code\": \"PSEUDED\",\n+          \"display\": \"pseudonymized\"\n+        } ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-request\"\n+        } ]\n       },\n       \"extension\": [ {\n         \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/multiple-prescription-extension\",\n         \"extension\": [ {\n           \"url\": \"indicator\",\n           \"valueBoolean\": false\n         } ]\n       }, {\n         \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/indicator-bvg-extension\",\n         \"valueBoolean\": false\n-      }, {\n-        \"url\": \"http://hl7.org/fhir/5.0/StructureDefinition/extension-MedicationRequest.renderedDosageInstruction\",\n-        \"valueMarkdown\": \"1-0-0-0 Stück\"\n-      }, {\n-        \"url\": \"http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta\",\n-        \"extension\": [ {\n-          \"url\": \"language\",\n-          \"valueCode\": \"de-DE\"\n-        }, {\n-          \"url\": \"algorithmVersion\",\n-          \"valueString\": \"1.0.1\"\n-        } ]\n       } ],\n       \"identifier\": [ {\n         \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier\",\n         \"value\": \"160.100.000.000.011.09_20250906\"\n       }, {\n         \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier\",\n         \"value\": \"59b9fa64-4ca1-4bd2-8388-652d0fec32b2_160.100.000.000.011.09\"\n       } ],\n       \"status\": \"completed\",\n       \"intent\": \"filler-order\",\n       \"medicationReference\": {\n         \"reference\": \"Medication/ExampleEPAMedicationMaaloxan\"\n       },\n       \"subject\": {\n-        \"reference\": \"Patient/12c0c2a4-71a2-4d49-9e6f-9b7a3b4f0d11\",\n         \"identifier\": {\n-          \"system\": \"http://fhir.de/sid/gkv/kvid-10\",\n-          \"value\": \"X110411319\"\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/job-number-identifier\",\n+          \"value\": \"PSEUDO-X110411319-9F2C\"\n         }\n       },\n       \"authoredOn\": \"2025-09-06\",\n-      \"requester\": {\n-        \"reference\": \"PractitionerRole/73a551f8-d8cd-4b44-823d-ab5f8aeab1aa\",\n-        \"display\": \"Dr. Max Manfred Mustermann / Praxis Dr. med. Max Mustermann\"\n-      },\n-      \"note\": [ {\n-        \"text\": \"Verträglichkeitstest erforderlich.\"\n-      } ],\n       \"dosageInstruction\": [ {\n-        \"text\": \"Morgens 1 Tablette einnehmen\",\n         \"timing\": {\n           \"repeat\": {\n             \"frequency\": 1,\n             \"period\": 1,\n             \"periodUnit\": \"d\",\n             \"when\": [ \"MORN\" ]\n           }\n         },\n         \"doseAndRate\": [ {\n           \"doseQuantity\": {\n             \"value\": 1,\n             \"unit\": \"Stück\",\n             \"system\": \"https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_BMP_DOSIEREINHEIT\",\n             \"code\": \"1\"\n           }\n         } ]\n       } ],\n       \"dispenseRequest\": {\n         \"quantity\": {\n           \"value\": 1,\n           \"unit\": \"Packung\"\n         }\n       },\n       \"substitution\": {\n         \"allowedBoolean\": true\n       }\n     }\n   } ]\n }";
             const diff2htmlUi = new Diff2HtmlUI(targetElement, diffString, {
                 drawFileList: false,
                 fileListToggle: false,

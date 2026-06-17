@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Test case</title>
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
@@ -35,11 +35,11 @@
                     </a>
                     <ul class="dropdown-menu">
                         
-                        <li><a class="dropdown-item" href="index.html">Privacy filter PoC: Medication Request</a></li>
+                        <li><a class="dropdown-item" href="index.html">Maaloxan Medication</a></li>
                         
-                        <li><a class="dropdown-item" href="MedicationDispense.html">Privacy filter PoC: Medication Dispense</a></li>
+                        <li><a class="dropdown-item" href="MedicationRequest.html">Maaloxan MedicationRequest</a></li>
                         
-                        <li><a class="dropdown-item" href="MedicationStatement.html">Privacy filter PoC: Medication Statement</a></li>
+                        <li><a class="dropdown-item" href="MedicationDispense.html">Maaloxan MedicationDispense</a></li>
                         
                     </ul>
                 </li>
@@ -48,66 +48,617 @@
     </div>
 </nav>
 
-<h2 class="mt-4 mb-4">Privacy filter PoC: Medication Request</h2>
+<h2 class="mt-4 mb-4">Maaloxan Medication</h2>
 
-    <h3 class="mt-4">Filtered values</h3>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Path</th>
-            <th>Privacy Filter</th>
-        </tr>
-        </thead>
-        <tbody>
-        
-            <tr>
-                <td>MedicationRequest.subject.reference</td>
-                <td class="INFO">Redact</td>
-            </tr>
-        
-            <tr>
-                <td>MedicationRequest.subject.identifier</td>
-                <td class="INFO">Pseudonymize</td>
-            </tr>
-        
-            <tr>
-                <td>MedicationRequest.requester</td>
-                <td class="INFO">Redact</td>
-            </tr>
-        
-            <tr>
-                <td>MedicationRequest.note</td>
-                <td class="INFO">Redact</td>
-            </tr>
-        
-        </tbody>
-    </table>
-    <h3 class="mt-4">Job Numbers (Arbeitsnummer)</h3>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Job Number</th>
-            <th>Value</th>
-        </tr>
-        </thead>
-        <tbody>
-        
-            <tr>
-                <td>1a7e0610-35dd-4715-85be-65c36c380b76</td>
-                <td>X123456789</td>
-            </tr>
-        
-        </tbody>
-    </table>
+    <ul class="nav nav-tabs" id="reportTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="diff-tab" data-bs-toggle="tab" data-bs-target="#diff" type="button" role="tab" aria-controls="diff" aria-selected="true">Diff</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="filter-tab" data-bs-toggle="tab" data-bs-target="#filter" type="button" role="tab" aria-controls="filter" aria-selected="false">P-Profile</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="validation-tab" data-bs-toggle="tab" data-bs-target="#validation" type="button" role="tab" aria-controls="validation" aria-selected="false">Validation</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="sources-tab" data-bs-toggle="tab" data-bs-target="#sources" type="button" role="tab" aria-controls="sources" aria-selected="false">Sources</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="resources-tab" data-bs-toggle="tab" data-bs-target="#resources" type="button" role="tab" aria-controls="resources" aria-selected="false">ePA Resources</button>
+        </li>
+    </ul>
 
-    <div id="bundleDiff" class="mt-4">
+    <div class="tab-content pt-4" id="reportTabsContent">
+        <div class="tab-pane fade" id="filter" role="tabpanel" aria-labelledby="filter-tab">
+            <h3>Filtered values</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Path</th>
+                    <th>Privacy Filter</th>
+                </tr>
+                </thead>
+                <tbody>
+                
+                    <tr>
+                        <td><code>Medication.code.coding:atc-de</code></td>
+                        <td class="INFO">Redact</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>Medication.code.text</code></td>
+                        <td class="INFO">Redact</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>Medication.manufacturer</code></td>
+                        <td class="INFO">Redact</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>Medication.form.coding:edqm</code></td>
+                        <td class="INFO">Redact</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>Medication.form.coding:kbvDarreichungsform</code></td>
+                        <td class="INFO">Redact</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>Medication.ingredient.item[x]:itemCodeableConcept.coding:atc-de</code></td>
+                        <td class="INFO">Redact</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>Medication.ingredient.item[x]:itemCodeableConcept.text</code></td>
+                        <td class="INFO">Redact</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>Medication.batch.lotNumber</code></td>
+                        <td class="INFO">Redact</td>
+                    </tr>
+                
+                </tbody>
+            </table>
+            <h3 class="mt-4">Job Numbers (Arbeitsnummer)</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Job Number</th>
+                    <th>Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade show active" id="diff" role="tabpanel" aria-labelledby="diff-tab">
+            <div id="bundleDiff"></div>
+        </div>
+
+        <div class="tab-pane fade" id="validation" role="tabpanel" aria-labelledby="validation-tab">
+            <div class="row">
+                <div class="col-xl-6">
+                    <h4>Validation before filter</h4>
+                    
+                        <table class="table table-sm">
+                            <tbody>
+                            
+                                <tr>
+                                    <td><span class="INFORMATION">INFORMATION</span> <code>Medication.form.coding[1]</code><br>This element does not match any known slice defined in the profile https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication|1.3.2 (this may not be a problem, but you should check that it's not intended to match a slice)</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="WARNING">WARNING</span> <code>Medication.amount.numerator</code><br>UCUM Codes that contain human readable annotations like {Tabletten} can be misleading (e.g. they are ignored when comparing units). Best Practice is not to depend on annotations in the UCUM code, so this usage should be checked</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="WARNING">WARNING</span> <code>Medication.amount.denominator</code><br>UCUM Codes that contain human readable annotations like {Package} can be misleading (e.g. they are ignored when comparing units). Best Practice is not to depend on annotations in the UCUM code, so this usage should be checked</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="WARNING">WARNING</span> <code>Medication.ingredient[0].strength.denominator</code><br>UCUM Codes that contain human readable annotations like {Tabletten} can be misleading (e.g. they are ignored when comparing units). Best Practice is not to depend on annotations in the UCUM code, so this usage should be checked</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="WARNING">WARNING</span> <code>Medication.ingredient[1].strength.denominator</code><br>UCUM Codes that contain human readable annotations like {Tabletten} can be misleading (e.g. they are ignored when comparing units). Best Practice is not to depend on annotations in the UCUM code, so this usage should be checked</td>
+                                </tr>
+                            
+                            </tbody>
+                        </table>
+                    
+                </div>
+                <div class="col-xl-6">
+                    <h4>Validation after filter</h4>
+                    
+                        <table class="table table-sm">
+                            <tbody>
+                            
+                                <tr>
+                                    <td><span class="INFORMATION">INFORMATION</span> <code>Medication.code.coding[0]</code><br>This element does not match any known slice defined in the profile https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication|1.1.0-rc2 (this may not be a problem, but you should check that it's not intended to match a slice)</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="INFORMATION">INFORMATION</span> <code>Medication.code.coding[1]</code><br>This element does not match any known slice defined in the profile https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication|1.1.0-rc2 (this may not be a problem, but you should check that it's not intended to match a slice)</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="WARNING">WARNING</span> <code>Medication.amount.numerator</code><br>UCUM Codes that contain human readable annotations like {Tabletten} can be misleading (e.g. they are ignored when comparing units). Best Practice is not to depend on annotations in the UCUM code, so this usage should be checked</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="WARNING">WARNING</span> <code>Medication.amount.denominator</code><br>UCUM Codes that contain human readable annotations like {Package} can be misleading (e.g. they are ignored when comparing units). Best Practice is not to depend on annotations in the UCUM code, so this usage should be checked</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="INFORMATION">INFORMATION</span> <code>Medication.ingredient[0].item.ofType(CodeableConcept).coding[0]</code><br>This element does not match any known slice defined in the profile https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication|1.1.0-rc2 (this may not be a problem, but you should check that it's not intended to match a slice)</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="WARNING">WARNING</span> <code>Medication.ingredient[0].strength.denominator</code><br>UCUM Codes that contain human readable annotations like {Tabletten} can be misleading (e.g. they are ignored when comparing units). Best Practice is not to depend on annotations in the UCUM code, so this usage should be checked</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="INFORMATION">INFORMATION</span> <code>Medication.ingredient[1].item.ofType(CodeableConcept).coding[0]</code><br>This element does not match any known slice defined in the profile https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication|1.1.0-rc2 (this may not be a problem, but you should check that it's not intended to match a slice)</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="WARNING">WARNING</span> <code>Medication.ingredient[1].strength.denominator</code><br>UCUM Codes that contain human readable annotations like {Tabletten} can be misleading (e.g. they are ignored when comparing units). Best Practice is not to depend on annotations in the UCUM code, so this usage should be checked</td>
+                                </tr>
+                            
+                            </tbody>
+                        </table>
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="sources" role="tabpanel" aria-labelledby="sources-tab">
+            
+                <h3>Privacy Label Extension</h3>
+                <div>
+                    <pre><code class="language-vbnet">Extension: PrivacyLabelExtension
+Id: privacy-label-extension
+Context: ElementDefinition
+Title: "Privacy Label Extension"
+Description: "Element-Ebene-Annotation zur Deklaration der Pseudonymisierungs-Behandlung eines FHIR-Elements innerhalb eines P-Profils. Trägt einen obligationPolicy-Code (PSEUD / REDACT / ANONY aus HL7 v3) und einen optionalen dummyValue für die Anonymisierung primitiver Elemente. Erscheint ausschließlich in StructureDefinitions, niemals in Instanzdaten."
+
+* insert Meta
+
+* extension contains
+    obligationPolicy 1..1 MS and
+    dummyValue 0..1 MS
+* extension[obligationPolicy].value[x] only Coding
+* extension[obligationPolicy].value[x] from $vs-v3-ObligationPolicy
+</code></pre>
+                </div>
+            
+                <h3>Privacy Rule Sets</h3>
+                <div>
+                    <pre><code class="language-vbnet">RuleSet: PrivacyLabelPseudonymize
+* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#PSEUD
+
+RuleSet: PrivacyLabelAnonymizeString(dummyValue)
+* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#ANONY
+* ^extension[PrivacyLabelExtension].extension[dummyValue].valueString = {dummyValue}
+
+RuleSet: PrivacyLabelRedact
+* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#REDACT
+</code></pre>
+                </div>
+            
+                <h3>Profile EPAResearchMedication</h3>
+                <div>
+                    <pre><code class="language-vbnet">Profile: EPAResearchMedication
+Id: epa-research-medication
+Parent: Medication
+Title: "Medication-Profil für ePA-Forschungsdaten"
+Description: "Pseudonymisiertes Gegenstück zu EPAMedication für den ePA-Forschungsdatensatz. Identifizierende Elemente werden entfernt oder anonymisiert; nur explizit deklarierte Extensions werden aus der Quellinstanz übernommen."
+
+* insert Meta
+* insert MetaSourceProfile
+
+* code.coding ^slicing.discriminator.type = #value
+* code.coding ^slicing.discriminator.path = "$this"
+* code.coding ^slicing.rules = #open
+
+* code.coding contains atc-de 0..0
+// Convention: attach PrivacyLabel to the slice itself
+* code.coding[atc-de]
+  * insert PrivacyLabelRedact
+* code.coding[atc-de].system = "http://fhir.de/CodeSystem/bfarm/atc"
+
+* code.text 0..0
+  * insert PrivacyLabelRedact
+
+* manufacturer 0..0
+  * insert PrivacyLabelRedact
+
+* form.coding ^slicing.discriminator.type = #value
+* form.coding ^slicing.discriminator.path = "$this"
+* form.coding ^slicing.rules = #open
+
+* form.coding contains edqm 0..0 and kbvDarreichungsform 0..0
+* form.coding[edqm]
+  * insert PrivacyLabelRedact
+* form.coding[edqm].system = "http://standardterms.edqm.eu"
+* form.coding[kbvDarreichungsform]
+  * insert PrivacyLabelRedact
+* form.coding[kbvDarreichungsform].system = "https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_KBV_DARREICHUNGSFORM"
+
+* ingredient.itemCodeableConcept.coding ^slicing.discriminator.type = #value
+* ingredient.itemCodeableConcept.coding ^slicing.discriminator.path = "$this"
+* ingredient.itemCodeableConcept.coding ^slicing.rules = #open
+
+* ingredient.itemCodeableConcept.coding contains atc-de 0..0
+* ingredient.itemCodeableConcept.coding[atc-de]
+  * insert PrivacyLabelRedact
+* ingredient.itemCodeableConcept.coding[atc-de].system = "http://fhir.de/CodeSystem/bfarm/atc"
+
+* ingredient.itemCodeableConcept.text 0..0
+  * insert PrivacyLabelRedact
+
+* batch.lotNumber 0..0
+  * insert PrivacyLabelRedact
+
+// Explicitly defined extension slices are copied; others are filtered out.
+// * extension contains
+//   MedicationIsVaccineExtension named isVaccine 0..1 and
+//   DrugCategoryExtension named drugCategory 0..1 and
+//   ExtensionNormgroesseDeBasis named normSizeCode 0..1 and
+//   MedicationFormulationPackagingExtension named packaging 0..1 and
+//   MedicationManufacturingInstructionsExtension named manufacturingInstructions 0..1 and
+//   EPAMedicationTypeExtension named type 0..1 MS
+</code></pre>
+                </div>
+            
+                <h3>Example EPAMedicationMaaloxan (source)</h3>
+                <div>
+                    <pre><code class="language-vbnet">// Full Maaloxan EPAMedication — pre-redaction reference.
+Instance: ExampleEPAMedicationMaaloxan
+InstanceOf: EPAMedication
+Usage: #example
+Description: "Full Maaloxan EPAMedication — pre-redaction reference."
+
+// Explicitly defined extension slices are copied; others are filtered out.
+* extension[rxPrescriptionProcessIdentifier].valueIdentifier.system = "https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier"
+* extension[rxPrescriptionProcessIdentifier].valueIdentifier.value = "160.100.000.000.011.09_20250906"
+* extension[isVaccine].valueBoolean = false
+* extension[drugCategory].valueCoding.system = "https://gematik.de/fhir/epa-medication/CodeSystem/epa-drug-category-cs"
+* extension[drugCategory].valueCoding.code = #00
+* extension[normSizeCode].valueCode = #N1
+* extension[type].valueCoding.system = "http://snomed.info/sct"
+* extension[type].valueCoding.code = #781405001
+* extension[type].valueCoding.display = "Medicinal product package"
+* extension[packaging].valueString = "Packung mit 30 Kautabletten"
+* extension[manufacturingInstructions].valueString = "Bei Raumtemperatur trocken lagern."
+
+// Upstream EPAMedication slices code.coding into pzn / atc-de / ask —
+// reference each by its slice name. Contrast with the research example,
+// which uses [+] array-index because EPAResearchMedication leaves these
+// codings to flow through the inherited #open slicing.
+* code.coding[pzn].code = #9717395
+* code.coding[pzn].display = "Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon"
+
+* code.coding[atc-de].version = "2024"
+* code.coding[atc-de].code = #A02AD10
+* code.coding[atc-de].display = "Aluminiumoxid in Kombination mit Magnesiumhydroxid"
+
+* code.coding[ask].code = #02250
+* code.coding[ask].display = "Magnesiumhydroxid"
+
+* code.text = "Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon"
+
+* status = #active
+
+* manufacturer.display = "Sanofi-Aventis Deutschland GmbH"
+
+* form.coding[+].system = "https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_KBV_DARREICHUNGSFORM"
+* form.coding[=].code = #KTA
+* form.coding[=].display = "Kautabletten"
+// EDQM coding — research profile redacts this slice too (in addition to KBV).
+* form.coding[+].system = "http://standardterms.edqm.eu"
+* form.coding[=].code = #10219000
+* form.coding[=].display = "Chewable tablet"
+
+* amount.numerator.value = 30
+* amount.numerator.unit = "Tabletten"
+* amount.numerator.system = "http://unitsofmeasure.org"
+* amount.numerator.code = #{Tabletten}
+* amount.denominator.value = 1
+* amount.denominator.unit = "Package"
+* amount.denominator.system = "http://unitsofmeasure.org"
+* amount.denominator.code = #{Package}
+
+// Ingredient 1: Magnesiumhydroxid
+* ingredient[+].itemCodeableConcept.coding[+].system = "http://fhir.de/CodeSystem/ask"
+* ingredient[=].itemCodeableConcept.coding[=].code = #2250
+* ingredient[=].itemCodeableConcept.coding[=].display = "Magnesiumhydroxid"
+* ingredient[=].itemCodeableConcept.coding[+].system = "http://fhir.de/CodeSystem/bfarm/atc"
+* ingredient[=].itemCodeableConcept.coding[=].version = "2024"
+* ingredient[=].itemCodeableConcept.coding[=].code = #A02AA04
+* ingredient[=].itemCodeableConcept.coding[=].display = "Magnesiumhydroxid"
+* ingredient[=].itemCodeableConcept.text = "Magnesiumhydroxid 400 mg"
+* ingredient[=].strength.numerator.value = 400
+* ingredient[=].strength.numerator.unit = "milligramm"
+* ingredient[=].strength.numerator.system = "http://unitsofmeasure.org"
+* ingredient[=].strength.numerator.code = #mg
+* ingredient[=].strength.denominator.value = 1
+* ingredient[=].strength.denominator.unit = "Tabletten"
+* ingredient[=].strength.denominator.system = "http://unitsofmeasure.org"
+* ingredient[=].strength.denominator.code = #{Tabletten}
+
+// Ingredient 2: Algeldrat
+* ingredient[+].itemCodeableConcept.coding[+].system = "http://fhir.de/CodeSystem/ask"
+* ingredient[=].itemCodeableConcept.coding[=].code = #01253
+* ingredient[=].itemCodeableConcept.coding[=].display = "Algeldrat"
+* ingredient[=].itemCodeableConcept.coding[+].system = "http://fhir.de/CodeSystem/bfarm/atc"
+* ingredient[=].itemCodeableConcept.coding[=].version = "2024"
+* ingredient[=].itemCodeableConcept.coding[=].code = #A02AB01
+* ingredient[=].itemCodeableConcept.coding[=].display = "Aluminiumhydroxid"
+* ingredient[=].itemCodeableConcept.text = "Algeldrat 400 mg"
+* ingredient[=].strength.numerator.value = 400
+* ingredient[=].strength.numerator.unit = "milligramm"
+* ingredient[=].strength.numerator.system = "http://unitsofmeasure.org"
+* ingredient[=].strength.numerator.code = #mg
+* ingredient[=].strength.denominator.value = 1
+* ingredient[=].strength.denominator.unit = "Tabletten"
+* ingredient[=].strength.denominator.system = "http://unitsofmeasure.org"
+* ingredient[=].strength.denominator.code = #{Tabletten}
+
+* batch.lotNumber = "LOT-2024-A0042"
+* batch.expirationDate = "2026-12-31"
+</code></pre>
+                </div>
+            
+                <h3>Example EPAResearchMedicationMaaloxan (expected)</h3>
+                <div>
+                    <pre><code class="language-vbnet">// Redacted version of full EPA Medication
+Instance: ExampleEPAResearchMedicationMaaloxan
+InstanceOf: EPAResearchMedication
+Usage: #example
+Description: "Maaloxan after EPAResearchMedication redaction rules."
+
+* meta.tag[TagSourceProfile].code = #"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication"
+* meta.security = http://terminology.hl7.org/CodeSystem/v3-ObservationValue#PSEUDED "pseudonymized"
+
+// Explicitly defined extension slices are copied; others are filtered out.
+// * extension[isVaccine].valueBoolean = false
+// * extension[drugCategory].valueCoding.system = "https://gematik.de/fhir/epa-medication/CodeSystem/epa-drug-category-cs"
+// * extension[drugCategory].valueCoding.code = #00
+// * extension[normSizeCode].valueCode = #N1
+// * extension[packaging].valueString = "Packung mit 30 Kautabletten"
+// * extension[manufacturingInstructions].valueString = "Bei Raumtemperatur trocken lagern."
+// * extension[type].valueCoding.system = "http://snomed.info/sct"
+// * extension[type].valueCoding.code = #781405001
+// * extension[type].valueCoding.display = "Medicinal product package"
+
+// EPAResearchMedication explicitly slices code.coding only for atc-de
+// (cardinality 0..0 — redacted). pzn and ask flow through implicitly via
+// the inherited #open slicing rule, so we add them by array-index here;
+// the absence of a slice name is the signal that they are not enumerated
+// by the research profile.
+* status = #active
+
+* code.coding[+].system = "http://fhir.de/CodeSystem/ifa/pzn"
+* code.coding[=].code = #9717395
+* code.coding[=].display = "Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon"
+
+* code.coding[+].system = "http://fhir.de/CodeSystem/ask"
+* code.coding[=].code = #02250
+* code.coding[=].display = "Magnesiumhydroxid"
+
+* amount.numerator.value = 30
+* amount.numerator.unit = "Tabletten"
+* amount.numerator.system = "http://unitsofmeasure.org"
+* amount.numerator.code = #{Tabletten}
+* amount.denominator.value = 1
+* amount.denominator.unit = "Package"
+* amount.denominator.system = "http://unitsofmeasure.org"
+* amount.denominator.code = #{Package}
+
+// Ingredient 1: Magnesiumhydroxid — ASK kept, ATC-DE + text removed
+* ingredient[+].itemCodeableConcept.coding[+].system = "http://fhir.de/CodeSystem/ask"
+* ingredient[=].itemCodeableConcept.coding[=].code = #2250
+* ingredient[=].itemCodeableConcept.coding[=].display = "Magnesiumhydroxid"
+* ingredient[=].strength.numerator.value = 400
+* ingredient[=].strength.numerator.unit = "milligramm"
+* ingredient[=].strength.numerator.system = "http://unitsofmeasure.org"
+* ingredient[=].strength.numerator.code = #mg
+* ingredient[=].strength.denominator.value = 1
+* ingredient[=].strength.denominator.unit = "Tabletten"
+* ingredient[=].strength.denominator.system = "http://unitsofmeasure.org"
+* ingredient[=].strength.denominator.code = #{Tabletten}
+
+// Ingredient 2: Algeldrat — ASK kept, ATC-DE + text removed
+* ingredient[+].itemCodeableConcept.coding[+].system = "http://fhir.de/CodeSystem/ask"
+* ingredient[=].itemCodeableConcept.coding[=].code = #01253
+* ingredient[=].itemCodeableConcept.coding[=].display = "Algeldrat"
+* ingredient[=].strength.numerator.value = 400
+* ingredient[=].strength.numerator.unit = "milligramm"
+* ingredient[=].strength.numerator.system = "http://unitsofmeasure.org"
+* ingredient[=].strength.numerator.code = #mg
+* ingredient[=].strength.denominator.value = 1
+* ingredient[=].strength.denominator.unit = "Tabletten"
+* ingredient[=].strength.denominator.system = "http://unitsofmeasure.org"
+* ingredient[=].strength.denominator.code = #{Tabletten}
+
+* batch.expirationDate = "2026-12-31"
+</code></pre>
+                </div>
+            
+        </div>
+
+        <div class="tab-pane fade" id="resources" role="tabpanel" aria-labelledby="resources-tab">
+            <pre><code class="language-json">{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "entry": [ {
+    "resource": {
+      "resourceType": "Medication",
+      "id": "ExampleEPAMedicationMaaloxan",
+      "meta": {
+        "profile": [ "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication" ]
+      },
+      "extension": [ {
+        "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension",
+        "valueIdentifier": {
+          "system": "https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier",
+          "value": "160.100.000.000.011.09_20250906"
+        }
+      }, {
+        "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/medication-id-vaccine-extension",
+        "valueBoolean": false
+      }, {
+        "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/drug-category-extension",
+        "valueCoding": {
+          "system": "https://gematik.de/fhir/epa-medication/CodeSystem/epa-drug-category-cs",
+          "code": "00"
+        }
+      }, {
+        "url": "http://fhir.de/StructureDefinition/normgroesse",
+        "valueCode": "N1"
+      }, {
+        "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-type-extension",
+        "valueCoding": {
+          "system": "http://snomed.info/sct",
+          "code": "781405001",
+          "display": "Medicinal product package"
+        }
+      }, {
+        "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/medication-formulation-packaging-extension",
+        "valueString": "Packung mit 30 Kautabletten"
+      }, {
+        "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/medication-manufacturing-instructions-extension",
+        "valueString": "Bei Raumtemperatur trocken lagern."
+      } ],
+      "code": {
+        "coding": [ {
+          "system": "http://fhir.de/CodeSystem/ifa/pzn",
+          "code": "9717395",
+          "display": "Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon"
+        }, {
+          "system": "http://fhir.de/CodeSystem/bfarm/atc",
+          "version": "2024",
+          "code": "A02AD10",
+          "display": "Aluminiumoxid in Kombination mit Magnesiumhydroxid"
+        }, {
+          "system": "http://fhir.de/CodeSystem/ask",
+          "code": "02250",
+          "display": "Magnesiumhydroxid"
+        } ],
+        "text": "Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon"
+      },
+      "status": "active",
+      "manufacturer": {
+        "display": "Sanofi-Aventis Deutschland GmbH"
+      },
+      "form": {
+        "coding": [ {
+          "system": "https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_KBV_DARREICHUNGSFORM",
+          "code": "KTA",
+          "display": "Kautabletten"
+        }, {
+          "system": "http://standardterms.edqm.eu",
+          "code": "10219000",
+          "display": "Chewable tablet"
+        } ]
+      },
+      "amount": {
+        "numerator": {
+          "value": 30,
+          "unit": "Tabletten",
+          "system": "http://unitsofmeasure.org",
+          "code": "{Tabletten}"
+        },
+        "denominator": {
+          "value": 1,
+          "unit": "Package",
+          "system": "http://unitsofmeasure.org",
+          "code": "{Package}"
+        }
+      },
+      "ingredient": [ {
+        "itemCodeableConcept": {
+          "coding": [ {
+            "system": "http://fhir.de/CodeSystem/ask",
+            "code": "2250",
+            "display": "Magnesiumhydroxid"
+          }, {
+            "system": "http://fhir.de/CodeSystem/bfarm/atc",
+            "version": "2024",
+            "code": "A02AA04",
+            "display": "Magnesiumhydroxid"
+          } ],
+          "text": "Magnesiumhydroxid 400 mg"
+        },
+        "strength": {
+          "numerator": {
+            "value": 400,
+            "unit": "milligramm",
+            "system": "http://unitsofmeasure.org",
+            "code": "mg"
+          },
+          "denominator": {
+            "value": 1,
+            "unit": "Tabletten",
+            "system": "http://unitsofmeasure.org",
+            "code": "{Tabletten}"
+          }
+        }
+      }, {
+        "itemCodeableConcept": {
+          "coding": [ {
+            "system": "http://fhir.de/CodeSystem/ask",
+            "code": "01253",
+            "display": "Algeldrat"
+          }, {
+            "system": "http://fhir.de/CodeSystem/bfarm/atc",
+            "version": "2024",
+            "code": "A02AB01",
+            "display": "Aluminiumhydroxid"
+          } ],
+          "text": "Algeldrat 400 mg"
+        },
+        "strength": {
+          "numerator": {
+            "value": 400,
+            "unit": "milligramm",
+            "system": "http://unitsofmeasure.org",
+            "code": "mg"
+          },
+          "denominator": {
+            "value": 1,
+            "unit": "Tabletten",
+            "system": "http://unitsofmeasure.org",
+            "code": "{Tabletten}"
+          }
+        }
+      } ],
+      "batch": {
+        "lotNumber": "LOT-2024-A0042",
+        "expirationDate": "2026-12-31"
+      }
+    }
+  } ]
+}</code></pre>
+        </div>
     </div>
 
     <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', () => {
-            const diffString = "--- FHIR.json\n+++ FHIR.json\n@@ -1,124 +1,71 @@\n {\n   \"resourceType\": \"Bundle\",\n   \"id\": \"ExampleEPAMedicationRequestBundle\",\n   \"type\": \"collection\",\n   \"entry\": [ {\n     \"resource\": {\n       \"resourceType\": \"MedicationRequest\",\n       \"id\": \"bf1b08e5-5cfe-4ec0-b6b3-580d4bdc7975\",\n       \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-request\" ]\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-request\" ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-request\"\n+        } ]\n       },\n       \"status\": \"active\",\n       \"intent\": \"plan\",\n       \"medicationReference\": {\n         \"reference\": \"Medication/50438bb0-34cd-4e48-a311-af6357f38681\"\n       },\n       \"subject\": {\n         \"identifier\": {\n-          \"system\": \"http://fhir.de/sid/gkv/kvid-10\",\n-          \"value\": \"X123456789\"\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/job-number-identifier\",\n+          \"value\": \"1a7e0610-35dd-4715-85be-65c36c380b76\"\n         }\n       },\n       \"authoredOn\": \"2024-07-01\",\n-      \"requester\": {\n-        \"reference\": \"PractitionerRole/115aceb7-d4a9-4843-aa6a-96a6999a803c\"\n-      },\n       \"dispenseRequest\": {\n         \"quantity\": {\n           \"value\": 3,\n           \"system\": \"http://unitsofmeasure.org\",\n           \"code\": \"{Package}\"\n         }\n       }\n     }\n   }, {\n     \"resource\": {\n       \"resourceType\": \"Medication\",\n       \"id\": \"50438bb0-34cd-4e48-a311-af6357f38681\",\n       \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication\" ]\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication\" ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication\"\n+        } ]\n       },\n       \"extension\": [ {\n         \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension\",\n         \"valueIdentifier\": {\n           \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier\",\n           \"value\": \"160.153.303.257.459_20240122\"\n         }\n       } ],\n       \"identifier\": [ {\n         \"system\": \"https://gematik.de/fhir/epa-medication/sid/epa-medication-unique-identifier\",\n         \"value\": \"583DC39E2BFFBFD6C05AE0AC404516309F56729EA44813F9FB881C73EE58EA5D\"\n       }, {\n         \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier\",\n         \"value\": \"6ae6a7ca-c9b5-46bf-9411-2ba49d96f988_160.153.303.257.459\"\n       } ],\n       \"code\": {\n         \"coding\": [ {\n           \"system\": \"http://fhir.de/CodeSystem/ask\",\n           \"code\": \"5682\",\n           \"display\": \"Ibuprofen\"\n         } ]\n       },\n       \"status\": \"active\"\n     }\n-  }, {\n-    \"resource\": {\n-      \"resourceType\": \"PractitionerRole\",\n-      \"id\": \"115aceb7-d4a9-4843-aa6a-96a6999a803c\",\n-      \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/directory/StructureDefinition/PractitionerRoleDirectory\" ],\n-        \"tag\": [ {\n-          \"system\": \"https://gematik.de/fhir/directory/CodeSystem/Origin\",\n-          \"code\": \"ldap\"\n-        } ]\n-      },\n-      \"practitioner\": {\n-        \"reference\": \"Practitioner/e94eb9b2-a8ac-4077-ba64-51af77a031f0\"\n-      },\n-      \"location\": [ {\n-        \"reference\": \"Location/5541eeb9-4b4f-4f0c-bdd3-53dc0280898b\"\n-      } ]\n-    }\n-  }, {\n-    \"resource\": {\n-      \"resourceType\": \"Practitioner\",\n-      \"id\": \"e94eb9b2-a8ac-4077-ba64-51af77a031f0\",\n-      \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/directory/StructureDefinition/PractitionerDirectory\" ],\n-        \"tag\": [ {\n-          \"system\": \"https://gematik.de/fhir/directory/CodeSystem/Origin\",\n-          \"code\": \"ldap\"\n-        } ]\n-      },\n-      \"identifier\": [ {\n-        \"system\": \"https://gematik.de/fhir/sid/telematik-id\",\n-        \"value\": \"1-1012345678\"\n-      }, {\n-        \"system\": \"https://fhir.kbv.de/NamingSystem/KBV_NS_Base_ANR\",\n-        \"value\": \"123456789\"\n-      } ],\n-      \"name\": [ {\n-        \"text\": \"Dr. Max Manfred Mustermann\",\n-        \"family\": \"Musterman\",\n-        \"given\": [ \"Max\", \"Manfred\" ],\n-        \"prefix\": [ \"Dr.\" ]\n-      } ],\n-      \"qualification\": [ {\n-        \"code\": {\n-          \"coding\": [ {\n-            \"system\": \"urn:oid:1.2.276.0.76.5.114\",\n-            \"code\": \"010\"\n-          } ]\n-        }\n-      }, {\n-        \"code\": {\n-          \"coding\": [ {\n-            \"system\": \"https://gematik.de/fhir/directory/CodeSystem/PractitionerProfessionOID\",\n-            \"code\": \"1.2.276.0.76.4.30\"\n-          } ]\n-        }\n-      } ]\n-    }\n   } ]\n }";
+        
+        
+        let diffRendered = false;
+        function renderBundleDiff() {
+            if (diffRendered) return;
+            diffRendered = true;
             const targetElement = document.getElementById('bundleDiff');
-            var configuration = {
+            const diffString = "--- FHIR.json\n+++ FHIR.json\n@@ -1,152 +1,96 @@\n {\n   \"resourceType\": \"Bundle\",\n   \"type\": \"collection\",\n   \"entry\": [ {\n     \"resource\": {\n       \"resourceType\": \"Medication\",\n       \"id\": \"ExampleEPAMedicationMaaloxan\",\n       \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication\" ]\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication\" ],\n+        \"security\": [ {\n+          \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ObservationValue\",\n+          \"code\": \"PSEUDED\",\n+          \"display\": \"pseudonymized\"\n+        } ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication\"\n+        } ]\n       },\n-      \"extension\": [ {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension\",\n-        \"valueIdentifier\": {\n-          \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier\",\n-          \"value\": \"160.100.000.000.011.09_20250906\"\n-        }\n-      }, {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/medication-id-vaccine-extension\",\n-        \"valueBoolean\": false\n-      }, {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/drug-category-extension\",\n-        \"valueCoding\": {\n-          \"system\": \"https://gematik.de/fhir/epa-medication/CodeSystem/epa-drug-category-cs\",\n-          \"code\": \"00\"\n-        }\n-      }, {\n-        \"url\": \"http://fhir.de/StructureDefinition/normgroesse\",\n-        \"valueCode\": \"N1\"\n-      }, {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-type-extension\",\n-        \"valueCoding\": {\n-          \"system\": \"http://snomed.info/sct\",\n-          \"code\": \"781405001\",\n-          \"display\": \"Medicinal product package\"\n-        }\n-      }, {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/medication-formulation-packaging-extension\",\n-        \"valueString\": \"Packung mit 30 Kautabletten\"\n-      }, {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/medication-manufacturing-instructions-extension\",\n-        \"valueString\": \"Bei Raumtemperatur trocken lagern.\"\n-      } ],\n       \"code\": {\n         \"coding\": [ {\n           \"system\": \"http://fhir.de/CodeSystem/ifa/pzn\",\n           \"code\": \"9717395\",\n           \"display\": \"Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon\"\n         }, {\n-          \"system\": \"http://fhir.de/CodeSystem/bfarm/atc\",\n-          \"version\": \"2024\",\n-          \"code\": \"A02AD10\",\n-          \"display\": \"Aluminiumoxid in Kombination mit Magnesiumhydroxid\"\n-        }, {\n           \"system\": \"http://fhir.de/CodeSystem/ask\",\n           \"code\": \"02250\",\n           \"display\": \"Magnesiumhydroxid\"\n-        } ],\n-        \"text\": \"Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon\"\n-      },\n-      \"status\": \"active\",\n-      \"manufacturer\": {\n-        \"display\": \"Sanofi-Aventis Deutschland GmbH\"\n-      },\n-      \"form\": {\n-        \"coding\": [ {\n-          \"system\": \"https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_KBV_DARREICHUNGSFORM\",\n-          \"code\": \"KTA\",\n-          \"display\": \"Kautabletten\"\n-        }, {\n-          \"system\": \"http://standardterms.edqm.eu\",\n-          \"code\": \"10219000\",\n-          \"display\": \"Chewable tablet\"\n         } ]\n       },\n+      \"status\": \"active\",\n       \"amount\": {\n         \"numerator\": {\n           \"value\": 30,\n           \"unit\": \"Tabletten\",\n           \"system\": \"http://unitsofmeasure.org\",\n           \"code\": \"{Tabletten}\"\n         },\n         \"denominator\": {\n           \"value\": 1,\n           \"unit\": \"Package\",\n           \"system\": \"http://unitsofmeasure.org\",\n           \"code\": \"{Package}\"\n         }\n       },\n       \"ingredient\": [ {\n         \"itemCodeableConcept\": {\n           \"coding\": [ {\n             \"system\": \"http://fhir.de/CodeSystem/ask\",\n             \"code\": \"2250\",\n             \"display\": \"Magnesiumhydroxid\"\n-          }, {\n-            \"system\": \"http://fhir.de/CodeSystem/bfarm/atc\",\n-            \"version\": \"2024\",\n-            \"code\": \"A02AA04\",\n-            \"display\": \"Magnesiumhydroxid\"\n-          } ],\n-          \"text\": \"Magnesiumhydroxid 400 mg\"\n+          } ]\n         },\n         \"strength\": {\n           \"numerator\": {\n             \"value\": 400,\n             \"unit\": \"milligramm\",\n             \"system\": \"http://unitsofmeasure.org\",\n             \"code\": \"mg\"\n           },\n           \"denominator\": {\n             \"value\": 1,\n             \"unit\": \"Tabletten\",\n             \"system\": \"http://unitsofmeasure.org\",\n             \"code\": \"{Tabletten}\"\n           }\n         }\n       }, {\n         \"itemCodeableConcept\": {\n           \"coding\": [ {\n             \"system\": \"http://fhir.de/CodeSystem/ask\",\n             \"code\": \"01253\",\n             \"display\": \"Algeldrat\"\n-          }, {\n-            \"system\": \"http://fhir.de/CodeSystem/bfarm/atc\",\n-            \"version\": \"2024\",\n-            \"code\": \"A02AB01\",\n-            \"display\": \"Aluminiumhydroxid\"\n-          } ],\n-          \"text\": \"Algeldrat 400 mg\"\n+          } ]\n         },\n         \"strength\": {\n           \"numerator\": {\n             \"value\": 400,\n             \"unit\": \"milligramm\",\n             \"system\": \"http://unitsofmeasure.org\",\n             \"code\": \"mg\"\n           },\n           \"denominator\": {\n             \"value\": 1,\n             \"unit\": \"Tabletten\",\n             \"system\": \"http://unitsofmeasure.org\",\n             \"code\": \"{Tabletten}\"\n           }\n         }\n       } ],\n       \"batch\": {\n-        \"lotNumber\": \"LOT-2024-A0042\",\n         \"expirationDate\": \"2026-12-31\"\n       }\n     }\n   } ]\n }";
+            const diff2htmlUi = new Diff2HtmlUI(targetElement, diffString, {
                 drawFileList: false,
                 fileListToggle: false,
                 fileListStartVisible: false,
@@ -118,329 +669,21 @@
                 highlight: true,
                 colorScheme: 'dark',
                 renderNothingWhenEmpty: false,
-              };
-            const diff2htmlUi = new Diff2HtmlUI(targetElement, diffString, configuration);
+            });
             diff2htmlUi.draw();
             diff2htmlUi.highlightCode();
-        });
+        }
+        document.getElementById('diff-tab').addEventListener('shown.bs.tab', renderBundleDiff);
+        
+        document.addEventListener('DOMContentLoaded', renderBundleDiff);
     </script>
-    <div class="row">
-        <div class="col-xl-6">
-            <h4>Validation before filter</h4>
-            
-                <p class="text-success">Bundle is valid</p>
-            
-        </div>
-        <div class="col-xl-6">
-            <h4>Validation after filter</h4>
-            
-                <p class="text-success">Bundle is valid</p>
-            
-
-        </div>
-
-        <h2 class="mt-4 mb-4">Sources</h2>
-        
-            <h3>Privacy Label Extension</h3>
-            <div>
-                <pre><code class="language-vbnet">Extension: PrivacyLabelExtension
-Id: privacy-label-extension
-Context: ElementDefinition
-
-* extension contains
-    obligationPolicy 1..1 MS and
-    dummyValue 0..1 MS
-* extension[obligationPolicy].value[x] only Coding
-* extension[obligationPolicy].value[x] from $vs-v3-ObligationPolicy
-</code></pre>
-            </div>
-        
-            <h3>Privacy Rule Sets</h3>
-            <div>
-                <pre><code class="language-vbnet">RuleSet: PrivacyLabelPseudonymize
-* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#PSEUD
-
-RuleSet: PrivacyLabelAnonymizeString(dummyValue)
-* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#ANONY
-* ^extension[PrivacyLabelExtension].extension[dummyValue].valueString = {dummyValue}
-
-RuleSet: PrivacyLabelRedact
-* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#REDACT
-</code></pre>
-            </div>
-        
-            <h3>Profile EPAResearchMedicationRequest</h3>
-            <div>
-                <pre><code class="language-vbnet">Profile: EPAResearchMedicationRequest
-Id: epa-research-medication-request
-Parent: MedicationRequest
-
-* insert MetaSourceProfile
-
-* note 0..0
-  * insert PrivacyLabelRedact
-* subject.identifier only EPAResearchJobNumberIdentifier
-  * insert PrivacyLabelPseudonymize
-* subject.reference 0..0
-  * insert PrivacyLabelRedact
-* requester 0..0
-  * insert PrivacyLabelRedact
-
-// Extensions
-* extension 0..
-  * ^slicing.discriminator.type = #value
-  * ^slicing.discriminator.path = "url"
-  * ^slicing.rules = #open
-* extension contains
-    MedicationRequestLinkedStatementExtension named medicationRequestLinkedStatement 0.. and
-    MultiplePrescriptionExtension named multiplePrescription 0..1 MS and
-    IndicatorBVGExtension named isBvg 0..1 MS
-* extension[medicationRequestLinkedStatement].value[x]
-
-* extension[isBvg].value[x] MS
-* extension[isBvg].valueBoolean MS
-
-* extension[multiplePrescription].extension[indicator].value[x] only boolean
-* extension[multiplePrescription].extension[indicator].valueBoolean MS
-
-* extension[multiplePrescription].extension[counter].value[x] only Ratio
-* extension[multiplePrescription].extension[counter].valueRatio MS
-* extension[multiplePrescription].extension[counter].valueRatio.numerator MS
-* extension[multiplePrescription].extension[counter].valueRatio.numerator.value MS
-* extension[multiplePrescription].extension[counter].valueRatio.denominator MS
-* extension[multiplePrescription].extension[counter].valueRatio.denominator.value MS
-
-* extension[multiplePrescription].extension[period].value[x] only Period
-* extension[multiplePrescription].extension[period].valuePeriod MS
-* extension[multiplePrescription].extension[period].valuePeriod.start MS
-* extension[multiplePrescription].extension[period].valuePeriod.end MS
-
-* extension[multiplePrescription].extension[id].value[x] only Identifier
-* extension[multiplePrescription].extension[id].valueIdentifier MS
-* extension[multiplePrescription].extension[id].valueIdentifier.system MS
-* extension[multiplePrescription].extension[id].valueIdentifier.value MS
-
-</code></pre>
-            </div>
-        
-            <h3>Example EPAMedicationRequest</h3>
-            <div>
-                <pre><code class="language-vbnet">Instance: ExampleEPAMedicationRequestMedication
-InstanceOf: EPAMedication
-Usage: #example
-* id = "50438bb0-34cd-4e48-a311-af6357f38681"
-* extension[rxPrescriptionProcessIdentifier].valueIdentifier.value = "160.153.303.257.459_20240122"
-* identifier[EPAMedicationUniqueIdentifier].value = "583DC39E2BFFBFD6C05AE0AC404516309F56729EA44813F9FB881C73EE58EA5D"
-* identifier[RxOriginatorProcessIdentifier].value = "6ae6a7ca-c9b5-46bf-9411-2ba49d96f988_160.153.303.257.459"
-* status = #active
-* code.coding
-  * system = $cs-ask
-  * code = #5682
-  * display = "Ibuprofen"
-
-Instance: ExampleEPAMedicationRequest
-InstanceOf: EPAMedicationRequest
-Usage: #example
-
-* id = "bf1b08e5-5cfe-4ec0-b6b3-580d4bdc7975"
-* status = medicationrequest-status#active
-* intent = http://hl7.org/fhir/CodeSystem/medicationrequest-intent#plan
-* medicationReference = Reference(ExampleEPAMedicationRequestMedication)
-* subject.identifier.value = "X123456789"
-* authoredOn = 2024-07-01
-* dispenseRequest.quantity.value = 3
-* requester = Reference(ExampleEPAPractitionerRole)
-
-Instance: ExampleEPAMedicationRequestBundle
-InstanceOf: Bundle
-Usage: #example
-
-* type = #collection
-* entry[+].resource = ExampleEPAMedicationRequest
-* entry[+].resource = ExampleEPAMedicationRequestMedication
-* entry[+].resource = ExampleEPAPractitionerRole
-* entry[+].resource = ExampleEPAPractitioner
-</code></pre>
-            </div>
-        
-            <h3>Example EPAPractioner</h3>
-            <div>
-                <pre><code class="language-vbnet">Instance: ExampleEPAPractitioner
-InstanceOf: PractitionerDirectory
-
-* meta.tag[Origin] = Origin#ldap
-* id = "e94eb9b2-a8ac-4077-ba64-51af77a031f0"
-* identifier[TelematikID].value = "1-1012345678"
-* identifier[LANR].value = "123456789"
-* name
-  * prefix = "Dr."
-  * given[+] = "Max"
-  * given[+] = "Manfred"
-  * family = "Musterman"
-  * text = "Dr. Max Manfred Mustermann"
-* qualification[+].code = urn:oid:1.2.276.0.76.5.114#010
-* qualification[+].code = PractitionerProfessionOID#1.2.276.0.76.4.30
-
-
-Instance: ExampleEPAPractitionerLocation
-InstanceOf: LocationDirectory
-
-* id = "5541eeb9-4b4f-4f0c-bdd3-53dc0280898b"
-* meta.tag[Origin] = Origin#ldap
-* address
-  * use = #work
-  * type = #both
-  * text = "Raiffeisenstr. 42&amp;#13;&amp;#10;10123 Berlin&amp;#13;&amp;#10;Berlin&amp;#13;&amp;#10;DE"
-  * line[+] = "Raiffeisenstr. 42"
-  * city = "Berlin"
-  * state = Region#Berlin
-  * postalCode = "10123"
-  * country = "DE"
-
-Instance: ExampleEPAPractitionerRole
-InstanceOf: PractitionerRoleDirectory
-
-* id = "115aceb7-d4a9-4843-aa6a-96a6999a803c"
-* meta.tag[Origin] = Origin#ldap
-* practitioner = Reference(ExampleEPAPractitioner)
-* location[+] = Reference(ExampleEPAPractitionerLocation)</code></pre>
-            </div>
-        
-
-        <h3 class="mt-4 mb-4">ePA Resources</h3>
-        <pre><code class="language-json">{
-  "resourceType": "Bundle",
-  "id": "ExampleEPAMedicationRequestBundle",
-  "type": "collection",
-  "entry": [ {
-    "resource": {
-      "resourceType": "MedicationRequest",
-      "id": "bf1b08e5-5cfe-4ec0-b6b3-580d4bdc7975",
-      "meta": {
-        "profile": [ "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-request" ]
-      },
-      "status": "active",
-      "intent": "plan",
-      "medicationReference": {
-        "reference": "Medication/50438bb0-34cd-4e48-a311-af6357f38681"
-      },
-      "subject": {
-        "identifier": {
-          "system": "http://fhir.de/sid/gkv/kvid-10",
-          "value": "X123456789"
-        }
-      },
-      "authoredOn": "2024-07-01",
-      "requester": {
-        "reference": "PractitionerRole/115aceb7-d4a9-4843-aa6a-96a6999a803c"
-      },
-      "dispenseRequest": {
-        "quantity": {
-          "value": 3,
-          "system": "http://unitsofmeasure.org",
-          "code": "{Package}"
-        }
-      }
-    }
-  }, {
-    "resource": {
-      "resourceType": "Medication",
-      "id": "50438bb0-34cd-4e48-a311-af6357f38681",
-      "meta": {
-        "profile": [ "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication" ]
-      },
-      "extension": [ {
-        "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension",
-        "valueIdentifier": {
-          "system": "https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier",
-          "value": "160.153.303.257.459_20240122"
-        }
-      } ],
-      "identifier": [ {
-        "system": "https://gematik.de/fhir/epa-medication/sid/epa-medication-unique-identifier",
-        "value": "583DC39E2BFFBFD6C05AE0AC404516309F56729EA44813F9FB881C73EE58EA5D"
-      }, {
-        "system": "https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier",
-        "value": "6ae6a7ca-c9b5-46bf-9411-2ba49d96f988_160.153.303.257.459"
-      } ],
-      "code": {
-        "coding": [ {
-          "system": "http://fhir.de/CodeSystem/ask",
-          "code": "5682",
-          "display": "Ibuprofen"
-        } ]
-      },
-      "status": "active"
-    }
-  }, {
-    "resource": {
-      "resourceType": "PractitionerRole",
-      "id": "115aceb7-d4a9-4843-aa6a-96a6999a803c",
-      "meta": {
-        "profile": [ "https://gematik.de/fhir/directory/StructureDefinition/PractitionerRoleDirectory" ],
-        "tag": [ {
-          "system": "https://gematik.de/fhir/directory/CodeSystem/Origin",
-          "code": "ldap"
-        } ]
-      },
-      "practitioner": {
-        "reference": "Practitioner/e94eb9b2-a8ac-4077-ba64-51af77a031f0"
-      },
-      "location": [ {
-        "reference": "Location/5541eeb9-4b4f-4f0c-bdd3-53dc0280898b"
-      } ]
-    }
-  }, {
-    "resource": {
-      "resourceType": "Practitioner",
-      "id": "e94eb9b2-a8ac-4077-ba64-51af77a031f0",
-      "meta": {
-        "profile": [ "https://gematik.de/fhir/directory/StructureDefinition/PractitionerDirectory" ],
-        "tag": [ {
-          "system": "https://gematik.de/fhir/directory/CodeSystem/Origin",
-          "code": "ldap"
-        } ]
-      },
-      "identifier": [ {
-        "system": "https://gematik.de/fhir/sid/telematik-id",
-        "value": "1-1012345678"
-      }, {
-        "system": "https://fhir.kbv.de/NamingSystem/KBV_NS_Base_ANR",
-        "value": "123456789"
-      } ],
-      "name": [ {
-        "text": "Dr. Max Manfred Mustermann",
-        "family": "Musterman",
-        "given": [ "Max", "Manfred" ],
-        "prefix": [ "Dr." ]
-      } ],
-      "qualification": [ {
-        "code": {
-          "coding": [ {
-            "system": "urn:oid:1.2.276.0.76.5.114",
-            "code": "010"
-          } ]
-        }
-      }, {
-        "code": {
-          "coding": [ {
-            "system": "https://gematik.de/fhir/directory/CodeSystem/PractitionerProfessionOID",
-            "code": "1.2.276.0.76.4.30"
-          } ]
-        }
-      } ]
-    }
-  } ]
-}</code></pre>
-
-    </div>
 
     
 
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 <script>hljs.highlightAll();</script>
 
 </body>
