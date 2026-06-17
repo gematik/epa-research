@@ -23,7 +23,7 @@
     },
     {
       "url": "http://hl7.org/fhir/5.0/StructureDefinition/extension-MedicationDispense.renderedDosageInstruction",
-      "valueMarkdown": "1-0-0-0 Stück"
+      "valueMarkdown": "Morgens 1 Tablette einnehmen, mit etwas Wasser."
     },
     {
       "url": "http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta",
