@@ -7,6 +7,10 @@ Description: "Maaloxan MedicationDispense after EPAResearchMedicationDispense re
 * meta.tag[TagSourceProfile].code = #"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense"
 * meta.security = http://terminology.hl7.org/CodeSystem/v3-ObservationValue#PSEUDED "pseudonymized"
 
+// identifier carries no privacy label and is therefore preserved unchanged.
+* identifier[0].system = "https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier"
+* identifier[0].value = "3a534e48-80e8-4bbb-a19e-43e83d6f3a3e_160.100.000.000.010.12"
+
 * status = #completed
 
 * medicationReference = Reference(ExampleEPAResearchMedicationMaaloxan)

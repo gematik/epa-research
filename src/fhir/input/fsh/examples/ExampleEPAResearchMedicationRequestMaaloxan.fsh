@@ -11,6 +11,12 @@ Description: "Maaloxan MedicationRequest after EPAResearchMedicationRequest reda
 * extension[multiplePrescription].extension[indicator].valueBoolean = false
 * extension[isBvg].valueBoolean = false
 
+// identifier carries no privacy label and is therefore preserved unchanged.
+* identifier[0].system = "https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier"
+* identifier[0].value = "160.100.000.000.011.09_20250906"
+* identifier[1].system = "https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier"
+* identifier[1].value = "59b9fa64-4ca1-4bd2-8388-652d0fec32b2_160.100.000.000.011.09"
+
 * status = #completed
 * intent = #filler-order
 

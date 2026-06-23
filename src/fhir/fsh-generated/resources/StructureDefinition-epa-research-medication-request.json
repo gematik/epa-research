@@ -2,7 +2,7 @@
   "resourceType": "StructureDefinition",
   "id": "epa-research-medication-request",
   "url": "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-request",
-  "version": "1.1.0-rc2",
+  "version": "1.1.0",
   "name": "EPAResearchMedicationRequest",
   "title": "MedicationRequest-Profil für ePA-Forschungsdaten",
   "status": "draft",
@@ -1748,6 +1748,20 @@
       },
       {
         "id": "MedicationRequest.subject",
+        "extension": [
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "PSEUD",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
+          }
+        ],
         "path": "MedicationRequest.subject",
         "short": "Who or group medication request is for",
         "definition": "A link to a resource representing the person or set of individuals to whom the medication will be given.",
@@ -1903,26 +1917,12 @@
       },
       {
         "id": "MedicationRequest.subject.reference",
-        "extension": [
-          {
-            "extension": [
-              {
-                "url": "obligationPolicy",
-                "valueCoding": {
-                  "code": "REDACT",
-                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
-                }
-              }
-            ],
-            "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
-          }
-        ],
         "path": "MedicationRequest.subject.reference",
         "short": "Literal reference, Relative, internal or absolute URL",
         "definition": "A reference to a location at which the other resource is found. The reference may be a relative reference, in which case it is relative to the service base URL, or an absolute URL that resolves to the location where the resource is found. The reference may be version specific or not. If the reference is not to a FHIR RESTful server, then it should be assumed to be version specific. Internal fragment references (start with '#') refer to contained resources.",
         "comment": "Using absolute URLs provides a stable scalable approach suitable for a cloud/web context, while using relative/logical references provides a flexible approach suitable for use when trading across closed eco-system boundaries.   Absolute URLs do not need to point to a FHIR RESTful server, though this is the preferred approach. If the URL conforms to the structure \"/[type]/[id]\" then it should be assumed that the reference is to a FHIR RESTful server.",
         "min": 0,
-        "max": "0",
+        "max": "1",
         "base": {
           "path": "Reference.reference",
           "min": 0,
@@ -2005,20 +2005,6 @@
       },
       {
         "id": "MedicationRequest.subject.identifier",
-        "extension": [
-          {
-            "extension": [
-              {
-                "url": "obligationPolicy",
-                "valueCoding": {
-                  "code": "PSEUD",
-                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
-                }
-              }
-            ],
-            "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
-          }
-        ],
         "path": "MedicationRequest.subject.identifier",
         "short": "Logical reference, when literal reference is not known",
         "definition": "An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.",
@@ -5131,26 +5117,7 @@
         "mustSupport": true
       },
       {
-        "id": "MedicationRequest.subject.reference",
-        "extension": [
-          {
-            "extension": [
-              {
-                "url": "obligationPolicy",
-                "valueCoding": {
-                  "code": "REDACT",
-                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
-                }
-              }
-            ],
-            "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
-          }
-        ],
-        "path": "MedicationRequest.subject.reference",
-        "max": "0"
-      },
-      {
-        "id": "MedicationRequest.subject.identifier",
+        "id": "MedicationRequest.subject",
         "extension": [
           {
             "extension": [
@@ -5165,6 +5132,10 @@
             "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
           }
         ],
+        "path": "MedicationRequest.subject"
+      },
+      {
+        "id": "MedicationRequest.subject.identifier",
         "path": "MedicationRequest.subject.identifier",
         "type": [
           {

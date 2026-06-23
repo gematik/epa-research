@@ -12,7 +12,8 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedication für den ePA-Forsch
 * code.coding ^slicing.rules = #open
 
 * code.coding contains atc-de 0..0
-// Convention: attach PrivacyLabel to the slice itself
+// REDACT is attached to the atc-de slice only — not to code.coding itself.
+// Only the ATC-DE coding is removed; PZN and ASK codings are retained intentionally.
 * code.coding[atc-de]
   * insert PrivacyLabelRedact
 * code.coding[atc-de].system = "http://fhir.de/CodeSystem/bfarm/atc"

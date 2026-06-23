@@ -2,7 +2,7 @@
   "resourceType": "StructureDefinition",
   "id": "epa-research-medication",
   "url": "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication",
-  "version": "1.1.0-rc2",
+  "version": "1.1.0",
   "name": "EPAResearchMedication",
   "title": "Medication-Profil für ePA-Forschungsdaten",
   "status": "draft",

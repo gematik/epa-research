@@ -7,10 +7,9 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedicationRequest für den ePA
 * insert Meta
 * insert MetaSourceProfile
 
-* subject.reference 0..0
-  * insert PrivacyLabelRedact
-* subject.identifier only EPAResearchJobNumberIdentifier
+* subject
   * insert PrivacyLabelPseudonymize
+* subject.identifier only EPAResearchJobNumberIdentifier
 
 * requester 0..0
   * insert PrivacyLabelRedact
