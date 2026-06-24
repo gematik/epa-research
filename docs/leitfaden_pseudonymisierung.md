@@ -2,7 +2,7 @@
 
 Version: 1.0 (ePA Pre-Release 3.1.0)
 
-Veröffentlichung vom 15.07.2024
+Veröffentlichung vom 24.06.2026
 
 Herausgeber: [gematik GmbH](https://www.gematik.de/)
 
