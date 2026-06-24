@@ -1,6 +1,6 @@
 
 
-Version: 1.0 (ePA Pre-Release 3.1.0)
+Version: 1.1 (ePA Pre-Release 3.1.0)
 
 Veröffentlichung vom 24.06.2026
 
