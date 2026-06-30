@@ -4,6 +4,7 @@
   "author": "gematik",
   "license" : "Apache-2.0",
   "canonical" : "https://gematik.de/fhir/epa-research",
+  "description": "The ePA research data specification",
   "jurisdiction" : "urn:iso:std:iso:3166#DE",
   "fhirVersions": [
     "4.0.1"
