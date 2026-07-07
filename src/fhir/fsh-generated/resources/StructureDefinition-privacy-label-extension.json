@@ -2,7 +2,7 @@
   "resourceType": "StructureDefinition",
   "id": "privacy-label-extension",
   "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "name": "PrivacyLabelExtension",
   "title": "Privacy Label Extension",
   "status": "active",

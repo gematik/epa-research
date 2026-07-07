@@ -2,7 +2,7 @@
   "resourceType": "StructureDefinition",
   "id": "epa-research-job-number-identifier",
   "url": "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-job-number-identifier",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "name": "EPAResearchJobNumberIdentifier",
   "title": "Job Number Identifier für ePA-Forschungsdaten",
   "status": "active",
