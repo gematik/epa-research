@@ -1,5 +1,5 @@
 RuleSet: Meta
-* ^status = #draft
+* ^status = #active
 * ^experimental = false
 * ^publisher = "gematik GmbH"
-* ^date = "2026-05-24"
+* ^date = "2026-07-07"
