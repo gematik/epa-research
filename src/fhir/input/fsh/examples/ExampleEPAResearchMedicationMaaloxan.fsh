@@ -18,20 +18,31 @@ Description: "Maaloxan after EPAResearchMedication redaction rules."
 // * extension[type].valueCoding.code = #781405001
 // * extension[type].valueCoding.display = "Medicinal product package"
 
-// EPAResearchMedication explicitly slices code.coding only for atc-de
-// (cardinality 0..0 — redacted). pzn and ask flow through implicitly via
-// the inherited #open slicing rule, so we add them by array-index here;
-// the absence of a slice name is the signal that they are not enumerated
-// by the research profile.
-* status = #active
+// status is 0..1 upstream and therefore redacted to absence.
 
+// EPAResearchMedication carries no slices on code.coding; all codings flow
+// through via the inherited #open slicing rule and are added by array-index
+// here. Only code.text is redacted.
 * code.coding[+].system = "http://fhir.de/CodeSystem/ifa/pzn"
 * code.coding[=].code = #9717395
 * code.coding[=].display = "Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon"
 
+* code.coding[+].system = "http://fhir.de/CodeSystem/bfarm/atc"
+* code.coding[=].version = "2024"
+* code.coding[=].code = #A02AD10
+* code.coding[=].display = "Aluminiumoxid in Kombination mit Magnesiumhydroxid"
+
 * code.coding[+].system = "http://fhir.de/CodeSystem/ask"
 * code.coding[=].code = #02250
 * code.coding[=].display = "Magnesiumhydroxid"
+
+* form.coding[+].system = "https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_KBV_DARREICHUNGSFORM"
+* form.coding[=].code = #KTA
+* form.coding[=].display = "Kautabletten"
+
+* form.coding[+].system = "http://standardterms.edqm.eu"
+* form.coding[=].code = #10219000
+* form.coding[=].display = "Chewable tablet"
 
 * amount.numerator.value = 30
 * amount.numerator.unit = "Tabletten"
@@ -42,9 +53,13 @@ Description: "Maaloxan after EPAResearchMedication redaction rules."
 * amount.denominator.system = "http://unitsofmeasure.org"
 * amount.denominator.code = #{Package}
 
-// Ingredient 1: Magnesiumhydroxid — ASK kept, ATC-DE + text removed
+// Ingredient 1: Magnesiumhydroxid — codings kept, text removed
 * ingredient[+].itemCodeableConcept.coding[+].system = "http://fhir.de/CodeSystem/ask"
 * ingredient[=].itemCodeableConcept.coding[=].code = #2250
+* ingredient[=].itemCodeableConcept.coding[=].display = "Magnesiumhydroxid"
+* ingredient[=].itemCodeableConcept.coding[+].system = "http://fhir.de/CodeSystem/bfarm/atc"
+* ingredient[=].itemCodeableConcept.coding[=].version = "2024"
+* ingredient[=].itemCodeableConcept.coding[=].code = #A02AA04
 * ingredient[=].itemCodeableConcept.coding[=].display = "Magnesiumhydroxid"
 * ingredient[=].strength.numerator.value = 400
 * ingredient[=].strength.numerator.unit = "milligramm"
@@ -55,10 +70,14 @@ Description: "Maaloxan after EPAResearchMedication redaction rules."
 * ingredient[=].strength.denominator.system = "http://unitsofmeasure.org"
 * ingredient[=].strength.denominator.code = #{Tabletten}
 
-// Ingredient 2: Algeldrat — ASK kept, ATC-DE + text removed
+// Ingredient 2: Algeldrat — codings kept, text removed
 * ingredient[+].itemCodeableConcept.coding[+].system = "http://fhir.de/CodeSystem/ask"
 * ingredient[=].itemCodeableConcept.coding[=].code = #01253
 * ingredient[=].itemCodeableConcept.coding[=].display = "Algeldrat"
+* ingredient[=].itemCodeableConcept.coding[+].system = "http://fhir.de/CodeSystem/bfarm/atc"
+* ingredient[=].itemCodeableConcept.coding[=].version = "2024"
+* ingredient[=].itemCodeableConcept.coding[=].code = #A02AB01
+* ingredient[=].itemCodeableConcept.coding[=].display = "Aluminiumhydroxid"
 * ingredient[=].strength.numerator.value = 400
 * ingredient[=].strength.numerator.unit = "milligramm"
 * ingredient[=].strength.numerator.system = "http://unitsofmeasure.org"

@@ -7,43 +7,15 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedication für den ePA-Forsch
 * insert Meta
 * insert MetaSourceProfile
 
-* code.coding ^slicing.discriminator.type = #value
-* code.coding ^slicing.discriminator.path = "$this"
-* code.coding ^slicing.rules = #open
-
-* code.coding contains atc-de 0..0
-// REDACT is attached to the atc-de slice only — not to code.coding itself.
-// Only the ATC-DE coding is removed; PZN and ASK codings are retained intentionally.
-* code.coding[atc-de]
+// only Medication's status is 0..1 and can be redacted to absence
+* status 0..0
   * insert PrivacyLabelRedact
-* code.coding[atc-de].system = "http://fhir.de/CodeSystem/bfarm/atc"
 
 * code.text 0..0
   * insert PrivacyLabelRedact
 
 * manufacturer 0..0
   * insert PrivacyLabelRedact
-
-* form.coding ^slicing.discriminator.type = #value
-* form.coding ^slicing.discriminator.path = "$this"
-* form.coding ^slicing.rules = #open
-
-* form.coding contains edqm 0..0 and kbvDarreichungsform 0..0
-* form.coding[edqm]
-  * insert PrivacyLabelRedact
-* form.coding[edqm].system = "http://standardterms.edqm.eu"
-* form.coding[kbvDarreichungsform]
-  * insert PrivacyLabelRedact
-* form.coding[kbvDarreichungsform].system = "https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_KBV_DARREICHUNGSFORM"
-
-* ingredient.itemCodeableConcept.coding ^slicing.discriminator.type = #value
-* ingredient.itemCodeableConcept.coding ^slicing.discriminator.path = "$this"
-* ingredient.itemCodeableConcept.coding ^slicing.rules = #open
-
-* ingredient.itemCodeableConcept.coding contains atc-de 0..0
-* ingredient.itemCodeableConcept.coding[atc-de]
-  * insert PrivacyLabelRedact
-* ingredient.itemCodeableConcept.coding[atc-de].system = "http://fhir.de/CodeSystem/bfarm/atc"
 
 * ingredient.itemCodeableConcept.text 0..0
   * insert PrivacyLabelRedact

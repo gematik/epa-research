@@ -19,6 +19,7 @@
       "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-request"
     ]
   },
+  "status": "unknown",
   "subject": {
     "identifier": {
       "system": "https://gematik.de/fhir/epa-research/sid/job-number-identifier",
@@ -50,7 +51,6 @@
       "value": "59b9fa64-4ca1-4bd2-8388-652d0fec32b2_160.100.000.000.011.09"
     }
   ],
-  "status": "completed",
   "intent": "filler-order",
   "medicationReference": {
     "reference": "Medication/ExampleEPAResearchMedicationMaaloxan"

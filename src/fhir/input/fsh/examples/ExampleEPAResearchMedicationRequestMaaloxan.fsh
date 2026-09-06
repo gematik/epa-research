@@ -17,7 +17,7 @@ Description: "Maaloxan MedicationRequest after EPAResearchMedicationRequest reda
 * identifier[1].system = "https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier"
 * identifier[1].value = "59b9fa64-4ca1-4bd2-8388-652d0fec32b2_160.100.000.000.011.09"
 
-* status = #completed
+* status = #unknown
 * intent = #filler-order
 
 * medicationReference = Reference(ExampleEPAResearchMedicationMaaloxan)

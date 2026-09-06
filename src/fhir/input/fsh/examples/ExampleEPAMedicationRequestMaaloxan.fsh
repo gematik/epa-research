@@ -4,6 +4,9 @@ InstanceOf: EPAMedicationRequest
 Usage: #example
 Description: "Full Maaloxan MedicationRequest — pre-redaction reference."
 
+// meta.source names the originating system and is therefore redacted.
+* meta.source = "https://praxis-mustermann.example/fhir"
+
 // Explicitly defined extension slices are copied; others are filtered out.
 * extension[multiplePrescription].extension[indicator].valueBoolean = false
 * extension[isBvg].valueBoolean = false

@@ -1,5 +1,8 @@
 RuleSet: MetaSourceProfile
 
+* meta.source 0..0
+  * insert PrivacyLabelRedact
+
 * meta.tag MS
   * ^slicing.discriminator.type = #value
   * ^slicing.discriminator.path = "system"

@@ -82,14 +82,14 @@ ObligationPolicy spezifiziert: `http://terminology.hl7.org/ValueSet/v3-Obligatio
 
 * `PSEUD` - Werte sind zu pseudonymisieren. Die KVNR werden durch Arbeitsnummer ersetzt.
 * `REDACT`- Das FHIR-Element ist zu entfernen.
-* `ANONY` - Werte sind durch einen festen Platzhalterwert zu ersetzen. Der eingesetzte Platzhalter wird in einer zusätzlichen `dummyValue` Sub-Extension der Privacy Label Extension mitgegeben.
+* `ANONY` - Werte sind durch einen festen Platzhalterwert zu ersetzen. Der eingesetzte Platzhalter wird in einer zusätzlichen `dummyValue` Sub-Extension der Privacy Label Extension mitgegeben — als `valueString` bei string-wertigen, als `valueCode` bei code-wertigen Elementen.
 
 ### Anwendbarkeit der Labels
 
 Die drei Labels unterscheiden sich darin, an welchen Elementen sie angebracht werden dürfen:
 
 * `REDACT` darf an jedem Element angegeben werden, sofern die strukturelle Kardinalität des Quell-Profils dies erlaubt (also eine Kardinalität von `0..0` zulässt). Auf komplexen Elementen entfernt es das gesamte Sub-Bäumchen, auf primitiven Elementen den jeweiligen Wert.
-* `ANONY` ist ausschließlich für primitive (z. B. string-wertige) Elemente vorgesehen. Bei komplexen Elementen (`BackboneElement`, `Reference`, weitere strukturierte Typen) wird `ANONY` nicht direkt am Element selbst angewendet, sondern an seinen Sub-Elementen mit primitivem Typ (z. B. `display` bei einer `Reference`). Identifizierende strukturelle Sub-Elemente werden parallel mit `REDACT` markiert; die strukturelle Kardinalität (z. B. `1..1`) bleibt damit erhalten.
+* `ANONY` ist ausschließlich für primitive (z. B. string-wertige) Elemente vorgesehen. Bei komplexen Elementen (`BackboneElement`, `Reference`, weitere strukturierte Typen) wird `ANONY` nicht direkt am Element selbst angewendet, sondern an seinen Sub-Elementen mit primitivem Typ (z. B. `display` bei einer `Reference`). Identifizierende strukturelle Sub-Elemente werden parallel mit `REDACT` markiert; die strukturelle Kardinalität (z. B. `1..1`) bleibt damit erhalten. Trägt ein code-wertiges Element ein required oder extensible Binding, muss der Platzhalter selbst ein gültiger Code des gebundenen ValueSets sein — etwa `#unknown` für `MedicationDispense.status`, das als `1..1` nicht redigiert werden kann.
 * `PSEUD` ist ausschließlich auf Elemente anwendbar, die einen Patient-Bezug über die KVNR tragen — typischerweise `subject` als `Reference(Patient)` oder direkte `Identifier`-Felder mit System `http://fhir.de/sid/gkv/kvid-10`. Eine Anwendung von `PSEUD` auf andere Element-Typen ist nicht definiert.
 
 #### `PSEUD` auf `Reference(Patient)` (z. B. `subject`)

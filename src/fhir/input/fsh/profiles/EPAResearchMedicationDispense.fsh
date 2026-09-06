@@ -7,6 +7,11 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedicationDispense für den eP
 * insert Meta
 * insert MetaSourceProfile
 
+// status ist 1..1 mit required binding — REDACT ist nicht möglich; der Platzhalter
+// muss ein gültiger Code aus medicationdispense-status sein.
+* status = #unknown
+  * insert PrivacyLabelAnonymizeCode(unknown)
+
 * subject
   * insert PrivacyLabelPseudonymize
 * subject.identifier only EPAResearchJobNumberIdentifier

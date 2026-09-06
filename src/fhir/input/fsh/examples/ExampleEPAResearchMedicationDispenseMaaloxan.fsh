@@ -11,7 +11,7 @@ Description: "Maaloxan MedicationDispense after EPAResearchMedicationDispense re
 * identifier[0].system = "https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier"
 * identifier[0].value = "3a534e48-80e8-4bbb-a19e-43e83d6f3a3e_160.100.000.000.010.12"
 
-* status = #completed
+* status = #unknown
 
 * medicationReference = Reference(ExampleEPAResearchMedicationMaaloxan)
 

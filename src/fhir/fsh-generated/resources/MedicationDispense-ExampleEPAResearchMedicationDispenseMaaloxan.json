@@ -19,6 +19,7 @@
       "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-dispense"
     ]
   },
+  "status": "unknown",
   "performer": [
     {
       "actor": {
@@ -38,7 +39,6 @@
       "value": "3a534e48-80e8-4bbb-a19e-43e83d6f3a3e_160.100.000.000.010.12"
     }
   ],
-  "status": "completed",
   "medicationReference": {
     "reference": "Medication/ExampleEPAResearchMedicationMaaloxan"
   },

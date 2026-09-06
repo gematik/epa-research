@@ -19,7 +19,6 @@
       "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication"
     ]
   },
-  "status": "active",
   "code": {
     "coding": [
       {
@@ -28,9 +27,29 @@
         "display": "Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon"
       },
       {
+        "system": "http://fhir.de/CodeSystem/bfarm/atc",
+        "version": "2024",
+        "code": "A02AD10",
+        "display": "Aluminiumoxid in Kombination mit Magnesiumhydroxid"
+      },
+      {
         "system": "http://fhir.de/CodeSystem/ask",
         "code": "02250",
         "display": "Magnesiumhydroxid"
+      }
+    ]
+  },
+  "form": {
+    "coding": [
+      {
+        "system": "https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_KBV_DARREICHUNGSFORM",
+        "code": "KTA",
+        "display": "Kautabletten"
+      },
+      {
+        "system": "http://standardterms.edqm.eu",
+        "code": "10219000",
+        "display": "Chewable tablet"
       }
     ]
   },
@@ -55,6 +74,12 @@
           {
             "system": "http://fhir.de/CodeSystem/ask",
             "code": "2250",
+            "display": "Magnesiumhydroxid"
+          },
+          {
+            "system": "http://fhir.de/CodeSystem/bfarm/atc",
+            "version": "2024",
+            "code": "A02AA04",
             "display": "Magnesiumhydroxid"
           }
         ]
@@ -81,6 +106,12 @@
             "system": "http://fhir.de/CodeSystem/ask",
             "code": "01253",
             "display": "Algeldrat"
+          },
+          {
+            "system": "http://fhir.de/CodeSystem/bfarm/atc",
+            "version": "2024",
+            "code": "A02AB01",
+            "display": "Aluminiumhydroxid"
           }
         ]
       },
