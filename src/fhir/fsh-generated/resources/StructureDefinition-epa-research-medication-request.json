@@ -67,32 +67,28 @@
             "severity": "error",
             "human": "If the resource is contained in another resource, it SHALL NOT contain nested Resources",
             "expression": "contained.contained.empty()",
-            "xpath": "not(parent::f:contained and f:contained)",
-            "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+            "xpath": "not(parent::f:contained and f:contained)"
           },
           {
             "key": "dom-3",
             "severity": "error",
             "human": "If the resource is contained in another resource, it SHALL be referred to from elsewhere in the resource or SHALL refer to the containing resource",
             "expression": "contained.where((('#'+id in (%resource.descendants().reference | %resource.descendants().as(canonical) | %resource.descendants().as(uri) | %resource.descendants().as(url))) or descendants().where(reference = '#').exists() or descendants().where(as(canonical) = '#').exists() or descendants().where(as(canonical) = '#').exists()).not()).trace('unmatched', id).empty()",
-            "xpath": "not(exists(for $id in f:contained/*/f:id/@value return $contained[not(parent::*/descendant::f:reference/@value=concat('#', $contained/*/id/@value) or descendant::f:reference[@value='#'])]))",
-            "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+            "xpath": "not(exists(for $id in f:contained/*/f:id/@value return $contained[not(parent::*/descendant::f:reference/@value=concat('#', $contained/*/id/@value) or descendant::f:reference[@value='#'])]))"
           },
           {
             "key": "dom-4",
             "severity": "error",
             "human": "If a resource is contained in another resource, it SHALL NOT have a meta.versionId or a meta.lastUpdated",
             "expression": "contained.meta.versionId.empty() and contained.meta.lastUpdated.empty()",
-            "xpath": "not(exists(f:contained/*/f:meta/f:versionId)) and not(exists(f:contained/*/f:meta/f:lastUpdated))",
-            "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+            "xpath": "not(exists(f:contained/*/f:meta/f:versionId)) and not(exists(f:contained/*/f:meta/f:lastUpdated))"
           },
           {
             "key": "dom-5",
             "severity": "error",
             "human": "If a resource is contained in another resource, it SHALL NOT have a security label",
             "expression": "contained.meta.security.empty()",
-            "xpath": "not(exists(f:contained/*/f:meta/f:security))",
-            "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+            "xpath": "not(exists(f:contained/*/f:meta/f:security))"
           },
           {
             "extension": [
@@ -109,8 +105,7 @@
             "severity": "warning",
             "human": "A resource should have narrative for robust management",
             "expression": "text.`div`.exists()",
-            "xpath": "exists(f:text/h:div)",
-            "source": "http://hl7.org/fhir/StructureDefinition/DomainResource"
+            "xpath": "exists(f:text/h:div)"
           }
         ],
         "isModifier": false,
@@ -444,6 +439,9 @@
             "code": "Coding"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -470,7 +468,25 @@
           "strength": "extensible",
           "description": "Security Labels from the Healthcare Privacy and Security Classification System.",
           "valueSet": "http://hl7.org/fhir/ValueSet/security-labels"
-        }
+        },
+        "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CE/CNE/CWE subset one of the sets of component 1-3 or 4-6"
+          },
+          {
+            "identity": "rim",
+            "map": "CV"
+          },
+          {
+            "identity": "orim",
+            "map": "fhir:Coding rdfs:subClassOf dt:CDCoding"
+          }
+        ]
       },
       {
         "id": "MedicationRequest.meta.tag",
@@ -499,6 +515,9 @@
             "code": "Coding"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -522,7 +541,25 @@
           "strength": "example",
           "description": "Codes that represent various types of tags, commonly workflow-related; e.g. \"Needs review by Dr. Jones\".",
           "valueSet": "http://hl7.org/fhir/ValueSet/common-tags"
-        }
+        },
+        "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CE/CNE/CWE subset one of the sets of component 1-3 or 4-6"
+          },
+          {
+            "identity": "rim",
+            "map": "CV"
+          },
+          {
+            "identity": "orim",
+            "map": "fhir:Coding rdfs:subClassOf dt:CDCoding"
+          }
+        ]
       },
       {
         "id": "MedicationRequest.meta.tag:TagSourceProfile",
@@ -543,6 +580,9 @@
             "code": "Coding"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -566,7 +606,25 @@
           "strength": "example",
           "description": "Codes that represent various types of tags, commonly workflow-related; e.g. \"Needs review by Dr. Jones\".",
           "valueSet": "http://hl7.org/fhir/ValueSet/common-tags"
-        }
+        },
+        "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CE/CNE/CWE subset one of the sets of component 1-3 or 4-6"
+          },
+          {
+            "identity": "rim",
+            "map": "CV"
+          },
+          {
+            "identity": "orim",
+            "map": "fhir:Coding rdfs:subClassOf dt:CDCoding"
+          }
+        ]
       },
       {
         "id": "MedicationRequest.meta.tag:TagSourceProfile.id",
@@ -811,6 +869,7 @@
         "path": "MedicationRequest.meta.tag.display",
         "short": "Representation defined by the system",
         "definition": "A representation of the meaning of the code in the system, following the rules of the system.",
+        "comment": "Note that FHIR strings SHALL NOT exceed 1MB in size",
         "requirements": "Need to be able to carry a human-readable meaning of the code for readers that do not know  the system.",
         "min": 0,
         "max": "1",
@@ -1064,7 +1123,7 @@
               "path": "url"
             }
           ],
-          "ordered": false,
+          "description": "Extensions are always sliced by (at least) url",
           "rules": "open"
         },
         "short": "Additional content defined by implementations",
@@ -1224,6 +1283,16 @@
       {
         "id": "MedicationRequest.modifierExtension",
         "path": "MedicationRequest.modifierExtension",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "value",
+              "path": "url"
+            }
+          ],
+          "description": "Extensions are always sliced by (at least) url",
+          "rules": "open"
+        },
         "short": "Extensions that cannot be ignored",
         "definition": "May be used to represent additional information that is not part of the basic definition of the resource and that modifies the understanding of the element that contains it and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer is allowed to define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions.\n\nModifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).",
         "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
@@ -1290,6 +1359,9 @@
             "code": "Identifier"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -1301,8 +1373,23 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CX / EI (occasionally, more often EI maps to a resource id or a URL)"
+          },
+          {
+            "identity": "rim",
+            "map": "II - The Identifier class is a little looser than the v3 type II because it allows URIs as well as registered OIDs or GUIDs.  Also maps to Role[classCode=IDENT]"
+          },
+          {
+            "identity": "servd",
+            "map": "Identifier"
+          },
           {
             "identity": "workflow",
             "map": "Request.identifier"
@@ -1423,6 +1510,9 @@
             "code": "CodeableConcept"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -1434,7 +1524,6 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "binding": {
           "extension": [
             {
@@ -1447,6 +1536,22 @@
           "valueSet": "http://hl7.org/fhir/ValueSet/medicationrequest-status-reason"
         },
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CE/CNE/CWE"
+          },
+          {
+            "identity": "rim",
+            "map": "CD"
+          },
+          {
+            "identity": "orim",
+            "map": "fhir:CodeableConcept rdfs:subClassOf dt:CD"
+          },
           {
             "identity": "workflow",
             "map": "Request.statusReason"
@@ -1532,6 +1637,9 @@
             "code": "CodeableConcept"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -1543,7 +1651,6 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "binding": {
           "extension": [
             {
@@ -1556,6 +1663,22 @@
           "valueSet": "http://hl7.org/fhir/ValueSet/medicationrequest-category"
         },
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CE/CNE/CWE"
+          },
+          {
+            "identity": "rim",
+            "map": "CD"
+          },
+          {
+            "identity": "orim",
+            "map": "fhir:CodeableConcept rdfs:subClassOf dt:CD"
+          },
           {
             "identity": "script10.6",
             "map": "Message/Body/NewRx/MedicationPrescribed/Directions\r\ror \r\rMessage/Body/NewRx/MedicationPrescribed/StructuredSIG"
@@ -1690,6 +1813,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -1703,6 +1829,10 @@
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
           {
             "identity": "rim",
             "map": ".participation[typeCode=INF].role"
@@ -1733,6 +1863,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -1757,6 +1890,10 @@
           "valueSet": "http://hl7.org/fhir/ValueSet/medication-codes"
         },
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
           {
             "identity": "workflow",
             "map": "Request.code"
@@ -1815,6 +1952,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -1823,11 +1963,27 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "ref-1",
+            "severity": "error",
+            "human": "SHALL have a contained resource if a local reference is provided",
+            "expression": "reference.startsWith('#').not() or (reference.substring(1).trace('url') in %rootResource.contained.id.trace('ids'))",
+            "xpath": "not(starts-with(f:reference/@value, '#')) or exists(ancestor::*[self::f:entry or self::f:parameter]/f:resource/f:*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')]|/*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')])",
+            "source": "http://hl7.org/fhir/StructureDefinition/Reference"
           }
         ],
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "rim",
+            "map": "The target of a resource reference is a RIM entry point (Act, Role, or Entity)"
+          },
           {
             "identity": "workflow",
             "map": "Request.subject"
@@ -2057,6 +2213,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -2070,6 +2229,22 @@
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CX / EI (occasionally, more often EI maps to a resource id or a URL)"
+          },
+          {
+            "identity": "rim",
+            "map": "II - The Identifier class is a little looser than the v3 type II because it allows URIs as well as registered OIDs or GUIDs.  Also maps to Role[classCode=IDENT]"
+          },
+          {
+            "identity": "servd",
+            "map": "Identifier"
+          },
           {
             "identity": "rim",
             "map": ".identifier"
@@ -2140,6 +2315,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -2148,11 +2326,26 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "ref-1",
+            "severity": "error",
+            "human": "SHALL have a contained resource if a local reference is provided",
+            "expression": "reference.startsWith('#').not() or (reference.substring(1).trace('url') in %rootResource.contained.id.trace('ids'))",
+            "xpath": "not(starts-with(f:reference/@value, '#')) or exists(ancestor::*[self::f:entry or self::f:parameter]/f:resource/f:*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')]|/*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')])",
+            "source": "http://hl7.org/fhir/StructureDefinition/Reference"
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "rim",
+            "map": "The target of a resource reference is a RIM entry point (Act, Role, or Entity)"
+          },
           {
             "identity": "workflow",
             "map": "Request.context"
@@ -2180,6 +2373,7 @@
         "path": "MedicationRequest.supportingInformation",
         "short": "Information to support ordering of the medication",
         "definition": "Include additional information (for example, patient height and weight) that supports the ordering of the medication.",
+        "comment": "References SHALL be a reference to an actual FHIR resource, and SHALL be resolveable (allowing for access control, temporary unavailability, etc.). Resolution can be either by retrieval from the URL, or, where applicable by resource type, by treating an absolute reference as a canonical URL and looking it up in a local registry/repository.",
         "min": 0,
         "max": "*",
         "base": {
@@ -2195,6 +2389,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -2203,11 +2400,26 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "ref-1",
+            "severity": "error",
+            "human": "SHALL have a contained resource if a local reference is provided",
+            "expression": "reference.startsWith('#').not() or (reference.substring(1).trace('url') in %rootResource.contained.id.trace('ids'))",
+            "xpath": "not(starts-with(f:reference/@value, '#')) or exists(ancestor::*[self::f:entry or self::f:parameter]/f:resource/f:*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')]|/*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')])",
+            "source": "http://hl7.org/fhir/StructureDefinition/Reference"
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "rim",
+            "map": "The target of a resource reference is a RIM entry point (Act, Role, or Entity)"
+          },
           {
             "identity": "workflow",
             "map": "Request.supportingInfo"
@@ -2293,6 +2505,7 @@
         "path": "MedicationRequest.requester",
         "short": "Who/What requested the Request",
         "definition": "The individual, organization, or device that initiated the request and has responsibility for its activation.",
+        "comment": "References SHALL be a reference to an actual FHIR resource, and SHALL be resolveable (allowing for access control, temporary unavailability, etc.). Resolution can be either by retrieval from the URL, or, where applicable by resource type, by treating an absolute reference as a canonical URL and looking it up in a local registry/repository.",
         "min": 0,
         "max": "0",
         "base": {
@@ -2313,6 +2526,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -2321,11 +2537,27 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "ref-1",
+            "severity": "error",
+            "human": "SHALL have a contained resource if a local reference is provided",
+            "expression": "reference.startsWith('#').not() or (reference.substring(1).trace('url') in %rootResource.contained.id.trace('ids'))",
+            "xpath": "not(starts-with(f:reference/@value, '#')) or exists(ancestor::*[self::f:entry or self::f:parameter]/f:resource/f:*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')]|/*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')])",
+            "source": "http://hl7.org/fhir/StructureDefinition/Reference"
           }
         ],
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "rim",
+            "map": "The target of a resource reference is a RIM entry point (Act, Role, or Entity)"
+          },
           {
             "identity": "workflow",
             "map": "Request.requester"
@@ -2345,6 +2577,7 @@
         "path": "MedicationRequest.performer",
         "short": "Intended performer of administration",
         "definition": "The specified desired performer of the medication treatment (e.g. the performer of the medication administration).",
+        "comment": "References SHALL be a reference to an actual FHIR resource, and SHALL be resolveable (allowing for access control, temporary unavailability, etc.). Resolution can be either by retrieval from the URL, or, where applicable by resource type, by treating an absolute reference as a canonical URL and looking it up in a local registry/repository.",
         "min": 0,
         "max": "1",
         "base": {
@@ -2366,6 +2599,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -2374,11 +2610,26 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "ref-1",
+            "severity": "error",
+            "human": "SHALL have a contained resource if a local reference is provided",
+            "expression": "reference.startsWith('#').not() or (reference.substring(1).trace('url') in %rootResource.contained.id.trace('ids'))",
+            "xpath": "not(starts-with(f:reference/@value, '#')) or exists(ancestor::*[self::f:entry or self::f:parameter]/f:resource/f:*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')]|/*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')])",
+            "source": "http://hl7.org/fhir/StructureDefinition/Reference"
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "rim",
+            "map": "The target of a resource reference is a RIM entry point (Act, Role, or Entity)"
+          },
           {
             "identity": "workflow",
             "map": "Request.performer"
@@ -2411,6 +2662,9 @@
             "code": "CodeableConcept"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -2436,6 +2690,22 @@
         },
         "mapping": [
           {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CE/CNE/CWE"
+          },
+          {
+            "identity": "rim",
+            "map": "CD"
+          },
+          {
+            "identity": "orim",
+            "map": "fhir:CodeableConcept rdfs:subClassOf dt:CD"
+          },
+          {
             "identity": "workflow",
             "map": "Request.performerType"
           },
@@ -2450,6 +2720,7 @@
         "path": "MedicationRequest.recorder",
         "short": "Person who entered the request",
         "definition": "The person who entered the order on behalf of another individual for example in the case of a verbal or a telephone order.",
+        "comment": "References SHALL be a reference to an actual FHIR resource, and SHALL be resolveable (allowing for access control, temporary unavailability, etc.). Resolution can be either by retrieval from the URL, or, where applicable by resource type, by treating an absolute reference as a canonical URL and looking it up in a local registry/repository.",
         "min": 0,
         "max": "1",
         "base": {
@@ -2466,6 +2737,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -2474,11 +2748,26 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "ref-1",
+            "severity": "error",
+            "human": "SHALL have a contained resource if a local reference is provided",
+            "expression": "reference.startsWith('#').not() or (reference.substring(1).trace('url') in %rootResource.contained.id.trace('ids'))",
+            "xpath": "not(starts-with(f:reference/@value, '#')) or exists(ancestor::*[self::f:entry or self::f:parameter]/f:resource/f:*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')]|/*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')])",
+            "source": "http://hl7.org/fhir/StructureDefinition/Reference"
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "rim",
+            "map": "The target of a resource reference is a RIM entry point (Act, Role, or Entity)"
+          },
           {
             "identity": "w5",
             "map": "FiveWs.who"
@@ -2507,6 +2796,9 @@
             "code": "CodeableConcept"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -2518,7 +2810,6 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "binding": {
           "extension": [
             {
@@ -2531,6 +2822,22 @@
           "valueSet": "http://hl7.org/fhir/ValueSet/condition-code"
         },
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CE/CNE/CWE"
+          },
+          {
+            "identity": "rim",
+            "map": "CD"
+          },
+          {
+            "identity": "orim",
+            "map": "fhir:CodeableConcept rdfs:subClassOf dt:CD"
+          },
           {
             "identity": "workflow",
             "map": "Request.reasonCode"
@@ -2575,6 +2882,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -2583,11 +2893,26 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "ref-1",
+            "severity": "error",
+            "human": "SHALL have a contained resource if a local reference is provided",
+            "expression": "reference.startsWith('#').not() or (reference.substring(1).trace('url') in %rootResource.contained.id.trace('ids'))",
+            "xpath": "not(starts-with(f:reference/@value, '#')) or exists(ancestor::*[self::f:entry or self::f:parameter]/f:resource/f:*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')]|/*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')])",
+            "source": "http://hl7.org/fhir/StructureDefinition/Reference"
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "rim",
+            "map": "The target of a resource reference is a RIM entry point (Act, Role, or Entity)"
+          },
           {
             "identity": "workflow",
             "map": "Request.reasonReference"
@@ -2611,6 +2936,7 @@
         "path": "MedicationRequest.instantiatesCanonical",
         "short": "Instantiates FHIR protocol or definition",
         "definition": "The URL pointing to a protocol, guideline, orderset, or other definition that is adhered to in whole or in part by this MedicationRequest.",
+        "comment": "see [Canonical References](references.html#canonical)",
         "min": 0,
         "max": "*",
         "base": {
@@ -2651,6 +2977,7 @@
         "path": "MedicationRequest.instantiatesUri",
         "short": "Instantiates external protocol or definition",
         "definition": "The URL pointing to an externally maintained protocol, guideline, orderset or other definition that is adhered to in whole or in part by this MedicationRequest.",
+        "comment": "see http://en.wikipedia.org/wiki/Uniform_resource_identifier",
         "min": 0,
         "max": "*",
         "base": {
@@ -2687,6 +3014,7 @@
         "path": "MedicationRequest.basedOn",
         "short": "What request fulfills",
         "definition": "A plan or request that is fulfilled in whole or in part by this medication request.",
+        "comment": "References SHALL be a reference to an actual FHIR resource, and SHALL be resolveable (allowing for access control, temporary unavailability, etc.). Resolution can be either by retrieval from the URL, or, where applicable by resource type, by treating an absolute reference as a canonical URL and looking it up in a local registry/repository.",
         "min": 0,
         "max": "*",
         "base": {
@@ -2705,6 +3033,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -2713,11 +3044,27 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "ref-1",
+            "severity": "error",
+            "human": "SHALL have a contained resource if a local reference is provided",
+            "expression": "reference.startsWith('#').not() or (reference.substring(1).trace('url') in %rootResource.contained.id.trace('ids'))",
+            "xpath": "not(starts-with(f:reference/@value, '#')) or exists(ancestor::*[self::f:entry or self::f:parameter]/f:resource/f:*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')]|/*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')])",
+            "source": "http://hl7.org/fhir/StructureDefinition/Reference"
           }
         ],
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "rim",
+            "map": "The target of a resource reference is a RIM entry point (Act, Role, or Entity)"
+          },
           {
             "identity": "workflow",
             "map": "Request.basedOn"
@@ -2746,6 +3093,9 @@
             "code": "Identifier"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -2759,6 +3109,22 @@
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CX / EI (occasionally, more often EI maps to a resource id or a URL)"
+          },
+          {
+            "identity": "rim",
+            "map": "II - The Identifier class is a little looser than the v3 type II because it allows URIs as well as registered OIDs or GUIDs.  Also maps to Role[classCode=IDENT]"
+          },
+          {
+            "identity": "servd",
+            "map": "Identifier"
+          },
           {
             "identity": "workflow",
             "map": "Request.groupIdentifier"
@@ -2787,6 +3153,9 @@
             "code": "CodeableConcept"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -2798,7 +3167,6 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "binding": {
           "extension": [
             {
@@ -2813,6 +3181,22 @@
         "mapping": [
           {
             "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CE/CNE/CWE"
+          },
+          {
+            "identity": "rim",
+            "map": "CD"
+          },
+          {
+            "identity": "orim",
+            "map": "fhir:CodeableConcept rdfs:subClassOf dt:CD"
+          },
+          {
+            "identity": "rim",
             "map": "Act.code where classCode = LIST and moodCode = EVN"
           }
         ]
@@ -2822,6 +3206,7 @@
         "path": "MedicationRequest.insurance",
         "short": "Associated insurance coverage",
         "definition": "Insurance plans, coverage extensions, pre-authorizations and/or pre-determinations that may be required for delivering the requested service.",
+        "comment": "References SHALL be a reference to an actual FHIR resource, and SHALL be resolveable (allowing for access control, temporary unavailability, etc.). Resolution can be either by retrieval from the URL, or, where applicable by resource type, by treating an absolute reference as a canonical URL and looking it up in a local registry/repository.",
         "min": 0,
         "max": "*",
         "base": {
@@ -2838,6 +3223,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -2846,11 +3234,26 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "ref-1",
+            "severity": "error",
+            "human": "SHALL have a contained resource if a local reference is provided",
+            "expression": "reference.startsWith('#').not() or (reference.substring(1).trace('url') in %rootResource.contained.id.trace('ids'))",
+            "xpath": "not(starts-with(f:reference/@value, '#')) or exists(ancestor::*[self::f:entry or self::f:parameter]/f:resource/f:*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')]|/*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')])",
+            "source": "http://hl7.org/fhir/StructureDefinition/Reference"
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "rim",
+            "map": "The target of a resource reference is a RIM entry point (Act, Role, or Entity)"
+          },
           {
             "identity": "workflow",
             "map": "Request.insurance"
@@ -2880,6 +3283,7 @@
         "path": "MedicationRequest.note",
         "short": "Information about the prescription",
         "definition": "Extra information about the prescription that could not be conveyed by the other attributes.",
+        "comment": "For systems that do not have structured annotations, they can simply communicate a single annotation with no author or time.  This element may need to be included in narrative because of the potential for modifying information.  *Annotations SHOULD NOT* be used to communicate \"modifying\" information that could be computable. (This is a SHOULD because enforcing user behavior is nearly impossible).",
         "min": 0,
         "max": "0",
         "base": {
@@ -2892,6 +3296,9 @@
             "code": "Annotation"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -2903,8 +3310,19 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "N/A"
+          },
+          {
+            "identity": "rim",
+            "map": "Act"
+          },
           {
             "identity": "workflow",
             "map": "Request.note"
@@ -2948,8 +3366,15 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "rim",
+            "map": ".outboundRelationship[typeCode=COMP].target[classCode=SBADM, moodCode=INT]"
+          },
           {
             "identity": "workflow",
             "map": "Request.occurrence[x]"
@@ -3111,6 +3536,7 @@
         "path": "MedicationRequest.dosageInstruction.sequence",
         "short": "The order of the dosage instructions",
         "definition": "Indicates the order in which the dosage instructions should be applied or interpreted.",
+        "comment": "32 bit number; for values larger than this, use decimal",
         "requirements": "If the sequence number of multiple Dosages is the same, then it is implied that the instructions are to be treated as concurrent.  If the sequence number is different, then the Dosages are intended to be sequential.",
         "min": 0,
         "max": "1",
@@ -3166,6 +3592,7 @@
         "path": "MedicationRequest.dosageInstruction.text",
         "short": "Free text dosage instructions e.g. SIG",
         "definition": "Free text dosage instructions e.g. SIG.",
+        "comment": "Note that FHIR strings SHALL NOT exceed 1MB in size",
         "requirements": "Free text dosage instructions can be used for cases where the instructions are too complex to code.  The content of this attribute does not include the name or description of the medication. When coded instructions are present, the free text instructions may still be present for display to humans taking or administering the medication. It is expected that the text instructions will always be populated.  If the dosage.timing attribute is also populated, then the dosage.text should reflect the same information as the timing.  Additional information about administration or preparation of the medication should be included as text.",
         "min": 0,
         "max": "0",
@@ -3221,6 +3648,9 @@
             "code": "CodeableConcept"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -3245,6 +3675,22 @@
           "valueSet": "http://hl7.org/fhir/ValueSet/additional-instruction-codes"
         },
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CE/CNE/CWE"
+          },
+          {
+            "identity": "rim",
+            "map": "CD"
+          },
+          {
+            "identity": "orim",
+            "map": "fhir:CodeableConcept rdfs:subClassOf dt:CD"
+          },
           {
             "identity": "v2",
             "map": "RXO-7"
@@ -3274,6 +3720,7 @@
         "path": "MedicationRequest.dosageInstruction.patientInstruction",
         "short": "Patient or consumer oriented instructions",
         "definition": "Instructions in terms that are understood by the patient or consumer.",
+        "comment": "Note that FHIR strings SHALL NOT exceed 1MB in size",
         "min": 0,
         "max": "0",
         "base": {
@@ -3328,6 +3775,9 @@
             "code": "Timing"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -3341,6 +3791,18 @@
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "N/A"
+          },
+          {
+            "identity": "rim",
+            "map": "QSET<TS> (GTS)"
+          },
           {
             "identity": "rim",
             "map": ".effectiveTime"
@@ -3368,6 +3830,9 @@
             "code": "CodeableConcept"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -3392,6 +3857,10 @@
           "valueSet": "http://hl7.org/fhir/ValueSet/medication-as-needed-reason"
         },
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
           {
             "identity": "v2",
             "map": "TQ1-9"
@@ -3421,6 +3890,9 @@
             "code": "CodeableConcept"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -3446,6 +3918,22 @@
         },
         "mapping": [
           {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CE/CNE/CWE"
+          },
+          {
+            "identity": "rim",
+            "map": "CD"
+          },
+          {
+            "identity": "orim",
+            "map": "fhir:CodeableConcept rdfs:subClassOf dt:CD"
+          },
+          {
             "identity": "v2",
             "map": "RXR-2"
           },
@@ -3460,6 +3948,7 @@
         "path": "MedicationRequest.dosageInstruction.route",
         "short": "How drug should enter body",
         "definition": "How drug should enter body.",
+        "comment": "Not all terminology uses fit this general pattern. In some cases, models should not use CodeableConcept and use Coding directly and provide their own structure for managing text, codings, translations and the relationship between elements and pre- and post-coordination.",
         "requirements": "A code specifying the route or physiological path of administration of a therapeutic agent into or onto a patient's body.",
         "min": 0,
         "max": "1",
@@ -3472,6 +3961,9 @@
           {
             "code": "CodeableConcept"
           }
+        ],
+        "condition": [
+          "ele-1"
         ],
         "constraint": [
           {
@@ -3497,6 +3989,22 @@
           "valueSet": "http://hl7.org/fhir/ValueSet/route-codes"
         },
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CE/CNE/CWE"
+          },
+          {
+            "identity": "rim",
+            "map": "CD"
+          },
+          {
+            "identity": "orim",
+            "map": "fhir:CodeableConcept rdfs:subClassOf dt:CD"
+          },
           {
             "identity": "v2",
             "map": "RXR-1"
@@ -3526,6 +4034,9 @@
             "code": "CodeableConcept"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -3550,6 +4061,22 @@
           "valueSet": "http://hl7.org/fhir/ValueSet/administration-method-codes"
         },
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CE/CNE/CWE"
+          },
+          {
+            "identity": "rim",
+            "map": "CD"
+          },
+          {
+            "identity": "orim",
+            "map": "fhir:CodeableConcept rdfs:subClassOf dt:CD"
+          },
           {
             "identity": "v2",
             "map": "RXR-4"
@@ -3577,6 +4104,9 @@
             "code": "Element"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -3590,6 +4120,10 @@
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
           {
             "identity": "v2",
             "map": "TQ1-2"
@@ -3695,6 +4229,7 @@
         "path": "MedicationRequest.dosageInstruction.doseAndRate.type",
         "short": "The kind of dose or rate specified",
         "definition": "The kind of dose or rate specified, for example, ordered or calculated.",
+        "comment": "Not all terminology uses fit this general pattern. In some cases, models should not use CodeableConcept and use Coding directly and provide their own structure for managing text, codings, translations and the relationship between elements and pre- and post-coordination.",
         "requirements": "If the type is not populated, assume to be \"ordered\".",
         "min": 0,
         "max": "1",
@@ -3707,6 +4242,9 @@
           {
             "code": "CodeableConcept"
           }
+        ],
+        "condition": [
+          "ele-1"
         ],
         "constraint": [
           {
@@ -3732,6 +4270,22 @@
           "valueSet": "http://hl7.org/fhir/ValueSet/dose-rate-type"
         },
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CE/CNE/CWE"
+          },
+          {
+            "identity": "rim",
+            "map": "CD"
+          },
+          {
+            "identity": "orim",
+            "map": "fhir:CodeableConcept rdfs:subClassOf dt:CD"
+          },
           {
             "identity": "v2",
             "map": "RXO-21; RXE-23"
@@ -3763,6 +4317,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -3776,6 +4333,10 @@
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
           {
             "identity": "v2",
             "map": "RXO-2, RXE-3"
@@ -3814,6 +4375,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -3827,6 +4391,10 @@
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
           {
             "identity": "v2",
             "map": "RXE22, RXE23, RXE-24"
@@ -3856,6 +4424,9 @@
             "code": "Ratio"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -3864,11 +4435,31 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "rat-1",
+            "severity": "error",
+            "human": "Numerator and denominator SHALL both be present, or both are absent. If both are absent, there SHALL be some extension present",
+            "expression": "(numerator.empty() xor denominator.exists()) and (numerator.exists() or extension.exists())",
+            "xpath": "(count(f:numerator) = count(f:denominator)) and ((count(f:numerator) > 0) or (count(f:extension) > 0))",
+            "source": "http://hl7.org/fhir/StructureDefinition/Ratio"
           }
         ],
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "N/A"
+          },
+          {
+            "identity": "rim",
+            "map": "RTO"
+          },
           {
             "identity": "v2",
             "map": "RXO-23, RXE-19"
@@ -3901,6 +4492,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -3909,11 +4503,39 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "qty-3",
+            "severity": "error",
+            "human": "If a code for the unit is present, the system SHALL also be present",
+            "expression": "code.empty() or system.exists()",
+            "xpath": "not(exists(f:code)) or exists(f:system)",
+            "source": "http://hl7.org/fhir/StructureDefinition/Quantity"
+          },
+          {
+            "key": "sqty-1",
+            "severity": "error",
+            "human": "The comparator is not used on a SimpleQuantity",
+            "expression": "comparator.empty()",
+            "xpath": "not(exists(f:comparator))",
+            "source": "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
           }
         ],
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "SN (see also Range) or CQ"
+          },
+          {
+            "identity": "rim",
+            "map": "PQ, IVL<PQ>, MO, CO, depending on the values"
+          },
           {
             "identity": "rim",
             "map": "not supported"
@@ -3925,6 +4547,7 @@
         "path": "MedicationRequest.dosageInstruction.maxDosePerLifetime",
         "short": "Upper limit on medication per lifetime of the patient",
         "definition": "Upper limit on medication per lifetime of the patient.",
+        "comment": "The context of use may frequently define what kind of quantity this is and therefore what kind of units can be used. The context of use may also restrict the values for the comparator.",
         "requirements": "The maximum total quantity of a therapeutic substance that may be administered per lifetime of the subject.",
         "min": 0,
         "max": "1",
@@ -3941,6 +4564,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -3949,11 +4575,39 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "qty-3",
+            "severity": "error",
+            "human": "If a code for the unit is present, the system SHALL also be present",
+            "expression": "code.empty() or system.exists()",
+            "xpath": "not(exists(f:code)) or exists(f:system)",
+            "source": "http://hl7.org/fhir/StructureDefinition/Quantity"
+          },
+          {
+            "key": "sqty-1",
+            "severity": "error",
+            "human": "The comparator is not used on a SimpleQuantity",
+            "expression": "comparator.empty()",
+            "xpath": "not(exists(f:comparator))",
+            "source": "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
           }
         ],
         "isModifier": false,
         "isSummary": true,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "SN (see also Range) or CQ"
+          },
+          {
+            "identity": "rim",
+            "map": "PQ, IVL<PQ>, MO, CO, depending on the values"
+          },
           {
             "identity": "rim",
             "map": "not supported"
@@ -3977,6 +4631,9 @@
             "code": "BackboneElement"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -3988,8 +4645,11 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
           {
             "identity": "script10.6",
             "map": "Message/Body/NewRx/MedicationPrescribed/ExpirationDate"
@@ -4038,6 +4698,16 @@
       {
         "id": "MedicationRequest.dispenseRequest.extension",
         "path": "MedicationRequest.dispenseRequest.extension",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "value",
+              "path": "url"
+            }
+          ],
+          "description": "Extensions are always sliced by (at least) url",
+          "rules": "open"
+        },
         "short": "Additional content defined by implementations",
         "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
         "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
@@ -4154,6 +4824,9 @@
             "code": "BackboneElement"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -4165,8 +4838,11 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
           {
             "identity": "rim",
             "map": "SubstanceAdministration -> ActRelationship[sequenceNumber = '1'] -> Supply"
@@ -4211,6 +4887,16 @@
       {
         "id": "MedicationRequest.dispenseRequest.initialFill.extension",
         "path": "MedicationRequest.dispenseRequest.initialFill.extension",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "value",
+              "path": "url"
+            }
+          ],
+          "description": "Extensions are always sliced by (at least) url",
+          "rules": "open"
+        },
         "short": "Additional content defined by implementations",
         "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
         "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
@@ -4314,6 +5000,7 @@
         "path": "MedicationRequest.dispenseRequest.initialFill.quantity",
         "short": "First fill quantity",
         "definition": "The amount or quantity to provide as part of the first dispense.",
+        "comment": "The context of use may frequently define what kind of quantity this is and therefore what kind of units can be used. The context of use may also restrict the values for the comparator.",
         "min": 0,
         "max": "1",
         "base": {
@@ -4329,6 +5016,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -4337,11 +5027,38 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "qty-3",
+            "severity": "error",
+            "human": "If a code for the unit is present, the system SHALL also be present",
+            "expression": "code.empty() or system.exists()",
+            "xpath": "not(exists(f:code)) or exists(f:system)",
+            "source": "http://hl7.org/fhir/StructureDefinition/Quantity"
+          },
+          {
+            "key": "sqty-1",
+            "severity": "error",
+            "human": "The comparator is not used on a SimpleQuantity",
+            "expression": "comparator.empty()",
+            "xpath": "not(exists(f:comparator))",
+            "source": "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "SN (see also Range) or CQ"
+          },
+          {
+            "identity": "rim",
+            "map": "PQ, IVL<PQ>, MO, CO, depending on the values"
+          },
           {
             "identity": "rim",
             "map": "Supply.quantity[moodCode=RQO]"
@@ -4353,6 +5070,7 @@
         "path": "MedicationRequest.dispenseRequest.initialFill.duration",
         "short": "First fill duration",
         "definition": "The length of time that the first dispense is expected to last.",
+        "comment": "The context of use may frequently define what kind of quantity this is and therefore what kind of units can be used. The context of use may also restrict the values for the comparator.",
         "min": 0,
         "max": "1",
         "base": {
@@ -4367,17 +5085,44 @@
         ],
         "constraint": [
           {
+            "key": "drt-1",
+            "severity": "error",
+            "human": "There SHALL be a code if there is a value and it SHALL be an expression of time.  If system is present, it SHALL be UCUM.",
+            "expression": "code.exists() implies ((system = %ucum) and value.exists())",
+            "xpath": "(f:code or not(f:value)) and (not(exists(f:system)) or f:system/@value='http://unitsofmeasure.org')",
+            "source": "http://hl7.org/fhir/StructureDefinition/Duration"
+          },
+          {
             "key": "ele-1",
             "severity": "error",
             "human": "All FHIR elements must have a @value or children",
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "qty-3",
+            "severity": "error",
+            "human": "If a code for the unit is present, the system SHALL also be present",
+            "expression": "code.empty() or system.exists()",
+            "xpath": "not(exists(f:code)) or exists(f:system)",
+            "source": "http://hl7.org/fhir/StructureDefinition/Quantity"
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "v2",
+            "map": "SN (see also Range) or CQ"
+          },
+          {
+            "identity": "rim",
+            "map": "PQ, IVL<PQ>, MO, CO, depending on the values"
+          },
+          {
+            "identity": "rim",
+            "map": "PQ, IVL<PQ> depending on the values"
+          },
           {
             "identity": "rim",
             "map": "Supply.effectivetime[moodCode=RQO]"
@@ -4389,6 +5134,7 @@
         "path": "MedicationRequest.dispenseRequest.dispenseInterval",
         "short": "Minimum period of time between dispenses",
         "definition": "The minimum period of time that must occur between dispenses of the medication.",
+        "comment": "The context of use may frequently define what kind of quantity this is and therefore what kind of units can be used. The context of use may also restrict the values for the comparator.",
         "min": 0,
         "max": "1",
         "base": {
@@ -4403,17 +5149,44 @@
         ],
         "constraint": [
           {
+            "key": "drt-1",
+            "severity": "error",
+            "human": "There SHALL be a code if there is a value and it SHALL be an expression of time.  If system is present, it SHALL be UCUM.",
+            "expression": "code.exists() implies ((system = %ucum) and value.exists())",
+            "xpath": "(f:code or not(f:value)) and (not(exists(f:system)) or f:system/@value='http://unitsofmeasure.org')",
+            "source": "http://hl7.org/fhir/StructureDefinition/Duration"
+          },
+          {
             "key": "ele-1",
             "severity": "error",
             "human": "All FHIR elements must have a @value or children",
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "qty-3",
+            "severity": "error",
+            "human": "If a code for the unit is present, the system SHALL also be present",
+            "expression": "code.empty() or system.exists()",
+            "xpath": "not(exists(f:code)) or exists(f:system)",
+            "source": "http://hl7.org/fhir/StructureDefinition/Quantity"
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "v2",
+            "map": "SN (see also Range) or CQ"
+          },
+          {
+            "identity": "rim",
+            "map": "PQ, IVL<PQ>, MO, CO, depending on the values"
+          },
+          {
+            "identity": "rim",
+            "map": "PQ, IVL<PQ> depending on the values"
+          },
           {
             "identity": "rim",
             "map": "Supply.effectivetime[moodCode=RQO]"
@@ -4439,6 +5212,9 @@
             "code": "Period"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -4447,11 +5223,30 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "per-1",
+            "severity": "error",
+            "human": "If present, start SHALL have a lower value than end",
+            "expression": "start.hasValue().not() or end.hasValue().not() or (start <= end)",
+            "xpath": "not(exists(f:start/@value)) or not(exists(f:end/@value)) or (xs:dateTime(f:start/@value) <= xs:dateTime(f:end/@value))",
+            "source": "http://hl7.org/fhir/StructureDefinition/Period"
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "DR"
+          },
+          {
+            "identity": "rim",
+            "map": "IVL<TS>[lowClosed=\"true\" and highClosed=\"true\"] or URG<TS>[lowClosed=\"true\" and highClosed=\"true\"]"
+          },
           {
             "identity": "script10.6",
             "map": "Message/Body/NewRx/MedicationPrescribed/Refills"
@@ -4512,6 +5307,7 @@
         "path": "MedicationRequest.dispenseRequest.quantity",
         "short": "Amount of medication to supply per dispense",
         "definition": "The amount that is to be dispensed for one fill.",
+        "comment": "The context of use may frequently define what kind of quantity this is and therefore what kind of units can be used. The context of use may also restrict the values for the comparator.",
         "min": 0,
         "max": "1",
         "base": {
@@ -4527,6 +5323,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -4535,11 +5334,38 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "qty-3",
+            "severity": "error",
+            "human": "If a code for the unit is present, the system SHALL also be present",
+            "expression": "code.empty() or system.exists()",
+            "xpath": "not(exists(f:code)) or exists(f:system)",
+            "source": "http://hl7.org/fhir/StructureDefinition/Quantity"
+          },
+          {
+            "key": "sqty-1",
+            "severity": "error",
+            "human": "The comparator is not used on a SimpleQuantity",
+            "expression": "comparator.empty()",
+            "xpath": "not(exists(f:comparator))",
+            "source": "http://hl7.org/fhir/StructureDefinition/SimpleQuantity"
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "SN (see also Range) or CQ"
+          },
+          {
+            "identity": "rim",
+            "map": "PQ, IVL<PQ>, MO, CO, depending on the values"
+          },
           {
             "identity": "script10.6",
             "map": "Message/Body/NewRx/MedicationPrescribed/DaysSupply"
@@ -4574,17 +5400,44 @@
         ],
         "constraint": [
           {
+            "key": "drt-1",
+            "severity": "error",
+            "human": "There SHALL be a code if there is a value and it SHALL be an expression of time.  If system is present, it SHALL be UCUM.",
+            "expression": "code.exists() implies ((system = %ucum) and value.exists())",
+            "xpath": "(f:code or not(f:value)) and (not(exists(f:system)) or f:system/@value='http://unitsofmeasure.org')",
+            "source": "http://hl7.org/fhir/StructureDefinition/Duration"
+          },
+          {
             "key": "ele-1",
             "severity": "error",
             "human": "All FHIR elements must have a @value or children",
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "qty-3",
+            "severity": "error",
+            "human": "If a code for the unit is present, the system SHALL also be present",
+            "expression": "code.empty() or system.exists()",
+            "xpath": "not(exists(f:code)) or exists(f:system)",
+            "source": "http://hl7.org/fhir/StructureDefinition/Quantity"
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "v2",
+            "map": "SN (see also Range) or CQ"
+          },
+          {
+            "identity": "rim",
+            "map": "PQ, IVL<PQ>, MO, CO, depending on the values"
+          },
+          {
+            "identity": "rim",
+            "map": "PQ, IVL<PQ> depending on the values"
+          },
           {
             "identity": "script10.6",
             "map": "Message/Body/NewRx/MedicationPrescribed/Substitutions"
@@ -4600,6 +5453,7 @@
         "path": "MedicationRequest.dispenseRequest.performer",
         "short": "Intended dispenser",
         "definition": "Indicates the intended dispensing Organization specified by the prescriber.",
+        "comment": "References SHALL be a reference to an actual FHIR resource, and SHALL be resolveable (allowing for access control, temporary unavailability, etc.). Resolution can be either by retrieval from the URL, or, where applicable by resource type, by treating an absolute reference as a canonical URL and looking it up in a local registry/repository.",
         "min": 0,
         "max": "1",
         "base": {
@@ -4615,6 +5469,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -4623,11 +5480,26 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "ref-1",
+            "severity": "error",
+            "human": "SHALL have a contained resource if a local reference is provided",
+            "expression": "reference.startsWith('#').not() or (reference.substring(1).trace('url') in %rootResource.contained.id.trace('ids'))",
+            "xpath": "not(starts-with(f:reference/@value, '#')) or exists(ancestor::*[self::f:entry or self::f:parameter]/f:resource/f:*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')]|/*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')])",
+            "source": "http://hl7.org/fhir/StructureDefinition/Reference"
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "rim",
+            "map": "The target of a resource reference is a RIM entry point (Act, Role, or Entity)"
+          },
           {
             "identity": "w5",
             "map": "FiveWs.who"
@@ -4655,6 +5527,9 @@
             "code": "BackboneElement"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -4666,8 +5541,11 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
           {
             "identity": "script10.6",
             "map": "specific values within Message/Body/NewRx/MedicationPrescribed/Substitutions"
@@ -4716,6 +5594,16 @@
       {
         "id": "MedicationRequest.substitution.extension",
         "path": "MedicationRequest.substitution.extension",
+        "slicing": {
+          "discriminator": [
+            {
+              "type": "value",
+              "path": "url"
+            }
+          ],
+          "description": "Extensions are always sliced by (at least) url",
+          "rules": "open"
+        },
         "short": "Additional content defined by implementations",
         "definition": "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance  applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
         "comment": "There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.",
@@ -4835,6 +5723,9 @@
             "code": "CodeableConcept"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -4846,7 +5737,6 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "binding": {
           "extension": [
             {
@@ -4859,6 +5749,10 @@
           "valueSet": "http://terminology.hl7.org/ValueSet/v3-ActSubstanceAdminSubstitutionCode"
         },
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
           {
             "identity": "script10.6",
             "map": "specific values within Message/Body/NewRx/MedicationPrescribed/Substitutions"
@@ -4878,6 +5772,7 @@
         "path": "MedicationRequest.substitution.reason",
         "short": "Why should (not) substitution be made",
         "definition": "Indicates the reason for the substitution, or why substitution must or must not be performed.",
+        "comment": "Not all terminology uses fit this general pattern. In some cases, models should not use CodeableConcept and use Coding directly and provide their own structure for managing text, codings, translations and the relationship between elements and pre- and post-coordination.",
         "min": 0,
         "max": "1",
         "base": {
@@ -4890,6 +5785,9 @@
             "code": "CodeableConcept"
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -4901,7 +5799,6 @@
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "binding": {
           "extension": [
             {
@@ -4914,6 +5811,22 @@
           "valueSet": "http://terminology.hl7.org/ValueSet/v3-SubstanceAdminSubstitutionReason"
         },
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "v2",
+            "map": "CE/CNE/CWE"
+          },
+          {
+            "identity": "rim",
+            "map": "CD"
+          },
+          {
+            "identity": "orim",
+            "map": "fhir:CodeableConcept rdfs:subClassOf dt:CD"
+          },
           {
             "identity": "script10.6",
             "map": "not mapped"
@@ -4933,6 +5846,7 @@
         "path": "MedicationRequest.priorPrescription",
         "short": "An order/prescription that is being replaced",
         "definition": "A link to a resource representing an earlier order related order or prescription.",
+        "comment": "References SHALL be a reference to an actual FHIR resource, and SHALL be resolveable (allowing for access control, temporary unavailability, etc.). Resolution can be either by retrieval from the URL, or, where applicable by resource type, by treating an absolute reference as a canonical URL and looking it up in a local registry/repository.",
         "min": 0,
         "max": "1",
         "base": {
@@ -4948,6 +5862,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -4956,11 +5873,26 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "ref-1",
+            "severity": "error",
+            "human": "SHALL have a contained resource if a local reference is provided",
+            "expression": "reference.startsWith('#').not() or (reference.substring(1).trace('url') in %rootResource.contained.id.trace('ids'))",
+            "xpath": "not(starts-with(f:reference/@value, '#')) or exists(ancestor::*[self::f:entry or self::f:parameter]/f:resource/f:*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')]|/*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')])",
+            "source": "http://hl7.org/fhir/StructureDefinition/Reference"
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "rim",
+            "map": "The target of a resource reference is a RIM entry point (Act, Role, or Entity)"
+          },
           {
             "identity": "workflow",
             "map": "Request.replaces"
@@ -5001,6 +5933,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -5009,11 +5944,26 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "ref-1",
+            "severity": "error",
+            "human": "SHALL have a contained resource if a local reference is provided",
+            "expression": "reference.startsWith('#').not() or (reference.substring(1).trace('url') in %rootResource.contained.id.trace('ids'))",
+            "xpath": "not(starts-with(f:reference/@value, '#')) or exists(ancestor::*[self::f:entry or self::f:parameter]/f:resource/f:*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')]|/*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')])",
+            "source": "http://hl7.org/fhir/StructureDefinition/Reference"
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "rim",
+            "map": "The target of a resource reference is a RIM entry point (Act, Role, or Entity)"
+          },
           {
             "identity": "rim",
             "map": ".inboundRelationship[typeCode=SUBJ]/source[classCode=ALRT,moodCode=EVN].value"
@@ -5041,6 +5991,9 @@
             ]
           }
         ],
+        "condition": [
+          "ele-1"
+        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -5049,11 +6002,26 @@
             "expression": "hasValue() or (children().count() > id.count())",
             "xpath": "@value|f:*|h:div",
             "source": "http://hl7.org/fhir/StructureDefinition/Element"
+          },
+          {
+            "key": "ref-1",
+            "severity": "error",
+            "human": "SHALL have a contained resource if a local reference is provided",
+            "expression": "reference.startsWith('#').not() or (reference.substring(1).trace('url') in %rootResource.contained.id.trace('ids'))",
+            "xpath": "not(starts-with(f:reference/@value, '#')) or exists(ancestor::*[self::f:entry or self::f:parameter]/f:resource/f:*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')]|/*/f:contained/f:*[f:id/@value=substring-after(current()/f:reference/@value, '#')])",
+            "source": "http://hl7.org/fhir/StructureDefinition/Reference"
           }
         ],
         "isModifier": false,
-        "isSummary": false,
         "mapping": [
+          {
+            "identity": "rim",
+            "map": "n/a"
+          },
+          {
+            "identity": "rim",
+            "map": "The target of a resource reference is a RIM entry point (Act, Role, or Entity)"
+          },
           {
             "identity": "workflow",
             "map": "Request.relevantHistory"
@@ -5121,20 +6089,6 @@
         "path": "MedicationRequest.meta.tag.code",
         "min": 1,
         "mustSupport": true
-      },
-      {
-        "id": "MedicationRequest.extension",
-        "path": "MedicationRequest.extension",
-        "slicing": {
-          "discriminator": [
-            {
-              "type": "value",
-              "path": "url"
-            }
-          ],
-          "ordered": false,
-          "rules": "open"
-        }
       },
       {
         "id": "MedicationRequest.extension:multiplePrescription",
