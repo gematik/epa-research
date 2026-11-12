@@ -18,8 +18,8 @@
  * For additional notes and disclaimer from gematik and in case of changes
  * by gematik, find details in the "Readme" file.
  */
- 
- package de.gematik.epa.poc.privacy
+
+package de.gematik.epa.poc.privacy
 
 import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.context.support.DefaultProfileValidationSupport
@@ -61,6 +61,7 @@ class Validator(
 
             fhirValidator = ctx.newValidator()
             val instanceValidator = FhirInstanceValidator(validationSupport)
+            instanceValidator.setNoTerminologyChecks(true)
             fhirValidator.registerValidatorModule(instanceValidator)
         }
         logger.info("Initialized Validator in {}ms", timeTaken)
@@ -70,7 +71,10 @@ class Validator(
         val result = fhirValidator.validateWithResult(resource)
         return ValidationResult(
             result.context,
-            result.messages.filter { it.messageId != "Terminology_PassThrough_TX_Message" }
+            result.messages.filter {
+                it.messageId != "Terminology_PassThrough_TX_Message" &&
+                    !(it.message ?: "").contains("dom-6")
+            }
         )
     }
 

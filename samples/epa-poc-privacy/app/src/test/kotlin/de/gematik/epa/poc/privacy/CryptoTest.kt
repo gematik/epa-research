@@ -18,8 +18,8 @@
  * For additional notes and disclaimer from gematik and in case of changes
  * by gematik, find details in the "Readme" file.
  */
- 
- package de.gematik.epa.poc.privacy
+
+package de.gematik.epa.poc.privacy
 
 import org.junit.jupiter.api.Test
 import java.security.SecureRandom
