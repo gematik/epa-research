@@ -18,21 +18,19 @@
  * For additional notes and disclaimer from gematik and in case of changes
  * by gematik, find details in the "Readme" file.
  */
- 
- package de.gematik.epa.poc.privacy
+
+package de.gematik.epa.poc.privacy
 
 import ca.uhn.fhir.context.FhirContext
 import org.hl7.fhir.instance.model.api.IBase
 import org.hl7.fhir.instance.model.api.IBaseResource
 import org.hl7.fhir.r4.context.SimpleWorkerContext
+import org.hl7.fhir.r4.fhirpath.FHIRPathEngine
 import org.hl7.fhir.r4.model.Base
+import org.hl7.fhir.r4.model.CodeType
 import org.hl7.fhir.r4.model.ElementDefinition
-import org.hl7.fhir.r4.model.Identifier
-import org.hl7.fhir.r4.model.Reference
-import org.hl7.fhir.r4.model.Resource
-import org.hl7.fhir.r4.utils.FHIRPathEngine
-import org.jetbrains.kotlin.util.capitalizeDecapitalize.capitalizeAsciiOnly
 import java.nio.file.Path
+import kotlin.reflect.KClass
 import kotlin.io.path.readText
 
 val FhirPath = FHIRPathEngine(SimpleWorkerContext())
@@ -50,8 +48,16 @@ fun loadResource(path: Path): IBaseResource {
 }
 
 fun Base.setValue(property: String, value: Any?) {
-    val setterName = "set${property.capitalizeAsciiOnly()}"
-    this::class.members.first() { it.name == setterName }.call(this, value)
+    val setterName = "set" + property.replaceFirstChar { it.uppercaseChar() }
+    val setter = this::class.members.first { it.name == setterName }
+    val paramType = setter.parameters[1].type.classifier as? KClass<*>
+    // Enum-backed code properties (e.g. MedicationRequest.status) expose no String setter;
+    // setProperty routes the raw code through the property's EnumFactory.
+    if (value is String && paramType != null && !paramType.isInstance(value)) {
+        setProperty(property, CodeType(value))
+        return
+    }
+    setter.call(this, value)
 }
 
 fun Base.getValuesForPath(path: String): List<Any> {
@@ -60,4 +66,3 @@ fun Base.getValuesForPath(path: String): List<Any> {
 
 val ElementDefinition.typeName: String?
     get() = this.type.firstOrNull()?.code
-

@@ -36,8 +36,10 @@ data class TestCaseConfig(
     val id: String,
     val title: String,
     val sushiProjectPath: String,
-    val bundlePath: String,
-    val sources: List<SourceFile>,
+    val resourcePaths: List<String>,
+    val expectedResearchPaths: List<String> = emptyList(),
+    val pseudonyms: Map<String, String> = emptyMap(),
+    val sources: List<SourceFile> = emptyList(),
 )
 
 @Serializable

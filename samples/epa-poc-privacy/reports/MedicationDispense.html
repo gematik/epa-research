@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Test case</title>
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
@@ -35,11 +35,11 @@
                     </a>
                     <ul class="dropdown-menu">
                         
-                        <li><a class="dropdown-item" href="index.html">Privacy filter PoC: Medication Request</a></li>
+                        <li><a class="dropdown-item" href="index.html">Maaloxan Medication</a></li>
                         
-                        <li><a class="dropdown-item" href="MedicationDispense.html">Privacy filter PoC: Medication Dispense</a></li>
+                        <li><a class="dropdown-item" href="MedicationRequest.html">Maaloxan MedicationRequest</a></li>
                         
-                        <li><a class="dropdown-item" href="MedicationStatement.html">Privacy filter PoC: Medication Statement</a></li>
+                        <li><a class="dropdown-item" href="MedicationDispense.html">Maaloxan MedicationDispense</a></li>
                         
                     </ul>
                 </li>
@@ -48,76 +48,417 @@
     </div>
 </nav>
 
-<h2 class="mt-4 mb-4">Privacy filter PoC: Medication Dispense</h2>
+<h2 class="mt-4 mb-4">Maaloxan MedicationDispense</h2>
 
-    <h3 class="mt-4">Filtered values</h3>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Path</th>
-            <th>Privacy Filter</th>
-        </tr>
-        </thead>
-        <tbody>
-        
-            <tr>
-                <td>MedicationDispense.subject.reference</td>
-                <td class="INFO">Redact</td>
-            </tr>
-        
-            <tr>
-                <td>MedicationDispense.subject.identifier</td>
-                <td class="INFO">Pseudonymize</td>
-            </tr>
-        
-            <tr>
-                <td>MedicationDispense.performer</td>
-                <td class="INFO">Redact</td>
-            </tr>
-        
-            <tr>
-                <td>MedicationDispense.location</td>
-                <td class="INFO">Redact</td>
-            </tr>
-        
-            <tr>
-                <td>MedicationDispense.destination</td>
-                <td class="INFO">Redact</td>
-            </tr>
-        
-            <tr>
-                <td>MedicationDispense.note</td>
-                <td class="INFO">Redact</td>
-            </tr>
-        
-        </tbody>
-    </table>
-    <h3 class="mt-4">Job Numbers (Arbeitsnummer)</h3>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Job Number</th>
-            <th>Value</th>
-        </tr>
-        </thead>
-        <tbody>
-        
-            <tr>
-                <td>036ee0fc-9f8e-478f-8766-436c3dbd016e</td>
-                <td>X123456789</td>
-            </tr>
-        
-        </tbody>
-    </table>
+    <ul class="nav nav-tabs" id="reportTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="diff-tab" data-bs-toggle="tab" data-bs-target="#diff" type="button" role="tab" aria-controls="diff" aria-selected="true">Diff</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="filter-tab" data-bs-toggle="tab" data-bs-target="#filter" type="button" role="tab" aria-controls="filter" aria-selected="false">P-Profile</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="validation-tab" data-bs-toggle="tab" data-bs-target="#validation" type="button" role="tab" aria-controls="validation" aria-selected="false">Validation</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="sources-tab" data-bs-toggle="tab" data-bs-target="#sources" type="button" role="tab" aria-controls="sources" aria-selected="false">Sources</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="resources-tab" data-bs-toggle="tab" data-bs-target="#resources" type="button" role="tab" aria-controls="resources" aria-selected="false">ePA Resources</button>
+        </li>
+    </ul>
 
-    <div id="bundleDiff" class="mt-4">
+    <div class="tab-content pt-4" id="reportTabsContent">
+        <div class="tab-pane fade" id="filter" role="tabpanel" aria-labelledby="filter-tab">
+            <h3>Filtered values</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Path</th>
+                    <th>Privacy Filter</th>
+                </tr>
+                </thead>
+                <tbody>
+                
+                    <tr>
+                        <td><code>MedicationDispense.meta.source</code></td>
+                        <td class="INFO">Redact</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>MedicationDispense.status</code></td>
+                        <td class="INFO">Anonymize</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>MedicationDispense.subject</code></td>
+                        <td class="INFO">Pseudonymize</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>MedicationDispense.performer.actor.reference</code></td>
+                        <td class="INFO">Redact</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>MedicationDispense.performer.actor.identifier</code></td>
+                        <td class="INFO">Redact</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>MedicationDispense.performer.actor.display</code></td>
+                        <td class="INFO">Anonymize</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>MedicationDispense.dosageInstruction.text</code></td>
+                        <td class="INFO">Redact</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>MedicationDispense.dosageInstruction.patientInstruction</code></td>
+                        <td class="INFO">Redact</td>
+                    </tr>
+                
+                </tbody>
+            </table>
+            <h3 class="mt-4">Job Numbers (Arbeitsnummer)</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Job Number</th>
+                    <th>Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                
+                    <tr>
+                        <td>PSEUDO-X110411319-9F2C</td>
+                        <td>X110411319</td>
+                    </tr>
+                
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-pane fade show active" id="diff" role="tabpanel" aria-labelledby="diff-tab">
+            <div id="bundleDiff"></div>
+        </div>
+
+        <div class="tab-pane fade" id="validation" role="tabpanel" aria-labelledby="validation-tab">
+            <div class="row">
+                <div class="col-xl-6">
+                    <h4>Validation before filter</h4>
+                    
+                        <table class="table table-sm">
+                            <tbody>
+                            
+                                <tr>
+                                    <td><span class="ERROR">ERROR</span> <code>MedicationDispense.extension[0]</code><br>Slicing cannot be evaluated: Unable to resolve profile CanonicalType[http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta]</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="ERROR">ERROR</span> <code>MedicationDispense.extension[1]</code><br>Slicing cannot be evaluated: Unable to resolve profile CanonicalType[http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta]</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="ERROR">ERROR</span> <code>MedicationDispense.extension[2]</code><br>Slicing cannot be evaluated: Unable to resolve profile CanonicalType[http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta]</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="INFORMATION">INFORMATION</span> <code>MedicationDispense.extension[2]</code><br>Unknown extension http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="ERROR">ERROR</span> <code>MedicationDispense.dosageInstruction[0]</code><br>Unknown profile http://ig.fhir.de/igs/medication/StructureDefinition/DosageDgMP</td>
+                                </tr>
+                            
+                            </tbody>
+                        </table>
+                    
+                </div>
+                <div class="col-xl-6">
+                    <h4>Validation after filter</h4>
+                    
+                        <p class="text-success">Bundle is valid</p>
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="sources" role="tabpanel" aria-labelledby="sources-tab">
+            
+                <h3>Privacy Label Extension</h3>
+                <div>
+                    <pre><code class="language-vbnet">Extension: PrivacyLabelExtension
+Id: privacy-label-extension
+Context: ElementDefinition
+Title: "Privacy Label Extension"
+Description: "Element-Ebene-Annotation zur Deklaration der Pseudonymisierungs-Behandlung eines FHIR-Elements innerhalb eines P-Profils. Trägt einen obligationPolicy-Code (PSEUD / REDACT / ANONY aus HL7 v3) und einen optionalen dummyValue für die Anonymisierung primitiver Elemente. Erscheint ausschließlich in StructureDefinitions, niemals in Instanzdaten."
+
+* insert Meta
+
+* extension contains
+    obligationPolicy 1..1 MS and
+    dummyValue 0..1 MS
+* extension[obligationPolicy].value[x] only Coding
+* extension[obligationPolicy].value[x] from $vs-v3-ObligationPolicy
+</code></pre>
+                </div>
+            
+                <h3>Privacy Rule Sets</h3>
+                <div>
+                    <pre><code class="language-vbnet">RuleSet: PrivacyLabelPseudonymize
+* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#PSEUD
+
+RuleSet: PrivacyLabelAnonymizeString(dummyValue)
+* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#ANONY
+* ^extension[PrivacyLabelExtension].extension[dummyValue].valueString = {dummyValue}
+
+// Für code-wertige Elemente: bei required/extensible Binding muss der Platzhalter
+// selbst ein gültiger Code des gebundenen ValueSets sein.
+RuleSet: PrivacyLabelAnonymizeCode(dummyValue)
+* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#ANONY
+* ^extension[PrivacyLabelExtension].extension[dummyValue].valueCode = #{dummyValue}
+
+RuleSet: PrivacyLabelRedact
+* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#REDACT
+</code></pre>
+                </div>
+            
+                <h3>Profile EPAResearchMedicationDispense</h3>
+                <div>
+                    <pre><code class="language-vbnet">Profile: EPAResearchMedicationDispense
+Id: epa-research-medication-dispense
+Parent: MedicationDispense
+Title: "MedicationDispense-Profil für ePA-Forschungsdaten"
+Description: "Pseudonymisiertes Gegenstück zu EPAMedicationDispense für den ePA-Forschungsdatensatz. Patientenbezogene Referenzen werden pseudonymisiert; identifizierende Sub-Felder strukturell erhaltener Elemente werden anonymisiert oder entfernt; nur explizit deklarierte Extensions werden aus der Quellinstanz übernommen."
+
+* insert Meta
+* insert MetaSourceProfile
+
+// status ist 1..1 mit required binding — REDACT ist nicht möglich; der Platzhalter
+// muss ein gültiger Code aus medicationdispense-status sein.
+* status = #unknown
+  * insert PrivacyLabelAnonymizeCode(unknown)
+
+* subject
+  * insert PrivacyLabelPseudonymize
+* subject.identifier only EPAResearchJobNumberIdentifier
+
+// performer is 1..1 in upstream EPAMedicationDispense — cannot be redacted to absence.
+// Approach 1 (leaf-level ANONY): keep the Reference structure, anonymize the
+// human-readable display, and redact the identifying sub-fields.
+* performer.actor.display = "ANONYMIZED"
+  * insert PrivacyLabelAnonymizeString(ANONYMIZED)
+* performer.actor.reference 0..0
+  * insert PrivacyLabelRedact
+* performer.actor.identifier 0..0
+  * insert PrivacyLabelRedact
+
+* dosageInstruction.text 0..0
+  * insert PrivacyLabelRedact
+
+* dosageInstruction.patientInstruction 0..0
+  * insert PrivacyLabelRedact
+
+// Explicitly defined extension slices are copied; others are filtered out.
+</code></pre>
+                </div>
+            
+                <h3>Datatype EPAResearchJobNumberIdentifier</h3>
+                <div>
+                    <pre><code class="language-vbnet">Profile: EPAResearchJobNumberIdentifier
+Parent: Identifier
+Id: epa-research-job-number-identifier
+Title: "Job Number Identifier für ePA-Forschungsdaten"
+Description: "Identifier-Profil zur Repräsentation der Arbeitsnummer, die im Rahmen der Pseudonymisierung KVNR-basierte Identifier (System http://fhir.de/sid/gkv/kvid-10) in ePA-Forschungsdaten ersetzt. Die Arbeitsnummer wird gemäß RKI-Pseudonymisierungskonzept generiert."
+
+* insert Meta
+
+* system 1..1 MS
+* system = "https://gematik.de/fhir/epa-research/sid/job-number-identifier"
+* value 1..1 MS
+</code></pre>
+                </div>
+            
+                <h3>Example EPAMedicationDispenseMaaloxan (source)</h3>
+                <div>
+                    <pre><code class="language-vbnet">// Full MedicationDispense for Maaloxan — pre-redaction reference.
+Instance: ExampleEPAMedicationDispenseMaaloxan
+InstanceOf: EPAMedicationDispense
+Usage: #example
+Description: "Full Maaloxan MedicationDispense — pre-redaction reference."
+
+// Explicitly defined extension slices are copied; others are filtered out.
+* extension[rxPrescriptionProcessIdentifier].valueIdentifier.value = "160.100.000.000.010.12_20251027"
+* extension[renderedDosageInstruction].valueMarkdown = "Morgens 1 Tablette einnehmen, mit etwas Wasser."
+* extension[generatedDosageInstructionsMeta]
+  * extension[algorithmVersion].valueString = "1.0.1"
+  * extension[language].valueCode = #de-DE
+
+* identifier[RxOriginatorProcessIdentifier].value = "3a534e48-80e8-4bbb-a19e-43e83d6f3a3e_160.100.000.000.010.12"
+
+* status = #completed
+
+* medicationReference = Reference(ExampleEPAMedicationMaaloxan)
+
+* subject.reference = "Patient/12c0c2a4-71a2-4d49-9e6f-9b7a3b4f0d11"
+* subject.identifier.system = "http://fhir.de/sid/gkv/kvid-10"
+* subject.identifier.value = "X110411319"
+
+* performer.actor.reference = "Organization/151f1697-7512-4e21-9466-1b75207475d8"
+* performer.actor.identifier
+  * type.coding.system = "http://terminology.hl7.org/CodeSystem/v2-0203"
+  * type.coding.code = #PRN
+  * type.coding.display = "Provider number"
+  * system = "https://gematik.de/fhir/sid/telematik-id"
+  * value = "9-2.58.00000023"
+* performer.actor.display = "gematik Apotheke"
+
+* authorizingPrescription = Reference(ExampleEPAMedicationRequestMaaloxan)
+
+* quantity.value = 1
+* quantity.unit = "Packung"
+
+* whenHandedOver = "2025-10-29"
+
+* dosageInstruction.text = "Morgens 1 Tablette einnehmen, mit etwas Wasser."
+
+* substitution.wasSubstituted = false
+</code></pre>
+                </div>
+            
+                <h3>Example EPAResearchMedicationDispenseMaaloxan (expected)</h3>
+                <div>
+                    <pre><code class="language-vbnet">// Redacted version of full EPA MedicationDispense
+Instance: ExampleEPAResearchMedicationDispenseMaaloxan
+InstanceOf: EPAResearchMedicationDispense
+Usage: #example
+Description: "Maaloxan MedicationDispense after EPAResearchMedicationDispense redaction rules."
+
+* meta.tag[TagSourceProfile].code = #"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense"
+* meta.security = http://terminology.hl7.org/CodeSystem/v3-ObservationValue#PSEUDED "pseudonymized"
+
+// identifier carries no privacy label and is therefore preserved unchanged.
+* identifier[0].system = "https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier"
+* identifier[0].value = "3a534e48-80e8-4bbb-a19e-43e83d6f3a3e_160.100.000.000.010.12"
+
+* status = #unknown
+
+* medicationReference = Reference(ExampleEPAResearchMedicationMaaloxan)
+
+// performer is 1..1 in upstream — anonymized: actor.display fixed to
+// "ANONYMIZED" by the profile, identifying sub-fields removed.
+* performer.actor.display = "ANONYMIZED"
+
+* subject.identifier.value = "PSEUDO-X110411319-9F2C"
+
+* authorizingPrescription = Reference(ExampleEPAResearchMedicationRequestMaaloxan)
+
+* quantity.value = 1
+* quantity.unit = "Packung"
+
+* whenHandedOver = "2025-10-29"
+
+* substitution.wasSubstituted = false
+</code></pre>
+                </div>
+            
+        </div>
+
+        <div class="tab-pane fade" id="resources" role="tabpanel" aria-labelledby="resources-tab">
+            <pre><code class="language-json">{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "entry": [ {
+    "resource": {
+      "resourceType": "MedicationDispense",
+      "id": "ExampleEPAMedicationDispenseMaaloxan",
+      "meta": {
+        "profile": [ "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense" ]
+      },
+      "extension": [ {
+        "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension",
+        "valueIdentifier": {
+          "system": "https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier",
+          "value": "160.100.000.000.010.12_20251027"
+        }
+      }, {
+        "url": "http://hl7.org/fhir/5.0/StructureDefinition/extension-MedicationDispense.renderedDosageInstruction",
+        "valueMarkdown": "Morgens 1 Tablette einnehmen, mit etwas Wasser."
+      }, {
+        "url": "http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta",
+        "extension": [ {
+          "url": "language",
+          "valueCode": "de-DE"
+        }, {
+          "url": "algorithmVersion",
+          "valueString": "1.0.1"
+        } ]
+      } ],
+      "identifier": [ {
+        "system": "https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier",
+        "value": "3a534e48-80e8-4bbb-a19e-43e83d6f3a3e_160.100.000.000.010.12"
+      } ],
+      "status": "completed",
+      "medicationReference": {
+        "reference": "Medication/ExampleEPAMedicationMaaloxan"
+      },
+      "subject": {
+        "reference": "Patient/12c0c2a4-71a2-4d49-9e6f-9b7a3b4f0d11",
+        "identifier": {
+          "system": "http://fhir.de/sid/gkv/kvid-10",
+          "value": "X110411319"
+        }
+      },
+      "performer": [ {
+        "actor": {
+          "reference": "Organization/151f1697-7512-4e21-9466-1b75207475d8",
+          "identifier": {
+            "type": {
+              "coding": [ {
+                "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+                "code": "PRN",
+                "display": "Provider number"
+              } ]
+            },
+            "system": "https://gematik.de/fhir/sid/telematik-id",
+            "value": "9-2.58.00000023"
+          },
+          "display": "gematik Apotheke"
+        }
+      } ],
+      "authorizingPrescription": [ {
+        "reference": "MedicationRequest/ExampleEPAMedicationRequestMaaloxan"
+      } ],
+      "quantity": {
+        "value": 1,
+        "unit": "Packung"
+      },
+      "whenHandedOver": "2025-10-29",
+      "dosageInstruction": [ {
+        "text": "Morgens 1 Tablette einnehmen, mit etwas Wasser."
+      } ],
+      "substitution": {
+        "wasSubstituted": false
+      }
+    }
+  } ]
+}</code></pre>
+        </div>
     </div>
 
     <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', () => {
-            const diffString = "--- FHIR.json\n+++ FHIR.json\n@@ -1,84 +1,63 @@\n {\n   \"resourceType\": \"Bundle\",\n   \"id\": \"ExampleEPAMedicationDispenseBundle\",\n   \"type\": \"collection\",\n   \"entry\": [ {\n     \"resource\": {\n       \"resourceType\": \"MedicationDispense\",\n       \"id\": \"cd6c2892-eef2-4eed-8b82-1b15e8e0fd4f\",\n       \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense\" ]\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-dispense\" ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense\"\n+        } ]\n       },\n       \"status\": \"completed\",\n       \"medicationReference\": {\n         \"reference\": \"Medication/6b0350b6-f5ab-495b-9aeb-1806170a814f\"\n       },\n       \"subject\": {\n         \"identifier\": {\n-          \"system\": \"http://fhir.de/sid/gkv/kvid-10\",\n-          \"value\": \"X123456789\"\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/job-number-identifier\",\n+          \"value\": \"036ee0fc-9f8e-478f-8766-436c3dbd016e\"\n         }\n       },\n-      \"performer\": [ {\n-        \"actor\": {\n-          \"reference\": \"Organization/e6b0cd54-a6f2-4b8c-ad68-76c3ae953b3e\"\n-        }\n-      } ],\n       \"whenHandedOver\": \"2025-01-15\"\n     }\n   }, {\n     \"resource\": {\n       \"resourceType\": \"Medication\",\n       \"id\": \"6b0350b6-f5ab-495b-9aeb-1806170a814f\",\n       \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication\" ]\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication\" ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication\"\n+        } ]\n       },\n       \"extension\": [ {\n         \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension\",\n         \"valueIdentifier\": {\n           \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier\",\n           \"value\": \"160.153.303.257.459_20240122\"\n         }\n       } ],\n       \"identifier\": [ {\n         \"system\": \"https://gematik.de/fhir/epa-medication/sid/epa-medication-unique-identifier\",\n         \"value\": \"583DC39E2BFFBFD6C05AE0AC404516309F56729EA44813F9FB881C73EE58EA5D\"\n       }, {\n         \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier\",\n         \"value\": \"6ae6a7ca-c9b5-46bf-9411-2ba49d96f988_160.153.303.257.459\"\n       } ],\n       \"code\": {\n         \"coding\": [ {\n           \"system\": \"http://fhir.de/CodeSystem/ask\",\n           \"code\": \"5682\",\n           \"display\": \"Ibuprofen\"\n         } ]\n       },\n       \"status\": \"active\"\n     }\n-  }, {\n-    \"resource\": {\n-      \"resourceType\": \"Organization\",\n-      \"id\": \"e6b0cd54-a6f2-4b8c-ad68-76c3ae953b3e\",\n-      \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/directory/StructureDefinition/OrganizationDirectory\" ],\n-        \"tag\": [ {\n-          \"system\": \"https://gematik.de/fhir/directory/CodeSystem/Origin\",\n-          \"code\": \"ldap\"\n-        } ]\n-      },\n-      \"identifier\": [ {\n-        \"system\": \"https://gematik.de/fhir/sid/telematik-id\",\n-        \"value\": \"3-21234567890\"\n-      } ],\n-      \"type\": [ {\n-        \"coding\": [ {\n-          \"system\": \"https://gematik.de/fhir/directory/CodeSystem/OrganizationProfessionOID\",\n-          \"code\": \"1.2.276.0.76.4.54\",\n-          \"display\": \"Öffentliche Apotheke\"\n-        } ]\n-      } ],\n-      \"name\": \"Example EPA Pharmacy\"\n-    }\n   } ]\n }";
+        
+        
+        let diffRendered = false;
+        function renderBundleDiff() {
+            if (diffRendered) return;
+            diffRendered = true;
             const targetElement = document.getElementById('bundleDiff');
-            var configuration = {
+            const diffString = "--- FHIR.json\n+++ FHIR.json\n@@ -1,78 +1,52 @@\n {\n   \"resourceType\": \"Bundle\",\n   \"type\": \"collection\",\n   \"entry\": [ {\n     \"resource\": {\n       \"resourceType\": \"MedicationDispense\",\n       \"id\": \"ExampleEPAMedicationDispenseMaaloxan\",\n       \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense\" ]\n-      },\n-      \"extension\": [ {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension\",\n-        \"valueIdentifier\": {\n-          \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier\",\n-          \"value\": \"160.100.000.000.010.12_20251027\"\n-        }\n-      }, {\n-        \"url\": \"http://hl7.org/fhir/5.0/StructureDefinition/extension-MedicationDispense.renderedDosageInstruction\",\n-        \"valueMarkdown\": \"Morgens 1 Tablette einnehmen, mit etwas Wasser.\"\n-      }, {\n-        \"url\": \"http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta\",\n-        \"extension\": [ {\n-          \"url\": \"language\",\n-          \"valueCode\": \"de-DE\"\n-        }, {\n-          \"url\": \"algorithmVersion\",\n-          \"valueString\": \"1.0.1\"\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-dispense\" ],\n+        \"security\": [ {\n+          \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ObservationValue\",\n+          \"code\": \"PSEUDED\",\n+          \"display\": \"pseudonymized\"\n+        } ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense\"\n         } ]\n-      } ],\n+      },\n       \"identifier\": [ {\n         \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier\",\n         \"value\": \"3a534e48-80e8-4bbb-a19e-43e83d6f3a3e_160.100.000.000.010.12\"\n       } ],\n-      \"status\": \"completed\",\n+      \"status\": \"unknown\",\n       \"medicationReference\": {\n         \"reference\": \"Medication/ExampleEPAMedicationMaaloxan\"\n       },\n       \"subject\": {\n-        \"reference\": \"Patient/12c0c2a4-71a2-4d49-9e6f-9b7a3b4f0d11\",\n         \"identifier\": {\n-          \"system\": \"http://fhir.de/sid/gkv/kvid-10\",\n-          \"value\": \"X110411319\"\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/job-number-identifier\",\n+          \"value\": \"PSEUDO-X110411319-9F2C\"\n         }\n       },\n       \"performer\": [ {\n         \"actor\": {\n-          \"reference\": \"Organization/151f1697-7512-4e21-9466-1b75207475d8\",\n-          \"identifier\": {\n-            \"type\": {\n-              \"coding\": [ {\n-                \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n-                \"code\": \"PRN\",\n-                \"display\": \"Provider number\"\n-              } ]\n-            },\n-            \"system\": \"https://gematik.de/fhir/sid/telematik-id\",\n-            \"value\": \"9-2.58.00000023\"\n-          },\n-          \"display\": \"gematik Apotheke\"\n+          \"display\": \"ANONYMIZED\"\n         }\n       } ],\n       \"authorizingPrescription\": [ {\n         \"reference\": \"MedicationRequest/ExampleEPAMedicationRequestMaaloxan\"\n       } ],\n       \"quantity\": {\n         \"value\": 1,\n         \"unit\": \"Packung\"\n       },\n       \"whenHandedOver\": \"2025-10-29\",\n-      \"dosageInstruction\": [ {\n-        \"text\": \"Morgens 1 Tablette einnehmen, mit etwas Wasser.\"\n-      } ],\n       \"substitution\": {\n         \"wasSubstituted\": false\n       }\n     }\n   } ]\n }";
+            const diff2htmlUi = new Diff2HtmlUI(targetElement, diffString, {
                 drawFileList: false,
                 fileListToggle: false,
                 fileListStartVisible: false,
@@ -128,224 +469,21 @@
                 highlight: true,
                 colorScheme: 'dark',
                 renderNothingWhenEmpty: false,
-              };
-            const diff2htmlUi = new Diff2HtmlUI(targetElement, diffString, configuration);
+            });
             diff2htmlUi.draw();
             diff2htmlUi.highlightCode();
-        });
+        }
+        document.getElementById('diff-tab').addEventListener('shown.bs.tab', renderBundleDiff);
+        
+        document.addEventListener('DOMContentLoaded', renderBundleDiff);
     </script>
-    <div class="row">
-        <div class="col-xl-6">
-            <h4>Validation before filter</h4>
-            
-                <p class="text-success">Bundle is valid</p>
-            
-        </div>
-        <div class="col-xl-6">
-            <h4>Validation after filter</h4>
-            
-                <p class="text-success">Bundle is valid</p>
-            
-
-        </div>
-
-        <h2 class="mt-4 mb-4">Sources</h2>
-        
-            <h3>Privacy Label Extension</h3>
-            <div>
-                <pre><code class="language-vbnet">Extension: PrivacyLabelExtension
-Id: privacy-label-extension
-Context: ElementDefinition
-
-* extension contains
-    obligationPolicy 1..1 MS and
-    dummyValue 0..1 MS
-* extension[obligationPolicy].value[x] only Coding
-* extension[obligationPolicy].value[x] from $vs-v3-ObligationPolicy
-</code></pre>
-            </div>
-        
-            <h3>Privacy Rule Sets</h3>
-            <div>
-                <pre><code class="language-vbnet">RuleSet: PrivacyLabelPseudonymize
-* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#PSEUD
-
-RuleSet: PrivacyLabelAnonymizeString(dummyValue)
-* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#ANONY
-* ^extension[PrivacyLabelExtension].extension[dummyValue].valueString = {dummyValue}
-
-RuleSet: PrivacyLabelRedact
-* ^extension[PrivacyLabelExtension].extension[obligationPolicy].valueCoding = $cs-v3-act-code#REDACT
-</code></pre>
-            </div>
-        
-            <h3>Profile EPAResearchMedicationDispense</h3>
-            <div>
-                <pre><code class="language-vbnet">Profile: EPAResearchMedicationDispense
-Id: epa-research-medication-dispense
-Parent: MedicationDispense
-
-* insert MetaSourceProfile
-  
-* note 0..0
-  * insert PrivacyLabelRedact
-* subject.identifier
-  * insert PrivacyLabelPseudonymize
-* subject.reference 0..0
-  * insert PrivacyLabelRedact
-* performer 0..0
-  * insert PrivacyLabelRedact
-* location 0..0
-  * insert PrivacyLabelRedact
-* destination 0..0
-  * insert PrivacyLabelRedact
-
-// Extensiona
-* extension contains RxPrescriptionProcessIdentifierExtension named rxPrescriptionProcessIdentifier 0..1
-* extension[rxPrescriptionProcessIdentifier].value[x]
-</code></pre>
-            </div>
-        
-            <h3>Example EPAMedicationDispense</h3>
-            <div>
-                <pre><code class="language-vbnet">Instance: ExampleEPAMedicationDispenseMedication
-InstanceOf: EPAMedication
-Usage: #example
-* id = "6b0350b6-f5ab-495b-9aeb-1806170a814f"
-* extension[rxPrescriptionProcessIdentifier].valueIdentifier.value = "160.153.303.257.459_20240122"
-* identifier[EPAMedicationUniqueIdentifier].value = "583DC39E2BFFBFD6C05AE0AC404516309F56729EA44813F9FB881C73EE58EA5D"
-* identifier[RxOriginatorProcessIdentifier].value = "6ae6a7ca-c9b5-46bf-9411-2ba49d96f988_160.153.303.257.459"
-* status = #active
-* code.coding
-  * system = $cs-ask
-  * code = #5682
-  * display = "Ibuprofen"
-
-Instance: ExampleEPAMedicationDispensePerformer
-InstanceOf: OrganizationDirectory
-
-* id = "e6b0cd54-a6f2-4b8c-ad68-76c3ae953b3e"
-* meta.tag[Origin] = Origin#ldap
-* name = "Example EPA Pharmacy"
-* identifier[TelematikID].value = "3-21234567890"
-* type = OrganizationProfessionOID#1.2.276.0.76.4.54 "Öffentliche Apotheke"
-
-Instance: ExampleEPAMedicationDispense
-InstanceOf: EPAMedicationDispense
-Usage: #example
-
-* id = "cd6c2892-eef2-4eed-8b82-1b15e8e0fd4f"
-* status = medicationdispense-status#completed
-* performer.actor = Reference(ExampleEPAMedicationDispensePerformer)
-* medicationReference = Reference(ExampleEPAMedicationDispenseMedication)
-* subject.identifier.value = "X123456789"
-* whenHandedOver[+] = 2025-01-15
-
-Instance: ExampleEPAMedicationDispenseBundle
-InstanceOf: Bundle
-Usage: #example
-
-* type = #collection
-* entry[+].resource = ExampleEPAMedicationDispense
-* entry[+].resource = ExampleEPAMedicationDispenseMedication
-* entry[+].resource = ExampleEPAMedicationDispensePerformer</code></pre>
-            </div>
-        
-
-        <h3 class="mt-4 mb-4">ePA Resources</h3>
-        <pre><code class="language-json">{
-  "resourceType": "Bundle",
-  "id": "ExampleEPAMedicationDispenseBundle",
-  "type": "collection",
-  "entry": [ {
-    "resource": {
-      "resourceType": "MedicationDispense",
-      "id": "cd6c2892-eef2-4eed-8b82-1b15e8e0fd4f",
-      "meta": {
-        "profile": [ "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense" ]
-      },
-      "status": "completed",
-      "medicationReference": {
-        "reference": "Medication/6b0350b6-f5ab-495b-9aeb-1806170a814f"
-      },
-      "subject": {
-        "identifier": {
-          "system": "http://fhir.de/sid/gkv/kvid-10",
-          "value": "X123456789"
-        }
-      },
-      "performer": [ {
-        "actor": {
-          "reference": "Organization/e6b0cd54-a6f2-4b8c-ad68-76c3ae953b3e"
-        }
-      } ],
-      "whenHandedOver": "2025-01-15"
-    }
-  }, {
-    "resource": {
-      "resourceType": "Medication",
-      "id": "6b0350b6-f5ab-495b-9aeb-1806170a814f",
-      "meta": {
-        "profile": [ "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication" ]
-      },
-      "extension": [ {
-        "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension",
-        "valueIdentifier": {
-          "system": "https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier",
-          "value": "160.153.303.257.459_20240122"
-        }
-      } ],
-      "identifier": [ {
-        "system": "https://gematik.de/fhir/epa-medication/sid/epa-medication-unique-identifier",
-        "value": "583DC39E2BFFBFD6C05AE0AC404516309F56729EA44813F9FB881C73EE58EA5D"
-      }, {
-        "system": "https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier",
-        "value": "6ae6a7ca-c9b5-46bf-9411-2ba49d96f988_160.153.303.257.459"
-      } ],
-      "code": {
-        "coding": [ {
-          "system": "http://fhir.de/CodeSystem/ask",
-          "code": "5682",
-          "display": "Ibuprofen"
-        } ]
-      },
-      "status": "active"
-    }
-  }, {
-    "resource": {
-      "resourceType": "Organization",
-      "id": "e6b0cd54-a6f2-4b8c-ad68-76c3ae953b3e",
-      "meta": {
-        "profile": [ "https://gematik.de/fhir/directory/StructureDefinition/OrganizationDirectory" ],
-        "tag": [ {
-          "system": "https://gematik.de/fhir/directory/CodeSystem/Origin",
-          "code": "ldap"
-        } ]
-      },
-      "identifier": [ {
-        "system": "https://gematik.de/fhir/sid/telematik-id",
-        "value": "3-21234567890"
-      } ],
-      "type": [ {
-        "coding": [ {
-          "system": "https://gematik.de/fhir/directory/CodeSystem/OrganizationProfessionOID",
-          "code": "1.2.276.0.76.4.54",
-          "display": "Öffentliche Apotheke"
-        } ]
-      } ],
-      "name": "Example EPA Pharmacy"
-    }
-  } ]
-}</code></pre>
-
-    </div>
 
     
 
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 <script>hljs.highlightAll();</script>
 
 </body>

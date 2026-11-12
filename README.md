@@ -29,6 +29,8 @@ For further resources related to an ePA release follow the link to 'Release docu
 FHIR profiles for Data Submission are available on</br>
 [**Simplifier**](https://simplifier.net/epa-research)
 
+For building the profiles locally and running the privacy filter sample see [DEVELOPMENT.md](./DEVELOPMENT.md).
+
 
 The current branch accompanies a particular release of specification documents of ePA version 3 (a set of normative specification documents for components, product types and vendor types) published on [Fachportal Gematik](https://fachportal.gematik.de/) (see [Branchinformation.md](./Branchinformation.md) for specific version information and links).
 The content in /src is normative in context of requirements defined by those specification documents and is essential for product approvals. Any other content is for information. Normative content here, the associated repositories and the documents together form a single product release of the Electronic Health Record system for an approval process.

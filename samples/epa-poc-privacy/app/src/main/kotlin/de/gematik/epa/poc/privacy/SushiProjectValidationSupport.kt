@@ -18,8 +18,8 @@
  * For additional notes and disclaimer from gematik and in case of changes
  * by gematik, find details in the "Readme" file.
  */
- 
- package de.gematik.epa.poc.privacy
+
+package de.gematik.epa.poc.privacy
 
 import ca.uhn.fhir.context.FhirContext
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -103,7 +103,11 @@ class SushiProjectValidationSupport(
         logger.debug("Loading package $packageName version $packageVersion")
         val packagePath = packagesCacheDirectory.resolve("$packageName#$packageVersion")
         if (!packagePath.toFile().exists()) {
-            throw RuntimeException("Package $packageName version $packageVersion is not installed.")
+            // Soft-fail: a missing transitive FHIR package would otherwise abort the whole run
+            // even when none of the resources it provides are needed. Validation against profiles
+            // from that package will still surface as warnings later.
+            logger.warn("Package {} version {} is not installed under {}; skipping", packageName, packageVersion, packagesCacheDirectory)
+            return
         }
         val npmPackage = NpmPackage.fromFolder(packagePath.toString())
         val packageFolder = npmPackage.folders["package"]

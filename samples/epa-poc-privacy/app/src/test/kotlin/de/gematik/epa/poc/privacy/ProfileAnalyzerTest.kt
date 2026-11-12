@@ -18,18 +18,24 @@
  * For additional notes and disclaimer from gematik and in case of changes
  * by gematik, find details in the "Readme" file.
  */
- 
- package de.gematik.epa.poc.privacy
 
-import org.hl7.fhir.r4.model.MedicationRequest
+package de.gematik.epa.poc.privacy
+
 import org.hl7.fhir.r4.model.StructureDefinition
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
 
 class ProfileAnalyzerTest {
+    /**
+     * Developer-only utility: prints all non-HL7 StructureDefinitions known to the validator,
+     * which requires the full FHIR package transitive closure to be present in `~/.fhir/packages/`.
+     * Disabled by default so CI does not fail on a developer machine missing one of those packages.
+     */
+    @Disabled("Requires full FHIR package transitive closure under ~/.fhir/packages — run manually when needed")
     @Test
     fun testFindAllProfiles() {
-        val validator = Validator(FhirContextR4, Path("../../../../dev-epa-medication/src/fhir"))
+        val validator = Validator(FhirContextR4, Path("../../../src/fhir"))
         val l = validator.validationSupport.fetchAllNonBaseStructureDefinitions<StructureDefinition>() ?: emptyList()
         val s = l.distinctBy { it.url }.filter { !it.url.startsWith("http://hl7.org/") }.sortedBy { it.name }.sortedBy { it.type }
 
