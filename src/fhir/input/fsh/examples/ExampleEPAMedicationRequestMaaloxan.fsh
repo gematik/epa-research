@@ -32,6 +32,8 @@ Description: "Full Maaloxan MedicationRequest — pre-redaction reference."
 * requester.reference = "PractitionerRole/73a551f8-d8cd-4b44-823d-ab5f8aeab1aa"
 * requester.display = "Dr. Max Manfred Mustermann / Praxis Dr. med. Max Mustermann"
 
+* recorder.display = "Dr. Max Manfred Mustermann"
+
 * dosageInstruction.text = "Morgens 1 Tablette einnehmen"
 * dosageInstruction.timing.repeat
   * frequency = 1
@@ -45,6 +47,7 @@ Description: "Full Maaloxan MedicationRequest — pre-redaction reference."
 
 * dispenseRequest.quantity.value = 1
 * dispenseRequest.quantity.unit = "Packung"
+* dispenseRequest.performer.display = "gematik Apotheke"
 
 * substitution.allowedBoolean = true
 

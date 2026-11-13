@@ -1,6 +1,6 @@
 {
   "name": "de.gematik.epa.research",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "author": "gematik",
   "license": "Apache-2.0",
   "canonical": "https://gematik.de/fhir/epa-research",

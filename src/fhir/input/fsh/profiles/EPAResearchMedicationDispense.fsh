@@ -26,10 +26,25 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedicationDispense für den eP
 * performer.actor.identifier 0..0
   * insert PrivacyLabelRedact
 
+* location 0..0
+  * insert PrivacyLabelRedact
+
+* destination 0..0
+  * insert PrivacyLabelRedact
+
+* receiver 0..0
+  * insert PrivacyLabelRedact
+
+* note 0..0
+  * insert PrivacyLabelRedact
+
 * dosageInstruction.text 0..0
   * insert PrivacyLabelRedact
 
 * dosageInstruction.patientInstruction 0..0
+  * insert PrivacyLabelRedact
+
+* substitution.responsibleParty 0..0
   * insert PrivacyLabelRedact
 
 // Explicitly defined extension slices are copied; others are filtered out.

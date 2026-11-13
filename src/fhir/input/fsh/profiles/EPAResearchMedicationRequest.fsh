@@ -19,6 +19,9 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedicationRequest für den ePA
 * requester 0..0
   * insert PrivacyLabelRedact
 
+* recorder 0..0
+  * insert PrivacyLabelRedact
+
 * note 0..0
   * insert PrivacyLabelRedact
 
@@ -28,7 +31,9 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedicationRequest für den ePA
 * dosageInstruction.patientInstruction 0..0
   * insert PrivacyLabelRedact
 
+* dispenseRequest.performer 0..0
+  * insert PrivacyLabelRedact
+
 // Explicitly defined extension slices are copied; others are filtered out.
 * extension contains
-  MultiplePrescriptionExtension named multiplePrescription 0..1 MS and
-  IndicatorBVGExtension named isBvg 0..1 MS
+  MultiplePrescriptionExtension named multiplePrescription 0..1 MS

@@ -30,6 +30,8 @@ Description: "Full Maaloxan MedicationDispense — pre-redaction reference."
   * value = "9-2.58.00000023"
 * performer.actor.display = "gematik Apotheke"
 
+* location.display = "gematik Apotheke, Rosenthaler Straße 30, 10178 Berlin"
+
 * authorizingPrescription = Reference(ExampleEPAMedicationRequestMaaloxan)
 
 * quantity.value = 1
@@ -37,6 +39,12 @@ Description: "Full Maaloxan MedicationDispense — pre-redaction reference."
 
 * whenHandedOver = "2025-10-29"
 
+* destination.display = "Musterstraße 1, 10117 Berlin"
+* receiver.display = "Erika Mustermann (Angehörige)"
+
+* note.text = "Abholung durch Angehörige, Botendienst abgelehnt."
+
 * dosageInstruction.text = "Morgens 1 Tablette einnehmen, mit etwas Wasser."
 
 * substitution.wasSubstituted = false
+* substitution.responsibleParty.display = "Apothekerin Dr. Petra Beispiel"

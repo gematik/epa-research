@@ -66,6 +66,9 @@
     "reference": "PractitionerRole/73a551f8-d8cd-4b44-823d-ab5f8aeab1aa",
     "display": "Dr. Max Manfred Mustermann / Praxis Dr. med. Max Mustermann"
   },
+  "recorder": {
+    "display": "Dr. Max Manfred Mustermann"
+  },
   "dosageInstruction": [
     {
       "text": "Morgens 1 Tablette einnehmen",
@@ -95,6 +98,9 @@
     "quantity": {
       "value": 1,
       "unit": "Packung"
+    },
+    "performer": {
+      "display": "gematik Apotheke"
     }
   },
   "substitution": {

@@ -35,10 +35,6 @@
         }
       ],
       "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/multiple-prescription-extension"
-    },
-    {
-      "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/indicator-bvg-extension",
-      "valueBoolean": false
     }
   ],
   "identifier": [
