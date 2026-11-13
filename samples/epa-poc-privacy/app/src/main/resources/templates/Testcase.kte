@@ -191,45 +191,6 @@
         document.addEventListener('DOMContentLoaded', renderBundleDiff);
     </script>
 
-    <%--
-<h2 class="mt-4 mb-4">Profiles</h2>
-<table class="table">
-    <thead>
-    <tr>
-        <th>Path</th>
-        <th>Type</th>
-        <th>N..M</th>
-        <th>MS</th>
-        <th>Privacy Label</th>
-    </tr>
-    </thead>
-    <tbody>
-    @for(element in testCase.profile.snapshot.element)
-        <tr>
-            <td>${element.path}</td>
-            <td>${element.type.firstOrNull()?.code}</td>
-            <td>
-                @if(element.min > 0)
-                    <span class="text-success">${element.min}..${element.max}</span>
-                @else
-                    <span>${element.min}..${element.max}</span>
-                @endif
-            </td>
-            <td>
-                @if(element.mustSupport)
-                    <span class="text-success">MS</span>
-                @else
-                    <span></span>
-                @endif
-            </td>
-            <td>-</td>
-        </tr>
-    @endfor
-    </tbody>
-</table>
---%>
-
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>

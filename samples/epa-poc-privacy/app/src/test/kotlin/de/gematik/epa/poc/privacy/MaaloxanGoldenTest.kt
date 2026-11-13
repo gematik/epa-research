@@ -23,98 +23,91 @@ package de.gematik.epa.poc.privacy
 
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
-import kotlinx.serialization.decodeFromString
-import net.mamoe.yamlkt.Yaml
 import org.hl7.fhir.r4.model.Resource
-import org.hl7.fhir.r4.model.StructureDefinition
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
-import java.nio.file.Files
 import kotlin.io.path.Path
-import kotlin.io.path.name
-import kotlin.io.path.readText
 
 /**
- * Asserts that PrivacyFilter, fed the upstream EPAMedication* Maaloxan example,
- * produces output that is semantically equal (HAPI [Resource.equalsDeep]) to the
- * FSH-generated EPAResearch* Maaloxan golden.
+ * Runs the filter over every source example in `testcases-config.yaml` and compares the outcome with
+ * the hand-written research example next to it.
  *
- * Loads StructureDefinitions directly from `fsh-generated/resources/` to avoid
- * pulling the full HAPI validation chain (and its transitive FHIR-package
- * dependencies) into the test.
+ * StructureDefinitions are read straight from `fsh-generated/resources/`, so the tests do not need
+ * the FHIR package cache that the full HAPI validation chain depends on.
  */
 class MaaloxanGoldenTest {
 
-    @TestFactory
-    fun `tool output matches FSH golden`(): List<DynamicTest> {
-        val config = Yaml.decodeFromString<Config>(Path("testcases-config.yaml").readText())
+    private class Example(val name: String, val source: Resource, val expected: Resource, val pseudonymize: PseudonymizeFunction)
 
-        return config.testCaseList.flatMap { testCase ->
-            assertEquals(
-                testCase.resourcePaths.size,
-                testCase.expectedResearchPaths.size,
-                "resourcePaths/expectedResearchPaths length mismatch in ${testCase.id}"
+    private val examples: List<Example> = Config.load(Path("testcases-config.yaml")).testCaseList.flatMap { testCase ->
+        assertEquals(
+            testCase.resourcePaths.size,
+            testCase.expectedResearchPaths.size,
+            "resourcePaths/expectedResearchPaths length mismatch in ${testCase.id}",
+        )
+        val sushiRoot = Path(testCase.sushiProjectPath)
+        testCase.resourcePaths.zip(testCase.expectedResearchPaths).map { (sourcePath, expectedPath) ->
+            Example(
+                name = "${testCase.id}: ${sourcePath.substringAfterLast('/')}",
+                source = loadResource(sushiRoot.resolve(sourcePath)) as Resource,
+                expected = loadResource(sushiRoot.resolve(expectedPath)) as Resource,
+                pseudonymize = deterministicPseudonymizer(testCase.pseudonyms),
             )
+        }
+    }
 
-            val sushiRoot = Path(testCase.sushiProjectPath)
-            val researchProfiles = loadResearchStructureDefinitions(sushiRoot)
-            val pseudonymize = deterministicPseudonymizer(testCase.pseudonyms)
+    @TestFactory
+    fun `filter output matches the research example`(): List<DynamicTest> = examples.map { example ->
+        dynamicTest(example.name) {
+            val result = PrivacyFilter(researchProfileFor(example.source), example.pseudonymize).filter(example.source)
+            assertEquals(emptyList<PrivacyFilterLogEntry>(), result.log.filter { it.severity == PrivacyLogSeverity.ERROR })
 
-            testCase.resourcePaths.zip(testCase.expectedResearchPaths).map { (sourcePath, expectedPath) ->
-                DynamicTest.dynamicTest("${testCase.id}: ${sourcePath.substringAfterLast('/')}") {
-                    val source = loadResource(sushiRoot.resolve(sourcePath)) as Resource
-                    val expected = loadResource(sushiRoot.resolve(expectedPath)) as Resource
-
-                    val url = researchProfileUrlFor(source)
-                    assertNotNull(url, "No privacy-aware profile URL for ${source.resourceType.name}")
-                    val profile = researchProfiles[url]
-                    assertNotNull(profile, "Profile not found in fsh-generated: $url")
-
-                    val actual = PrivacyFilter(profile!!, pseudonymize).filter(source).resource
-
-                    val actualNorm = normalizeForComparison(actual)
-                    val expectedNorm = normalizeForComparison(expected)
-                    if (!actualNorm.equalsDeep(expectedNorm)) {
-                        val expectedLines = expectedNorm.toPrettyString().lines()
-                        val actualLines = actualNorm.toPrettyString().lines()
-                        val patch = DiffUtils.diff(expectedLines, actualLines)
-                        val diff = UnifiedDiffUtils.generateUnifiedDiff("expected", "actual", expectedLines, patch, 3)
-                        System.err.println(diff.joinToString("\n"))
-                    }
-                    assertTrue(
-                        actualNorm.equalsDeep(expectedNorm),
-                        "Filtered ${source.resourceType.name} does not match ${expectedPath.substringAfterLast('/')}"
-                    )
-                }
+            val actual = withoutExampleNaming(result.resource!!)
+            val expected = withoutExampleNaming(example.expected)
+            assertTrue(actual.equalsDeep(expected)) {
+                val expectedLines = expected.toPrettyString().lines()
+                val patch = DiffUtils.diff(expectedLines, actual.toPrettyString().lines())
+                UnifiedDiffUtils.generateUnifiedDiff("expected", "actual", expectedLines, patch, 3).joinToString("\n")
             }
         }
     }
 
     /**
-     * Normalize away differences that are not part of the redaction rules:
-     *
-     * - **FSH instance naming convention** — the source FSH `ExampleEPAMedicationMaaloxan` and the
-     *   redacted-golden FSH `ExampleEPAResearchMedicationMaaloxan` are separate FSH instances and
-     *   therefore have different `id`s and cross-resource reference targets. The privacy filter
-     *   preserves the source id and references (it does not transform them), so comparison treats
-     *   `ExampleEPAResearch` and `ExampleEPA` as equivalent.
+     * A rule that finds nothing to do proves nothing, so every privacy rule of a research profile must
+     * change something in its source example. A new rule in a profile fails here until the example covers it.
      */
-    private fun normalizeForComparison(resource: Resource): Resource {
+    @TestFactory
+    fun `source example exercises every privacy rule of its profile`(): List<DynamicTest> = examples.map { example ->
+        dynamicTest(example.name) {
+            val log = PrivacyFilter(researchProfileFor(example.source), example.pseudonymize).filter(example.source).log
+            val idle = log.filter { it.affectedValues == 0 }.map { it.path } - NOT_IN_SOURCE_EXAMPLES
+            assertEquals(emptyList<String>(), idle)
+        }
+    }
+
+    private companion object {
+        /** Rules no source example can exercise; PrivacyFilterTest covers them with hand-built resources. */
+        val NOT_IN_SOURCE_EXAMPLES = setOf(
+            // The EPAMedication profiles already forbid patientInstruction.
+            "MedicationRequest.dosageInstruction.patientInstruction",
+            "MedicationDispense.dosageInstruction.patientInstruction",
+            // The examples reference their Medication as a resource of its own.
+            "MedicationRequest.contained",
+            "MedicationDispense.contained",
+        )
+    }
+
+    /**
+     * Source and research example are separate FSH instances with their own ids and reference targets
+     * (`ExampleEPAMedicationMaaloxan` vs. `ExampleEPAResearchMedicationMaaloxan`). The filter keeps ids
+     * and references as they are, so the naming difference is not part of what is compared.
+     */
+    private fun withoutExampleNaming(resource: Resource): Resource {
         val parser = FhirContextR4.newJsonParser()
         val json = parser.encodeResourceToString(resource).replace("ExampleEPAResearch", "ExampleEPA")
         return parser.parseResource(json) as Resource
-    }
-
-    private fun loadResearchStructureDefinitions(sushiRoot: java.nio.file.Path): Map<String, StructureDefinition> {
-        val resourcesDir = sushiRoot.resolve("fsh-generated/resources")
-        return Files.list(resourcesDir).use { stream ->
-            stream.toList()
-                .filter { it.name.startsWith("StructureDefinition-") && it.name.endsWith(".json") }
-                .map { loadResource(it) as StructureDefinition }
-                .associateBy { it.url }
-        }
     }
 }

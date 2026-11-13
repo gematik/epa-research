@@ -11,7 +11,7 @@ resource instances. For the rule definitions themselves, see
 - The parent FHIR project must have been built so its StructureDefinitions exist under
   `../../src/fhir/fsh-generated/resources/`:
   ```sh
-  cd ../../src/fhir && sushi .
+  cd ../../src/fhir && sushi build -s .
   ```
 
 ## Run the sample
@@ -40,22 +40,39 @@ Open a report in a browser to see:
 - validation results before and after filtering,
 - the FSH sources that drive the rules.
 
-## Run the golden tests
+## Run the tests
 
 ```sh
 ./gradlew test
 ```
 
-`MaaloxanGoldenTest` runs the filter against the three upstream
-`ExampleEPAMedication*Maaloxan` JSON inputs and asserts each output is semantically
-equal (HAPI `Resource.equalsDeep`) to the FSH-generated `ExampleEPAResearch*Maaloxan`
-golden. Deterministic pseudonyms come from `app/testcases-config.yaml`'s
-`pseudonyms` map so the goldens are reproducible.
+- `MaaloxanGoldenTest` runs the filter against the three upstream
+  `ExampleEPAMedication*Maaloxan` JSON inputs and asserts each output is semantically
+  equal (HAPI `Resource.equalsDeep`) to the FSH-generated `ExampleEPAResearch*Maaloxan`
+  golden. It also asserts that every privacy rule of a research profile changes something
+  in its source example, so a new rule without example coverage fails the build.
+  Deterministic pseudonyms come from `app/testcases-config.yaml`'s `pseudonyms` map.
+- `ResearchProfileRulesTest` lists, per research profile, the rules and the retained
+  extensions the filter derives from it. Update it together with the profile.
+- `PrivacyFilterTest` covers the filter rule by rule with hand-built resources,
+  including the failure modes.
+
+The tests read the StructureDefinitions from `fsh-generated/resources/` and do not need
+the FHIR package cache.
+
+## How the filter behaves
+
+- Rules come from the profile's differential: privacy labels plus every element with `max = 0`.
+- Extensions the profile does not declare are removed on every element, not only on the resource root.
+- `PSEUD` replaces a `Reference` or `Identifier` by the job number identifier alone.
+- If any rule fails, the filter returns no resource; resources without a research profile are not exported.
+- A contained resource is filtered by the same rules when the profile names itself for `contained`
+  (EPAResearchMedication); a contained resource the profile does not cover makes the filter fail.
 
 ## Adding a new test case
 
 1. Author the source resource (FSH) and its expected EPAResearch* counterpart, regenerate
-   with `sushi .` in `src/fhir/`.
+   with `sushi build -s .` in `src/fhir/`.
 2. Append a new entry to `testCaseList` in `app/testcases-config.yaml` with
    `resourcePaths`, `expectedResearchPaths`, any required `pseudonyms`, and `sources`
    for the report.

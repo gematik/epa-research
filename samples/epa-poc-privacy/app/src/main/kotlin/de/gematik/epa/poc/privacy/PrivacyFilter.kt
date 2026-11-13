@@ -21,13 +21,21 @@
 
 package de.gematik.epa.poc.privacy
 
-import org.hl7.fhir.r4.model.*
-
-enum class PrivacyFilterMethod {
-    Redact,
-    Anonymize,
-    Pseudonymize,
-}
+import org.hl7.fhir.r4.model.BackboneElement
+import org.hl7.fhir.r4.model.BackboneType
+import org.hl7.fhir.r4.model.Base
+import org.hl7.fhir.r4.model.CanonicalType
+import org.hl7.fhir.r4.model.Coding
+import org.hl7.fhir.r4.model.DomainResource
+import org.hl7.fhir.r4.model.Element
+import org.hl7.fhir.r4.model.ElementDefinition
+import org.hl7.fhir.r4.model.Extension
+import org.hl7.fhir.r4.model.Identifier
+import org.hl7.fhir.r4.model.Reference
+import org.hl7.fhir.r4.model.Resource
+import org.hl7.fhir.r4.model.StructureDefinition
+import org.hl7.fhir.r4.model.Type
+import org.slf4j.LoggerFactory
 
 const val PRIVACY_LABEL_EXTENSION_URL = "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
 const val SYSTEM_JOB_NUMBER = "https://gematik.de/fhir/epa-research/sid/job-number-identifier"
@@ -35,282 +43,209 @@ const val SYSTEM_SOURCE_PROFILE = "https://gematik.de/fhir/epa-research/sid/sour
 const val SYSTEM_PSEUDED = "http://terminology.hl7.org/CodeSystem/v3-ObservationValue"
 const val CODE_PSEUDED = "PSEUDED"
 
-val RESOURCE_BLOCK_LIST = listOf(
-    "Patient",
-    "Practitioner",
-    "PractitionerRole",
-    "Organization",
-    "HealthcareService",
-)
+enum class PrivacyFilterMethod(val obligationPolicy: String) {
+    Redact("REDACT"),
+    Anonymize("ANONY"),
+    Pseudonymize("PSEUD"),
+}
 
-enum class PrivacyLogeSeverity {
+enum class PrivacyLogSeverity {
     INFO,
     ERROR,
 }
 
 data class PrivacyFilterLogEntry(
-    val severity: PrivacyLogeSeverity,
-    val method: PrivacyFilterMethod,
+    val severity: PrivacyLogSeverity,
+    /** Null for entries that do not stem from a privacy rule. */
+    val method: PrivacyFilterMethod?,
     val path: String,
-    val message: String = "",
+    val message: String,
+    val affectedValues: Int = 0,
 )
 
-class PrivacyFilterRule(
-    val method: PrivacyFilterMethod,
-    val profile: StructureDefinition,
-    private val element: ElementDefinition,
-    private val applyRule: (Resource) -> Unit
-) {
-    fun filter(resource: Resource): PrivacyFilterLogEntry {
-        logger.info("Applying rule {} to {}", method, element.id)
-        try {
-            applyRule(resource)
-        } catch (e: Exception) {
-            logger.error("Error applying rule to {}", element.id, e)
-            return PrivacyFilterLogEntry(PrivacyLogeSeverity.ERROR, method, element.id, e.message ?: "")
-        }
-        return PrivacyFilterLogEntry(PrivacyLogeSeverity.INFO, method, element.id, method.toString())
-    }
-}
-
-val subPathRegex = Regex("""^[^.]+\.(.+)$""")
-
+/** [resource] is null when any rule failed: a partially filtered resource must never leave the filter. */
 class PrivacyFilterResult(
-    val resource: Resource,
+    val resource: Resource?,
     val log: List<PrivacyFilterLogEntry>,
 )
 
 typealias PseudonymizeFunction = (String) -> String
 
+/**
+ * Turns a resource into its pseudonymised counterpart as described by a research profile:
+ * every element carrying a privacy label is redacted, anonymised or pseudonymised, elements
+ * the profile forbids (`max = 0`) are removed, and extensions the profile does not declare are dropped.
+ * Contained resources are filtered by the same rules where the profile names itself as their profile.
+ *
+ * Only the profile's differential is read, so the research profiles must state all of their
+ * privacy rules themselves rather than inherit them.
+ */
 class PrivacyFilter(
     private val profile: StructureDefinition,
-    private val pseudonymize: PseudonymizeFunction = { Integer.toHexString(it.hashCode()) }
+    private val pseudonymize: PseudonymizeFunction,
 ) {
-    private val resourceTypeName: String = profile.type
+    private val rules: List<Rule> = profile.differential.element.mapNotNull(::ruleFor)
 
-    private val allowedExtensionUrls: Set<String> = profile.differential.element
-        .filter { it.path == "$resourceTypeName.extension" && it.sliceName != null }
-        .flatMap { slice -> slice.type.flatMap { t -> t.profile.map { p -> p.value } } }
-        .toSet()
+    /** Extension URLs the profile admits, keyed by the path of the `extension` element they are sliced on. */
+    private val declaredExtensionUrls: Map<String, Set<String>> = profile.differential.element
+        .filter { it.sliceName != null && it.max != "0" && it.path.substringAfterLast('.') in EXTENSION_PROPERTIES }
+        .groupBy({ it.path }, { it.extensionProfileUrls })
+        .mapValues { (_, urls) -> urls.flatten().toSet() }
 
-    private val rules: List<PrivacyFilterRule> = buildList {
-        profile.differential.element.forEach { element ->
-            var privacyLabel = element.extension.find { it.url == PRIVACY_LABEL_EXTENSION_URL }
-
-            // auto-add REDACT when max=0 (the cardinality already mandates absence; the label makes it explicit)
-            if (privacyLabel == null && element.max == "0") {
-                privacyLabel = Extension(PRIVACY_LABEL_EXTENSION_URL).apply {
-                    addExtension("obligationPolicy", Coding(SYSTEM_PSEUDED, "REDACT", "redact"))
-                }
-            }
-
-            if (privacyLabel == null) return@forEach
-
-            findPrivacyFilterRule(element, privacyLabel)?.let { add(it) }
-        }
-    }
+    /** Whether the profile declares itself as the profile of resources contained in the resource. */
+    private val filtersContainedResources: Boolean = profile.differential.element
+        .filter { it.path == "${profile.type}.contained" }
+        .any { profile.url in it.extensionProfileUrls }
 
     fun filter(resource: Resource): PrivacyFilterResult {
-        val filteredResource = resource.copy()
-
-        // meta.tag: drop any prior source-profile tag, then move each meta.profile entry into a fresh source-profile tag
-        filteredResource.meta.tag = filteredResource.meta.tag.filter { it.system != SYSTEM_SOURCE_PROFILE }
-        filteredResource.meta.profile.forEach {
-            filteredResource.meta.tag.add(Coding(SYSTEM_SOURCE_PROFILE, it.value, null))
+        require(resource.fhirType() == profile.type) {
+            "Profile ${profile.url} is for ${profile.type}, not ${resource.fhirType()}"
         }
-        filteredResource.meta.profile.clear()
-        filteredResource.meta.profile.add(CanonicalType(profile.url))
-
-        val log = mutableListOf<PrivacyFilterLogEntry>()
-        rules.forEach { log.add(it.filter(filteredResource)) }
-
-        applyExtensionAllowlist(filteredResource)
-        stampPseudedSecurity(filteredResource)
-
-        return PrivacyFilterResult(filteredResource, log)
+        val filtered = resource.copy()
+        val log = pseudonymizeInPlace(filtered, isContained = false)
+        val failed = log.any { it.severity == PrivacyLogSeverity.ERROR }
+        return PrivacyFilterResult(filtered.takeUnless { failed }, log)
     }
 
-    private fun applyExtensionAllowlist(resource: Resource) {
-        val domain = resource as? DomainResource ?: return
-        val iter = domain.extension.iterator()
-        while (iter.hasNext()) {
-            if (iter.next().url !in allowedExtensionUrls) iter.remove()
-        }
+    private fun pseudonymizeInPlace(resource: Resource, isContained: Boolean): List<PrivacyFilterLogEntry> {
+        val log = rules.map { it.apply(resource) }.toMutableList()
+        (resource as? DomainResource)?.contained?.forEach { log += pseudonymizeContained(it) }
+        removeUndeclaredExtensions(resource, profile.type)
+        declareAsPseudonymized(resource, isContained)
+        return log
     }
 
-    private fun stampPseudedSecurity(resource: Resource) {
-        val already = resource.meta.security.any { it.system == SYSTEM_PSEUDED && it.code == CODE_PSEUDED }
-        if (!already) {
-            resource.meta.security.add(Coding(SYSTEM_PSEUDED, CODE_PSEUDED, "pseudonymized"))
+    private fun pseudonymizeContained(contained: Resource): List<PrivacyFilterLogEntry> {
+        val containedPath = "${profile.type}.contained"
+        if (!filtersContainedResources || contained.fhirType() != profile.type) {
+            val message = "no research profile declared for contained ${contained.fhirType()}"
+            logger.error("{}: {}", containedPath, message)
+            return listOf(PrivacyFilterLogEntry(PrivacyLogSeverity.ERROR, null, containedPath, message))
         }
+        return pseudonymizeInPlace(contained, isContained = true).map { it.copy(path = "$containedPath > ${it.path}") }
     }
 
-    private fun findPrivacyFilterRule(element: ElementDefinition, privacyLabel: Extension): PrivacyFilterRule? {
-        // Use element.id (carries slice annotations + polymorphic-type slices) and normalize to a
-        // runtime-navigable FHIRPath. element.id on its own loses the slice context and uses
-        // [x] for polymorphic fields, which FHIRPath cannot evaluate.
-        val idSubPath = element.id.removePrefix("$resourceTypeName.")
-        val subPath = sliceIdToFhirPath(idSubPath)
-        val obligationPolicy = privacyLabel.getExtensionByUrl("obligationPolicy")?.value as? Coding
-            ?: throw IllegalArgumentException("obligationPolicy not found or is invalid")
-        val dummyValue = (privacyLabel.getExtensionByUrl("dummyValue")?.value as? StringType)?.value ?: "<anonymized>"
-
-        val method = when (obligationPolicy.code) {
-            "PSEUD" -> PrivacyFilterMethod.Pseudonymize
-            "ANONY" -> PrivacyFilterMethod.Anonymize
-            "REDACT" -> PrivacyFilterMethod.Redact
-            else -> throw IllegalArgumentException("Unknown obligationPolicy: ${obligationPolicy.code}")
+    private fun ruleFor(element: ElementDefinition): Rule? {
+        val label = element.getExtensionByUrl(PRIVACY_LABEL_EXTENSION_URL)
+        val method = when {
+            label != null -> methodOf(label, element)
+            // The cardinality already mandates absence, with or without a label.
+            element.max == "0" -> PrivacyFilterMethod.Redact
+            else -> return null
         }
-
-        val applyRule = buildRuleAction(method, subPath, dummyValue, element) ?: return null
-        return PrivacyFilterRule(method, profile, element, applyRule)
+        val dummyValue = label?.getExtensionByUrl("dummyValue")?.value
+        if (method == PrivacyFilterMethod.Anonymize && dummyValue == null) {
+            throw UnsupportedProfileException("${element.id}: ANONY needs a dummyValue")
+        }
+        return Rule(element.id, method, ElementPath.of(element, profile), dummyValue)
     }
 
-    private fun buildRuleAction(
-        method: PrivacyFilterMethod,
-        subPath: String,
-        dummyValue: String,
-        element: ElementDefinition,
-    ): ((Resource) -> Unit)? = when {
-        // slice-targeted REDACT: remove matching entries from the parent list
-        method == PrivacyFilterMethod.Redact && element.sliceName != null && element.max == "0" -> {
-            buildSliceRedact(element)
-        }
-
-        // REDACT on the resource itself (e.g. requester) — top-level field
-        method == PrivacyFilterMethod.Redact && "." !in subPath -> { resource ->
-            resource.setValue(subPath, null)
-        }
-
-        // REDACT on a nested field (e.g. subject.reference, dosageInstruction.text)
-        method == PrivacyFilterMethod.Redact -> { resource ->
-            val basePath = subPath.substringBeforeLast(".")
-            val lastPath = subPath.substringAfterLast(".")
-            FhirPath.evaluate(resource, basePath).filterIsInstance<Base>().forEach {
-                it.setValue(lastPath, null)
-            }
-        }
-
-        // ANONY on a nested field (e.g. performer.actor.display = "ANONYMIZED")
-        method == PrivacyFilterMethod.Anonymize && "." in subPath -> { resource ->
-            val basePath = subPath.substringBeforeLast(".")
-            val lastPath = subPath.substringAfterLast(".")
-            FhirPath.evaluate(resource, basePath).filterIsInstance<Base>().forEach {
-                it.setValue(lastPath, dummyValue)
-            }
-        }
-
-        // ANONY on a top-level field
-        method == PrivacyFilterMethod.Anonymize -> { resource ->
-            resource.setValue(subPath, dummyValue)
-        }
-
-        // PSEUD on the resource id
-        method == PrivacyFilterMethod.Pseudonymize && subPath == "id" -> { resource ->
-            resource.id = pseudonymize(resource.id)
-        }
-
-        // PSEUD on a Reference's identifier (e.g. subject.identifier on MedicationRequest)
-        method == PrivacyFilterMethod.Pseudonymize && subPath.endsWith(".identifier") -> { resource ->
-            val basePath = subPath.substringBeforeLast(".")
-            val ref = FhirPath.evaluate(resource, basePath).filterIsInstance<Reference>().firstOrNull()
-            if (ref != null) applyIdentifierPseud(ref)
-        }
-
-        // PSEUD on a Reference's reference string
-        method == PrivacyFilterMethod.Pseudonymize && subPath.endsWith(".reference") -> { resource ->
-            val basePath = subPath.substringBeforeLast(".")
-            val ref = FhirPath.evaluate(resource, basePath).filterIsInstance<Reference>().firstOrNull()
-            ref?.reference?.let { ref.reference = pseudonymize(it) }
-        }
-
-        // PSEUD on a top-level Reference (e.g. subject on MedicationDispense)
-        method == PrivacyFilterMethod.Pseudonymize && "." !in subPath -> { resource ->
-            val ref = FhirPath.evaluate(resource, subPath).filterIsInstance<Reference>().firstOrNull()
-            if (ref != null) {
-                ref.reference = null
-                applyIdentifierPseud(ref)
-            }
-        }
-
-        // PSEUD on a nested non-identifier/non-reference primitive (legacy)
-        method == PrivacyFilterMethod.Pseudonymize -> { resource ->
-            val basePath = subPath.substringBeforeLast(".")
-            val lastPath = subPath.substringAfterLast(".")
-            FhirPath.evaluate(resource, basePath).filterIsInstance<Base>().forEach { base ->
-                val value = base.getValuesForPath(lastPath).firstOrNull()
-                base.setValue(lastPath, pseudonymize(value.toString()))
-            }
-        }
-
-        else -> null
+    private fun methodOf(label: Extension, element: ElementDefinition): PrivacyFilterMethod {
+        val policy = (label.getExtensionByUrl("obligationPolicy")?.value as? Coding)?.code
+        return PrivacyFilterMethod.entries.find { it.obligationPolicy == policy }
+            ?: throw UnsupportedProfileException("${element.id}: unknown obligationPolicy '$policy'")
     }
 
-    private fun applyIdentifierPseud(ref: Reference) {
-        val original = ref.identifier?.value
-        val pseud = if (original != null) pseudonymize(original) else null
-        ref.identifier = Identifier().apply {
-            system = SYSTEM_JOB_NUMBER
-            value = pseud
-        }
-    }
-
-    private fun buildSliceRedact(element: ElementDefinition): (Resource) -> Unit {
-        // Use element.id (carries slice annotations like ':itemCodeableConcept' for polymorphic types)
-        // and normalize to a FHIRPath the runtime resource can navigate.
-        val resourcePrefix = "$resourceTypeName."
-        val idSubPath = element.id.removePrefix(resourcePrefix) // "code.coding:atc-de" or "ingredient.item[x]:itemCodeableConcept.coding:atc-de"
-        val containerFhirPath = sliceIdToFhirPath(idSubPath) // "code.coding" or "ingredient.itemCodeableConcept.coding"
-        val parentSubPath = if ("." in containerFhirPath) containerFhirPath.substringBeforeLast(".") else ""
-        val listProperty = containerFhirPath.substringAfterLast(".")
-        val sliceIdPrefix = "${element.id}." // "<Type>.code.coding:atc-de."
-
-        val constraints: List<Pair<String, String>> = profile.differential.element
-            .filter { it.id?.startsWith(sliceIdPrefix) == true }
-            .mapNotNull { sibling ->
-                val relPath = sibling.id.removePrefix(sliceIdPrefix)
-                primitiveFixedOrPattern(sibling)?.let { relPath to it }
-            }
-
-        if (constraints.isEmpty()) {
-            return { logger.warn("Cannot apply slice REDACT for {}: no primitive discriminator found", element.id) }
-        }
-
-        return { resource ->
-            val parents: List<Base> = if (parentSubPath.isEmpty()) {
-                listOf(resource)
-            } else {
-                FhirPath.evaluate(resource, parentSubPath).filterIsInstance<Base>()
-            }
-            parents.forEach { parent ->
-                val getterName = "get" + listProperty.replaceFirstChar { it.uppercaseChar() }
-                val getter = parent::class.members.firstOrNull { it.name == getterName } ?: return@forEach
-                @Suppress("UNCHECKED_CAST")
-                val list = getter.call(parent) as? MutableList<Base> ?: return@forEach
-                list.removeAll { entry ->
-                    constraints.all { (path, value) ->
-                        FhirPath.evaluate(entry, path).any { v ->
-                            (v as? PrimitiveType<*>)?.valueAsString == value
-                        }
-                    }
+    private inner class Rule(
+        private val elementId: String,
+        private val method: PrivacyFilterMethod,
+        private val path: ElementPath,
+        private val dummyValue: Type?,
+    ) {
+        fun apply(resource: Resource): PrivacyFilterLogEntry =
+            try {
+                val affected = when (method) {
+                    PrivacyFilterMethod.Redact -> redactIn(resource)
+                    PrivacyFilterMethod.Anonymize -> anonymizeIn(resource)
+                    PrivacyFilterMethod.Pseudonymize -> pseudonymizeIn(resource)
                 }
+                logger.info("{} {}: {} value(s)", method, elementId, affected)
+                val outcome = if (affected == 0) "not present" else "$affected value(s)"
+                PrivacyFilterLogEntry(PrivacyLogSeverity.INFO, method, elementId, "$method, $outcome", affected)
+            } catch (e: Exception) {
+                logger.error("{} {} failed", method, elementId, e)
+                PrivacyFilterLogEntry(PrivacyLogSeverity.ERROR, method, elementId, e.message ?: e.toString())
             }
-        }
-    }
 
-    private fun primitiveFixedOrPattern(element: ElementDefinition): String? {
-        val raw = element.fixed ?: element.pattern ?: return null
-        return (raw as? PrimitiveType<*>)?.valueAsString
+        private fun redactIn(resource: Resource): Int =
+            path.find(resource).onEach { it.parent.removeValue(it.property, it.value) }.size
+
+        /**
+         * Writes the placeholder wherever the parent element exists, also when the element itself
+         * was empty: the profile fixes the element to the placeholder, so absence gives nothing away
+         * that the placeholder would hide.
+         */
+        private fun anonymizeIn(resource: Resource): Int =
+            path.findParents(resource).onEach { parent ->
+                parent.listChildrenByName(path.leafProperty).forEach { parent.removeValue(path.leafProperty, it) }
+                parent.setProperty(parent.declaredName(path.leafProperty), dummyValue!!.copy())
+            }.size
+
+        private fun pseudonymizeIn(resource: Resource): Int =
+            path.find(resource).onEach { match ->
+                // Replaced as a whole so that nothing next to the identifier (reference, display) survives.
+                val replacement: Type = when (val value = match.value) {
+                    is Reference -> Reference().setIdentifier(jobNumberFor(value.identifier))
+                    is Identifier -> jobNumberFor(value)
+                    else -> error("PSEUD applies to Reference and Identifier, not ${value.fhirType()}")
+                }
+                match.parent.removeValue(match.property, match.value)
+                match.parent.setProperty(match.parent.declaredName(match.property), replacement)
+            }.size
+
+        private fun jobNumberFor(identifier: Identifier): Identifier {
+            val original = identifier.value ?: error("no identifier value to derive the job number from")
+            return Identifier().setSystem(SYSTEM_JOB_NUMBER).setValue(pseudonymize(original))
+        }
     }
 
     /**
-     * Normalize a StructureDefinition `id` sub-path to a navigable FHIRPath:
-     * - polymorphic-type slices collapse to the abstract field name:
-     *   `item[x]:itemCodeableConcept` → `item` (HAPI's FHIRPath returns the typed value directly)
-     * - drop any other slice annotations: `coding:atc-de` → `coding`
+     * Extensions can sit on any element, including primitives, so the whole tree is walked.
+     * Extensions that are kept are kept whole; contained resources are filtered on their own.
      */
-    private fun sliceIdToFhirPath(idSubPath: String): String =
-        idSubPath
-            .replace(Regex("""(\w+)\[x\]:[\w-]+""")) { it.groupValues[1] }
-            .replace(Regex(""":[\w-]+"""), "")
+    private fun removeUndeclaredExtensions(base: Base, path: String) {
+        for ((property, extensions) in base.extensionLists()) {
+            val declared = declaredExtensionUrls["$path.$property"].orEmpty()
+            extensions.removeAll { it.url !in declared }
+        }
+        for (property in base.children()) {
+            if (property.name in EXTENSION_PROPERTIES) continue
+            property.values
+                .filterNot { it is Resource }
+                .forEach { removeUndeclaredExtensions(it, "$path.${property.name}") }
+        }
+    }
+
+    private fun declareAsPseudonymized(resource: Resource, isContained: Boolean) {
+        val meta = resource.meta
+        val sourceProfiles = meta.profile.map { Coding(SYSTEM_SOURCE_PROFILE, it.value, null) }
+        meta.tag = meta.tag.filter { it.system != SYSTEM_SOURCE_PROFILE } + sourceProfiles
+        meta.profile = listOf(CanonicalType(profile.url))
+        // FHIR forbids security labels on contained resources (dom-5); the container's label covers them.
+        if (!isContained && meta.security.none { it.system == SYSTEM_PSEUDED && it.code == CODE_PSEUDED }) {
+            meta.addSecurity(SYSTEM_PSEUDED, CODE_PSEUDED, "pseudonymized")
+        }
+    }
+
+    private companion object {
+        val logger = LoggerFactory.getLogger(PrivacyFilter::class.java)
+    }
+}
+
+/** HAPI lists a choice element as `item` but removes and sets it as `item[x]`. */
+private fun Base.declaredName(property: String): String = getNamedProperty(property).name
+
+private fun Base.removeValue(property: String, value: Base) = removeChild(declaredName(property), value)
+
+/** Read from the typed accessors because `children()` omits `extension` on HAPI's BackboneType (e.g. Dosage). */
+private fun Base.extensionLists(): Map<String, MutableList<Extension>> = buildMap {
+    when (val base = this@extensionLists) {
+        is Element -> put("extension", base.extension)
+        is DomainResource -> put("extension", base.extension)
+    }
+    when (val base = this@extensionLists) {
+        is BackboneElement -> put("modifierExtension", base.modifierExtension)
+        is BackboneType -> put("modifierExtension", base.modifierExtension)
+        is DomainResource -> put("modifierExtension", base.modifierExtension)
+    }
 }

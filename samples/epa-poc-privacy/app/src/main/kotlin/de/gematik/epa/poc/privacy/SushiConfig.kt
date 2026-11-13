@@ -21,41 +21,26 @@
 
 package de.gematik.epa.poc.privacy
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import java.nio.file.Path
+import kotlin.io.path.exists
+
+data class FhirPackage(val name: String, val version: String)
 
 class SushiConfig(sushiProjectDir: Path) {
-    inner class SushiDependency(val packageName: String, val packageVersion: String)
-
-    private val rootNode: JsonNode
+    val dependencies: List<FhirPackage>
 
     init {
-        val sushiConfigPath = sushiProjectDir.resolve("sushi-config.yaml")
-        if (!sushiConfigPath.toFile().exists()) {
-            throw Exception(String.format("File 'sushi-config.yaml' not found in %s", sushiProjectDir))
-        }
+        val configFile = sushiProjectDir.resolve("sushi-config.yaml")
+        require(configFile.exists()) { "File 'sushi-config.yaml' not found in $sushiProjectDir" }
 
-        val om = ObjectMapper(YAMLFactory())
-        this.rootNode = om.readTree(sushiConfigPath.toFile())
-    }
-
-    val dependencies: Collection<SushiDependency>
-        get() {
-            val dependenciesNode = rootNode["dependencies"] ?: return emptyList()
-            val packageNames = dependenciesNode.fieldNames()
-            val dependencies = ArrayList<SushiDependency>()
-            while (packageNames.hasNext()) {
-                val packageName = packageNames.next()
-                val dependencyNode = dependenciesNode[packageName]
-                if (dependencyNode.isTextual) {
-                    dependencies.add(SushiDependency(packageName, dependencyNode.textValue()))
-                } else {
-                    dependencies.add(SushiDependency(packageName, dependencyNode["version"].textValue()))
-                }
+        val dependenciesNode = ObjectMapper(YAMLFactory()).readTree(configFile.toFile())["dependencies"]
+        dependencies = dependenciesNode?.fields()?.asSequence().orEmpty()
+            .map { (name, node) ->
+                // SUSHI accepts both `name: version` and `name: { version: ..., id: ... }`.
+                FhirPackage(name, if (node.isTextual) node.textValue() else node["version"].textValue())
             }
-
-            return dependencies
-        }
+            .toList()
+    }
 }

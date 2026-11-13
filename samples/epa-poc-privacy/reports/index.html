@@ -82,32 +82,37 @@
                 
                     <tr>
                         <td><code>Medication.meta.source</code></td>
-                        <td class="INFO">Redact</td>
+                        <td class="INFO">Redact, 1 value(s)</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>Medication.text</code></td>
+                        <td class="INFO">Redact, 1 value(s)</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>Medication.code.coding:atc-de</code></td>
+                        <td class="INFO">Redact, 1 value(s)</td>
                     </tr>
                 
                     <tr>
                         <td><code>Medication.code.text</code></td>
-                        <td class="INFO">Redact</td>
+                        <td class="INFO">Redact, 1 value(s)</td>
                     </tr>
                 
                     <tr>
                         <td><code>Medication.status</code></td>
-                        <td class="INFO">Redact</td>
+                        <td class="INFO">Redact, 1 value(s)</td>
                     </tr>
                 
                     <tr>
-                        <td><code>Medication.manufacturer</code></td>
-                        <td class="INFO">Redact</td>
+                        <td><code>Medication.ingredient.item[x]:itemCodeableConcept.coding:atc-de</code></td>
+                        <td class="INFO">Redact, 2 value(s)</td>
                     </tr>
                 
                     <tr>
                         <td><code>Medication.ingredient.item[x]:itemCodeableConcept.text</code></td>
-                        <td class="INFO">Redact</td>
-                    </tr>
-                
-                    <tr>
-                        <td><code>Medication.batch.lotNumber</code></td>
-                        <td class="INFO">Redact</td>
+                        <td class="INFO">Redact, 2 value(s)</td>
                     </tr>
                 
                 </tbody>
@@ -169,6 +174,14 @@
                             <tbody>
                             
                                 <tr>
+                                    <td><span class="INFORMATION">INFORMATION</span> <code>Medication.code.coding[0]</code><br>This element does not match any known slice defined in the profile https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication|1.3.0 (this may not be a problem, but you should check that it's not intended to match a slice)</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="INFORMATION">INFORMATION</span> <code>Medication.code.coding[1]</code><br>This element does not match any known slice defined in the profile https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication|1.3.0 (this may not be a problem, but you should check that it's not intended to match a slice)</td>
+                                </tr>
+                            
+                                <tr>
                                     <td><span class="WARNING">WARNING</span> <code>Medication.amount.numerator</code><br>UCUM Codes that contain human readable annotations like {Tabletten} can be misleading (e.g. they are ignored when comparing units). Best Practice is not to depend on annotations in the UCUM code, so this usage should be checked</td>
                                 </tr>
                             
@@ -177,7 +190,15 @@
                                 </tr>
                             
                                 <tr>
+                                    <td><span class="INFORMATION">INFORMATION</span> <code>Medication.ingredient[0].item.ofType(CodeableConcept).coding[0]</code><br>This element does not match any known slice defined in the profile https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication|1.3.0 (this may not be a problem, but you should check that it's not intended to match a slice)</td>
+                                </tr>
+                            
+                                <tr>
                                     <td><span class="WARNING">WARNING</span> <code>Medication.ingredient[0].strength.denominator</code><br>UCUM Codes that contain human readable annotations like {Tabletten} can be misleading (e.g. they are ignored when comparing units). Best Practice is not to depend on annotations in the UCUM code, so this usage should be checked</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td><span class="INFORMATION">INFORMATION</span> <code>Medication.ingredient[1].item.ofType(CodeableConcept).coding[0]</code><br>This element does not match any known slice defined in the profile https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication|1.3.0 (this may not be a problem, but you should check that it's not intended to match a slice)</td>
                                 </tr>
                             
                                 <tr>
@@ -242,30 +263,50 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedication für den ePA-Forsch
 * insert Meta
 * insert MetaSourceProfile
 
+// The narrative repeats the content of the resource in free text, including what is redacted below.
+* text 0..0
+  * insert PrivacyLabelRedact
+
+// Contained medications (PZN ingredients, pharmaceutical products) are pseudonymised by the same rules.
+* contained only EPAResearchMedication
+
 // only Medication's status is 0..1 and can be redacted to absence
 * status 0..0
   * insert PrivacyLabelRedact
 
+* code.coding ^slicing.discriminator.type = #value
+* code.coding ^slicing.discriminator.path = "$this"
+* code.coding ^slicing.rules = #open
+
+* code.coding contains atc-de 0..0
+// REDACT is attached to the atc-de slice only — not to code.coding itself.
+// Only the ATC-DE coding is removed; PZN and ASK codings are retained intentionally.
+* code.coding[atc-de]
+  * insert PrivacyLabelRedact
+* code.coding[atc-de].system = "http://fhir.de/CodeSystem/bfarm/atc"
+
 * code.text 0..0
   * insert PrivacyLabelRedact
 
-* manufacturer 0..0
+* ingredient.itemCodeableConcept.coding ^slicing.discriminator.type = #value
+* ingredient.itemCodeableConcept.coding ^slicing.discriminator.path = "$this"
+* ingredient.itemCodeableConcept.coding ^slicing.rules = #open
+
+* ingredient.itemCodeableConcept.coding contains atc-de 0..0
+* ingredient.itemCodeableConcept.coding[atc-de]
   * insert PrivacyLabelRedact
+* ingredient.itemCodeableConcept.coding[atc-de].system = "http://fhir.de/CodeSystem/bfarm/atc"
 
 * ingredient.itemCodeableConcept.text 0..0
   * insert PrivacyLabelRedact
 
-* batch.lotNumber 0..0
-  * insert PrivacyLabelRedact
-
 // Explicitly defined extension slices are copied; others are filtered out.
-// * extension contains
-//   MedicationIsVaccineExtension named isVaccine 0..1 and
-//   DrugCategoryExtension named drugCategory 0..1 and
-//   ExtensionNormgroesseDeBasis named normSizeCode 0..1 and
-//   MedicationFormulationPackagingExtension named packaging 0..1 and
-//   MedicationManufacturingInstructionsExtension named manufacturingInstructions 0..1 and
-//   EPAMedicationTypeExtension named type 0..1 MS
+// packaging and manufacturingInstructions are free text and stay filtered.
+* extension contains
+  MedicationIsVaccineExtension named isVaccine 0..1 MS and
+  DrugCategoryExtension named drugCategory 0..1 MS and
+  ExtensionNormgroesseDeBasis named normSizeCode 0..1 MS and
+  EPAMedicationTypeExtension named type 0..1 MS
 </code></pre>
                 </div>
             
@@ -276,6 +317,13 @@ Instance: ExampleEPAMedicationMaaloxan
 InstanceOf: EPAMedication
 Usage: #example
 Description: "Full Maaloxan EPAMedication — pre-redaction reference."
+
+// meta.source names the originating system and is therefore redacted.
+* meta.source = "https://apotheke.example/fhir"
+
+// The narrative restates redacted content and is therefore redacted as a whole.
+* text.status = #generated
+* text.div = "&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon, Sanofi-Aventis Deutschland GmbH, Charge LOT-2024-A0042&lt;/div&gt;"
 
 // Explicitly defined extension slices are copied; others are filtered out.
 * extension[rxPrescriptionProcessIdentifier].valueIdentifier.system = "https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier"
@@ -380,33 +428,27 @@ Description: "Maaloxan after EPAResearchMedication redaction rules."
 * meta.security = http://terminology.hl7.org/CodeSystem/v3-ObservationValue#PSEUDED "pseudonymized"
 
 // Explicitly defined extension slices are copied; others are filtered out.
-// * extension[isVaccine].valueBoolean = false
-// * extension[drugCategory].valueCoding.system = "https://gematik.de/fhir/epa-medication/CodeSystem/epa-drug-category-cs"
-// * extension[drugCategory].valueCoding.code = #00
-// * extension[normSizeCode].valueCode = #N1
-// * extension[packaging].valueString = "Packung mit 30 Kautabletten"
-// * extension[manufacturingInstructions].valueString = "Bei Raumtemperatur trocken lagern."
-// * extension[type].valueCoding.system = "http://snomed.info/sct"
-// * extension[type].valueCoding.code = #781405001
-// * extension[type].valueCoding.display = "Medicinal product package"
+* extension[isVaccine].valueBoolean = false
+* extension[drugCategory].valueCoding.system = "https://gematik.de/fhir/epa-medication/CodeSystem/epa-drug-category-cs"
+* extension[drugCategory].valueCoding.code = #00
+* extension[normSizeCode].valueCode = #N1
+* extension[type].valueCoding.system = "http://snomed.info/sct"
+* extension[type].valueCoding.code = #781405001
+* extension[type].valueCoding.display = "Medicinal product package"
 
 // status is 0..1 upstream and therefore redacted to absence.
 
-// EPAResearchMedication carries no slices on code.coding; all codings flow
-// through via the inherited #open slicing rule and are added by array-index
-// here. Only code.text is redacted.
+// The ATC-DE coding and code.text are redacted; PZN and ASK codings flow
+// through the #open slicing and are added by array-index here.
 * code.coding[+].system = "http://fhir.de/CodeSystem/ifa/pzn"
 * code.coding[=].code = #9717395
 * code.coding[=].display = "Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon"
 
-* code.coding[+].system = "http://fhir.de/CodeSystem/bfarm/atc"
-* code.coding[=].version = "2024"
-* code.coding[=].code = #A02AD10
-* code.coding[=].display = "Aluminiumoxid in Kombination mit Magnesiumhydroxid"
-
 * code.coding[+].system = "http://fhir.de/CodeSystem/ask"
 * code.coding[=].code = #02250
 * code.coding[=].display = "Magnesiumhydroxid"
+
+* manufacturer.display = "Sanofi-Aventis Deutschland GmbH"
 
 * form.coding[+].system = "https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_KBV_DARREICHUNGSFORM"
 * form.coding[=].code = #KTA
@@ -425,14 +467,10 @@ Description: "Maaloxan after EPAResearchMedication redaction rules."
 * amount.denominator.system = "http://unitsofmeasure.org"
 * amount.denominator.code = #{Package}
 
-// Ingredient 1: Magnesiumhydroxid — codings kept, text removed
+// Ingredient 1: Magnesiumhydroxid — ASK coding kept, ATC-DE coding and text removed
 * ingredient[+].itemCodeableConcept.coding[+].system = "http://fhir.de/CodeSystem/ask"
 * ingredient[=].itemCodeableConcept.coding[=].code = #2250
 * ingredient[=].itemCodeableConcept.coding[=].display = "Magnesiumhydroxid"
-* ingredient[=].itemCodeableConcept.coding[+].system = "http://fhir.de/CodeSystem/bfarm/atc"
-* ingredient[=].itemCodeableConcept.coding[=].version = "2024"
-* ingredient[=].itemCodeableConcept.coding[=].code = #A02AA04
-* ingredient[=].itemCodeableConcept.coding[=].display = "Magnesiumhydroxid"
 * ingredient[=].strength.numerator.value = 400
 * ingredient[=].strength.numerator.unit = "milligramm"
 * ingredient[=].strength.numerator.system = "http://unitsofmeasure.org"
@@ -442,14 +480,10 @@ Description: "Maaloxan after EPAResearchMedication redaction rules."
 * ingredient[=].strength.denominator.system = "http://unitsofmeasure.org"
 * ingredient[=].strength.denominator.code = #{Tabletten}
 
-// Ingredient 2: Algeldrat — codings kept, text removed
+// Ingredient 2: Algeldrat — ASK coding kept, ATC-DE coding and text removed
 * ingredient[+].itemCodeableConcept.coding[+].system = "http://fhir.de/CodeSystem/ask"
 * ingredient[=].itemCodeableConcept.coding[=].code = #01253
 * ingredient[=].itemCodeableConcept.coding[=].display = "Algeldrat"
-* ingredient[=].itemCodeableConcept.coding[+].system = "http://fhir.de/CodeSystem/bfarm/atc"
-* ingredient[=].itemCodeableConcept.coding[=].version = "2024"
-* ingredient[=].itemCodeableConcept.coding[=].code = #A02AB01
-* ingredient[=].itemCodeableConcept.coding[=].display = "Aluminiumhydroxid"
 * ingredient[=].strength.numerator.value = 400
 * ingredient[=].strength.numerator.unit = "milligramm"
 * ingredient[=].strength.numerator.system = "http://unitsofmeasure.org"
@@ -459,6 +493,7 @@ Description: "Maaloxan after EPAResearchMedication redaction rules."
 * ingredient[=].strength.denominator.system = "http://unitsofmeasure.org"
 * ingredient[=].strength.denominator.code = #{Tabletten}
 
+* batch.lotNumber = "LOT-2024-A0042"
 * batch.expirationDate = "2026-12-31"
 </code></pre>
                 </div>
@@ -474,7 +509,12 @@ Description: "Maaloxan after EPAResearchMedication redaction rules."
       "resourceType": "Medication",
       "id": "ExampleEPAMedicationMaaloxan",
       "meta": {
+        "source": "https://apotheke.example/fhir",
         "profile": [ "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication" ]
+      },
+      "text": {
+        "status": "generated",
+        "div": "&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon, Sanofi-Aventis Deutschland GmbH, Charge LOT-2024-A0042&lt;/div&gt;"
       },
       "extension": [ {
         "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension",
@@ -629,7 +669,7 @@ Description: "Maaloxan after EPAResearchMedication redaction rules."
             if (diffRendered) return;
             diffRendered = true;
             const targetElement = document.getElementById('bundleDiff');
-            const diffString = "--- FHIR.json\n+++ FHIR.json\n@@ -1,152 +1,121 @@\n {\n   \"resourceType\": \"Bundle\",\n   \"type\": \"collection\",\n   \"entry\": [ {\n     \"resource\": {\n       \"resourceType\": \"Medication\",\n       \"id\": \"ExampleEPAMedicationMaaloxan\",\n       \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication\" ]\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication\" ],\n+        \"security\": [ {\n+          \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ObservationValue\",\n+          \"code\": \"PSEUDED\",\n+          \"display\": \"pseudonymized\"\n+        } ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication\"\n+        } ]\n       },\n-      \"extension\": [ {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension\",\n-        \"valueIdentifier\": {\n-          \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier\",\n-          \"value\": \"160.100.000.000.011.09_20250906\"\n-        }\n-      }, {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/medication-id-vaccine-extension\",\n-        \"valueBoolean\": false\n-      }, {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/drug-category-extension\",\n-        \"valueCoding\": {\n-          \"system\": \"https://gematik.de/fhir/epa-medication/CodeSystem/epa-drug-category-cs\",\n-          \"code\": \"00\"\n-        }\n-      }, {\n-        \"url\": \"http://fhir.de/StructureDefinition/normgroesse\",\n-        \"valueCode\": \"N1\"\n-      }, {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-type-extension\",\n-        \"valueCoding\": {\n-          \"system\": \"http://snomed.info/sct\",\n-          \"code\": \"781405001\",\n-          \"display\": \"Medicinal product package\"\n-        }\n-      }, {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/medication-formulation-packaging-extension\",\n-        \"valueString\": \"Packung mit 30 Kautabletten\"\n-      }, {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/medication-manufacturing-instructions-extension\",\n-        \"valueString\": \"Bei Raumtemperatur trocken lagern.\"\n-      } ],\n       \"code\": {\n         \"coding\": [ {\n           \"system\": \"http://fhir.de/CodeSystem/ifa/pzn\",\n           \"code\": \"9717395\",\n           \"display\": \"Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon\"\n         }, {\n           \"system\": \"http://fhir.de/CodeSystem/bfarm/atc\",\n           \"version\": \"2024\",\n           \"code\": \"A02AD10\",\n           \"display\": \"Aluminiumoxid in Kombination mit Magnesiumhydroxid\"\n         }, {\n           \"system\": \"http://fhir.de/CodeSystem/ask\",\n           \"code\": \"02250\",\n           \"display\": \"Magnesiumhydroxid\"\n-        } ],\n-        \"text\": \"Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon\"\n+        } ]\n       },\n-      \"status\": \"active\",\n-      \"manufacturer\": {\n-        \"display\": \"Sanofi-Aventis Deutschland GmbH\"\n-      },\n       \"form\": {\n         \"coding\": [ {\n           \"system\": \"https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_KBV_DARREICHUNGSFORM\",\n           \"code\": \"KTA\",\n           \"display\": \"Kautabletten\"\n         }, {\n           \"system\": \"http://standardterms.edqm.eu\",\n           \"code\": \"10219000\",\n           \"display\": \"Chewable tablet\"\n         } ]\n       },\n       \"amount\": {\n         \"numerator\": {\n           \"value\": 30,\n           \"unit\": \"Tabletten\",\n           \"system\": \"http://unitsofmeasure.org\",\n           \"code\": \"{Tabletten}\"\n         },\n         \"denominator\": {\n           \"value\": 1,\n           \"unit\": \"Package\",\n           \"system\": \"http://unitsofmeasure.org\",\n           \"code\": \"{Package}\"\n         }\n       },\n       \"ingredient\": [ {\n         \"itemCodeableConcept\": {\n           \"coding\": [ {\n             \"system\": \"http://fhir.de/CodeSystem/ask\",\n             \"code\": \"2250\",\n             \"display\": \"Magnesiumhydroxid\"\n           }, {\n             \"system\": \"http://fhir.de/CodeSystem/bfarm/atc\",\n             \"version\": \"2024\",\n             \"code\": \"A02AA04\",\n             \"display\": \"Magnesiumhydroxid\"\n-          } ],\n-          \"text\": \"Magnesiumhydroxid 400 mg\"\n+          } ]\n         },\n         \"strength\": {\n           \"numerator\": {\n             \"value\": 400,\n             \"unit\": \"milligramm\",\n             \"system\": \"http://unitsofmeasure.org\",\n             \"code\": \"mg\"\n           },\n           \"denominator\": {\n             \"value\": 1,\n             \"unit\": \"Tabletten\",\n             \"system\": \"http://unitsofmeasure.org\",\n             \"code\": \"{Tabletten}\"\n           }\n         }\n       }, {\n         \"itemCodeableConcept\": {\n           \"coding\": [ {\n             \"system\": \"http://fhir.de/CodeSystem/ask\",\n             \"code\": \"01253\",\n             \"display\": \"Algeldrat\"\n           }, {\n             \"system\": \"http://fhir.de/CodeSystem/bfarm/atc\",\n             \"version\": \"2024\",\n             \"code\": \"A02AB01\",\n             \"display\": \"Aluminiumhydroxid\"\n-          } ],\n-          \"text\": \"Algeldrat 400 mg\"\n+          } ]\n         },\n         \"strength\": {\n           \"numerator\": {\n             \"value\": 400,\n             \"unit\": \"milligramm\",\n             \"system\": \"http://unitsofmeasure.org\",\n             \"code\": \"mg\"\n           },\n           \"denominator\": {\n             \"value\": 1,\n             \"unit\": \"Tabletten\",\n             \"system\": \"http://unitsofmeasure.org\",\n             \"code\": \"{Tabletten}\"\n           }\n         }\n       } ],\n       \"batch\": {\n-        \"lotNumber\": \"LOT-2024-A0042\",\n         \"expirationDate\": \"2026-12-31\"\n       }\n     }\n   } ]\n }";
+            const diffString = "--- FHIR.json\n+++ FHIR.json\n@@ -1,157 +1,130 @@\n {\n   \"resourceType\": \"Bundle\",\n   \"type\": \"collection\",\n   \"entry\": [ {\n     \"resource\": {\n       \"resourceType\": \"Medication\",\n       \"id\": \"ExampleEPAMedicationMaaloxan\",\n       \"meta\": {\n-        \"source\": \"https://apotheke.example/fhir\",\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication\" ]\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication\" ],\n+        \"security\": [ {\n+          \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ObservationValue\",\n+          \"code\": \"PSEUDED\",\n+          \"display\": \"pseudonymized\"\n+        } ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication\"\n+        } ]\n       },\n-      \"text\": {\n-        \"status\": \"generated\",\n-        \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon, Sanofi-Aventis Deutschland GmbH, Charge LOT-2024-A0042</div>\"\n-      },\n       \"extension\": [ {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension\",\n-        \"valueIdentifier\": {\n-          \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier\",\n-          \"value\": \"160.100.000.000.011.09_20250906\"\n-        }\n-      }, {\n         \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/medication-id-vaccine-extension\",\n         \"valueBoolean\": false\n       }, {\n         \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/drug-category-extension\",\n         \"valueCoding\": {\n           \"system\": \"https://gematik.de/fhir/epa-medication/CodeSystem/epa-drug-category-cs\",\n           \"code\": \"00\"\n         }\n       }, {\n         \"url\": \"http://fhir.de/StructureDefinition/normgroesse\",\n         \"valueCode\": \"N1\"\n       }, {\n         \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-type-extension\",\n         \"valueCoding\": {\n           \"system\": \"http://snomed.info/sct\",\n           \"code\": \"781405001\",\n           \"display\": \"Medicinal product package\"\n         }\n-      }, {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/medication-formulation-packaging-extension\",\n-        \"valueString\": \"Packung mit 30 Kautabletten\"\n-      }, {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/medication-manufacturing-instructions-extension\",\n-        \"valueString\": \"Bei Raumtemperatur trocken lagern.\"\n       } ],\n       \"code\": {\n         \"coding\": [ {\n           \"system\": \"http://fhir.de/CodeSystem/ifa/pzn\",\n           \"code\": \"9717395\",\n           \"display\": \"Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon\"\n         }, {\n-          \"system\": \"http://fhir.de/CodeSystem/bfarm/atc\",\n-          \"version\": \"2024\",\n-          \"code\": \"A02AD10\",\n-          \"display\": \"Aluminiumoxid in Kombination mit Magnesiumhydroxid\"\n-        }, {\n           \"system\": \"http://fhir.de/CodeSystem/ask\",\n           \"code\": \"02250\",\n           \"display\": \"Magnesiumhydroxid\"\n-        } ],\n-        \"text\": \"Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon\"\n+        } ]\n       },\n-      \"status\": \"active\",\n       \"manufacturer\": {\n         \"display\": \"Sanofi-Aventis Deutschland GmbH\"\n       },\n       \"form\": {\n         \"coding\": [ {\n           \"system\": \"https://fhir.kbv.de/CodeSystem/KBV_CS_SFHIR_KBV_DARREICHUNGSFORM\",\n           \"code\": \"KTA\",\n           \"display\": \"Kautabletten\"\n         }, {\n           \"system\": \"http://standardterms.edqm.eu\",\n           \"code\": \"10219000\",\n           \"display\": \"Chewable tablet\"\n         } ]\n       },\n       \"amount\": {\n         \"numerator\": {\n           \"value\": 30,\n           \"unit\": \"Tabletten\",\n           \"system\": \"http://unitsofmeasure.org\",\n           \"code\": \"{Tabletten}\"\n         },\n         \"denominator\": {\n           \"value\": 1,\n           \"unit\": \"Package\",\n           \"system\": \"http://unitsofmeasure.org\",\n           \"code\": \"{Package}\"\n         }\n       },\n       \"ingredient\": [ {\n         \"itemCodeableConcept\": {\n           \"coding\": [ {\n             \"system\": \"http://fhir.de/CodeSystem/ask\",\n             \"code\": \"2250\",\n             \"display\": \"Magnesiumhydroxid\"\n-          }, {\n-            \"system\": \"http://fhir.de/CodeSystem/bfarm/atc\",\n-            \"version\": \"2024\",\n-            \"code\": \"A02AA04\",\n-            \"display\": \"Magnesiumhydroxid\"\n-          } ],\n-          \"text\": \"Magnesiumhydroxid 400 mg\"\n+          } ]\n         },\n         \"strength\": {\n           \"numerator\": {\n             \"value\": 400,\n             \"unit\": \"milligramm\",\n             \"system\": \"http://unitsofmeasure.org\",\n             \"code\": \"mg\"\n           },\n           \"denominator\": {\n             \"value\": 1,\n             \"unit\": \"Tabletten\",\n             \"system\": \"http://unitsofmeasure.org\",\n             \"code\": \"{Tabletten}\"\n           }\n         }\n       }, {\n         \"itemCodeableConcept\": {\n           \"coding\": [ {\n             \"system\": \"http://fhir.de/CodeSystem/ask\",\n             \"code\": \"01253\",\n             \"display\": \"Algeldrat\"\n-          }, {\n-            \"system\": \"http://fhir.de/CodeSystem/bfarm/atc\",\n-            \"version\": \"2024\",\n-            \"code\": \"A02AB01\",\n-            \"display\": \"Aluminiumhydroxid\"\n-          } ],\n-          \"text\": \"Algeldrat 400 mg\"\n+          } ]\n         },\n         \"strength\": {\n           \"numerator\": {\n             \"value\": 400,\n             \"unit\": \"milligramm\",\n             \"system\": \"http://unitsofmeasure.org\",\n             \"code\": \"mg\"\n           },\n           \"denominator\": {\n             \"value\": 1,\n             \"unit\": \"Tabletten\",\n             \"system\": \"http://unitsofmeasure.org\",\n             \"code\": \"{Tabletten}\"\n           }\n         }\n       } ],\n       \"batch\": {\n         \"lotNumber\": \"LOT-2024-A0042\",\n         \"expirationDate\": \"2026-12-31\"\n       }\n     }\n   } ]\n }";
             const diff2htmlUi = new Diff2HtmlUI(targetElement, diffString, {
                 drawFileList: false,
                 fileListToggle: false,
@@ -649,9 +689,6 @@ Description: "Maaloxan after EPAResearchMedication redaction rules."
         
         document.addEventListener('DOMContentLoaded', renderBundleDiff);
     </script>
-
-    
-
 
 </div>
 
