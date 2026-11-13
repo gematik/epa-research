@@ -2,7 +2,7 @@
  
 # Release Notes ePA Research
 ## Release 1.3.1
-- package de.gematik.epa.research 1.3.1 (version 1.3.0 was skipped)
+- package de.gematik.epa.research 1.3.1
 - guide (Leitfaden) 1.1.2
 ### changes
 - all research profiles: the narrative (`text`) is redacted
