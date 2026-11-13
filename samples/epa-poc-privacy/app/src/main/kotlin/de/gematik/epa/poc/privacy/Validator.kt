@@ -34,33 +34,26 @@ import org.hl7.fhir.common.hapi.validation.support.ValidationSupportChain
 import org.hl7.fhir.common.hapi.validation.validator.FhirInstanceValidator
 import org.hl7.fhir.instance.model.api.IBaseResource
 import org.hl7.fhir.r4.model.StructureDefinition
+import org.slf4j.LoggerFactory
 import java.nio.file.Path
-import kotlin.io.path.Path
 import kotlin.system.measureTimeMillis
 
-class Validator(
-    ctx: FhirContext,
-    sushiDir: Path = Path("privacy-testdata")
-) {
+/** Validates resources against the profiles of a SUSHI project and its package dependencies. */
+class Validator(ctx: FhirContext, sushiDir: Path) {
     val validationSupport: IValidationSupport
-    val fhirValidator: FhirValidator
+    private val fhirValidator: FhirValidator = ctx.newValidator()
 
     init {
         val timeTaken = measureTimeMillis {
             validationSupport = SushiProjectValidationSupport(ctx, sushiDir)
-
-            // Create a support chain including the NPM Package Support
-            val validationSupportChain = ValidationSupportChain(
+            val chain = ValidationSupportChain(
                 validationSupport,
                 DefaultProfileValidationSupport(ctx),
                 CommonCodeSystemsTerminologyService(ctx),
                 InMemoryTerminologyServerValidationSupport(ctx),
-                SnapshotGeneratingValidationSupport(ctx)
+                SnapshotGeneratingValidationSupport(ctx),
             )
-            val validationSupport = CachingValidationSupport(validationSupportChain)
-
-            fhirValidator = ctx.newValidator()
-            val instanceValidator = FhirInstanceValidator(validationSupport)
+            val instanceValidator = FhirInstanceValidator(CachingValidationSupport(chain))
             instanceValidator.setNoTerminologyChecks(true)
             fhirValidator.registerValidatorModule(instanceValidator)
         }
@@ -69,16 +62,17 @@ class Validator(
 
     fun validateWithoutTerminology(resource: IBaseResource): ValidationResult {
         val result = fhirValidator.validateWithResult(resource)
-        return ValidationResult(
-            result.context,
-            result.messages.filter {
-                it.messageId != "Terminology_PassThrough_TX_Message" &&
-                    !(it.message ?: "").contains("dom-6")
-            }
-        )
+        return ValidationResult(result.context, result.messages.filterNot { it.isNoise })
     }
 
-    fun fetchProfile(profileUrl: String): StructureDefinition? {
-        return validationSupport.fetchResource(StructureDefinition::class.java, profileUrl)
+    fun fetchProfile(profileUrl: String): StructureDefinition? =
+        validationSupport.fetchResource(StructureDefinition::class.java, profileUrl)
+
+    private companion object {
+        val logger = LoggerFactory.getLogger(Validator::class.java)
+
+        // Terminology is switched off, and dom-6 only recommends a narrative the examples do not carry.
+        val ca.uhn.fhir.validation.SingleValidationMessage.isNoise: Boolean
+            get() = messageId == "Terminology_PassThrough_TX_Message" || message.orEmpty().contains("dom-6")
     }
 }

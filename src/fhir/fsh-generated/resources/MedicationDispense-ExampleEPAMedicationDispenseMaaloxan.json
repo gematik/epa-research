@@ -2,6 +2,7 @@
   "resourceType": "MedicationDispense",
   "id": "ExampleEPAMedicationDispenseMaaloxan",
   "meta": {
+    "source": "https://apotheke.example/fhir",
     "profile": [
       "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense"
     ]
@@ -11,7 +12,8 @@
       "system": "http://fhir.de/sid/gkv/kvid-10",
       "value": "X110411319"
     },
-    "reference": "Patient/12c0c2a4-71a2-4d49-9e6f-9b7a3b4f0d11"
+    "reference": "Patient/12c0c2a4-71a2-4d49-9e6f-9b7a3b4f0d11",
+    "display": "Erika Mustermann"
   },
   "extension": [
     {
@@ -45,6 +47,10 @@
       "value": "3a534e48-80e8-4bbb-a19e-43e83d6f3a3e_160.100.000.000.010.12"
     }
   ],
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Abgabe Maaloxan an X110411319 durch gematik Apotheke: Morgens 1 Tablette einnehmen, mit etwas Wasser.</div>"
+  },
   "status": "completed",
   "medicationReference": {
     "reference": "Medication/ExampleEPAMedicationMaaloxan"
@@ -70,6 +76,9 @@
       }
     }
   ],
+  "location": {
+    "display": "gematik Apotheke, Rosenthaler Straße 30, 10178 Berlin"
+  },
   "authorizingPrescription": [
     {
       "reference": "MedicationRequest/ExampleEPAMedicationRequestMaaloxan"
@@ -80,12 +89,30 @@
     "unit": "Packung"
   },
   "whenHandedOver": "2025-10-29",
+  "destination": {
+    "display": "Musterstraße 1, 10117 Berlin"
+  },
+  "receiver": [
+    {
+      "display": "Erika Mustermann (Angehörige)"
+    }
+  ],
+  "note": [
+    {
+      "text": "Abholung durch Angehörige, Botendienst abgelehnt."
+    }
+  ],
   "dosageInstruction": [
     {
       "text": "Morgens 1 Tablette einnehmen, mit etwas Wasser."
     }
   ],
   "substitution": {
-    "wasSubstituted": false
+    "wasSubstituted": false,
+    "responsibleParty": [
+      {
+        "display": "Apothekerin Dr. Petra Beispiel"
+      }
+    ]
   }
 }

@@ -12,7 +12,8 @@
       "system": "http://fhir.de/sid/gkv/kvid-10",
       "value": "X110411319"
     },
-    "reference": "Patient/12c0c2a4-71a2-4d49-9e6f-9b7a3b4f0d11"
+    "reference": "Patient/12c0c2a4-71a2-4d49-9e6f-9b7a3b4f0d11",
+    "display": "Erika Mustermann"
   },
   "extension": [
     {
@@ -56,6 +57,10 @@
       "value": "59b9fa64-4ca1-4bd2-8388-652d0fec32b2_160.100.000.000.011.09"
     }
   ],
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Verordnung Maaloxan für X110411319 durch Dr. Max Manfred Mustermann: Morgens 1 Tablette einnehmen</div>"
+  },
   "status": "completed",
   "intent": "filler-order",
   "medicationReference": {
@@ -65,6 +70,9 @@
   "requester": {
     "reference": "PractitionerRole/73a551f8-d8cd-4b44-823d-ab5f8aeab1aa",
     "display": "Dr. Max Manfred Mustermann / Praxis Dr. med. Max Mustermann"
+  },
+  "recorder": {
+    "display": "Dr. Max Manfred Mustermann"
   },
   "dosageInstruction": [
     {
@@ -95,6 +103,9 @@
     "quantity": {
       "value": 1,
       "unit": "Packung"
+    },
+    "performer": {
+      "display": "gematik Apotheke"
     }
   },
   "substitution": {

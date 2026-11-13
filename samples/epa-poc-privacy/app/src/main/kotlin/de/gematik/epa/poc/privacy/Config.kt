@@ -22,13 +22,17 @@
 package de.gematik.epa.poc.privacy
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import net.mamoe.yamlkt.Yaml
+import java.nio.file.Path
+import kotlin.io.path.readText
 
 @Serializable
 data class SourceFile(
     val title: String,
     val path: String,
     val language: String,
-    var content: String? = null,
+    val content: String? = null,
 )
 
 @Serializable
@@ -45,4 +49,8 @@ data class TestCaseConfig(
 @Serializable
 data class Config(
     val testCaseList: List<TestCaseConfig>,
-)
+) {
+    companion object {
+        fun load(path: Path): Config = Yaml.decodeFromString(path.readText())
+    }
+}

@@ -26,48 +26,45 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
 import org.hl7.fhir.r4.model.Bundle
-import org.hl7.fhir.r4.model.Resource
-import org.hl7.fhir.r4.model.StructureDefinition
 
-
-private var objectMapper = ObjectMapper()
-
+/** Everything the HTML report of one test case shows. */
 class TestCaseResult(
     val testCaseConfig: TestCaseConfig,
     val sources: List<SourceFile>,
-    val bundle: Bundle,
-    val filteredBudle: Bundle,
+    sourceBundle: Bundle,
+    filteredBundle: Bundle,
     val filterLog: List<PrivacyFilterLogEntry>,
-    val validationResults: List<ValidationResult>,
-    val filtereValidationResults: List<ValidationResult>,
+    sourceValidation: List<ValidationResult>,
+    filteredValidation: List<ValidationResult>,
     val pseudonyms: Map<String, String>,
 ) {
-    val bundleJson = bundle.toPrettyString()
-    val filteredBudleJson = filteredBudle.toPrettyString()
+    val bundleJson: String = sourceBundle.toPrettyString()
+    private val filteredBundleJson: String = filteredBundle.toPrettyString()
 
-    val validationMessages: List<ValidationMessage> = validationResults.flatMap { it.messages }.map {
-        ValidationMessage(
-            severity = it.severity.name,
-            location = it.locationString,
-            message = it.message,
-            messageId = it.messageId ?: "Generic"
-        )
-    }
+    val validationMessages: List<ValidationMessage> = sourceValidation.toMessages()
+    val filteredValidationMessages: List<ValidationMessage> = filteredValidation.toMessages()
 
-    val filteredValidationMessages: List<ValidationMessage> = filtereValidationResults.flatMap { it.messages }.map {
-        ValidationMessage(
-            severity = it.severity.name,
-            location = it.locationString,
-            message = it.message,
-            messageId = it.messageId ?: "Generic"
-        )
-    } ?: emptyList()
+    /** Unified diff of source against filtered bundle, as a JavaScript string literal for diff2html. */
+    val bundleDiff: String
+        get() {
+            val sourceLines = bundleJson.lines()
+            val patch = DiffUtils.diff(sourceLines, filteredBundleJson.lines())
+            val unifiedDiff = UnifiedDiffUtils.generateUnifiedDiff("FHIR.json", "FHIR.json", sourceLines, patch, WHOLE_FILE_CONTEXT)
+            return objectMapper.writeValueAsString(unifiedDiff.joinToString("\n"))
+        }
 
-    val bundleDiff: String get() {
-        val bundleLines = bundleJson.lines()
-        val patch = DiffUtils.diff(bundleLines, filteredBudleJson.lines())
-        val unifiedDiff = UnifiedDiffUtils.generateUnifiedDiff("FHIR.json", "FHIR.json", bundleLines, patch, 1000)
-        return objectMapper.writeValueAsString(unifiedDiff.joinToString("\n"))
+    private companion object {
+        const val WHOLE_FILE_CONTEXT = 1000
+        val objectMapper = ObjectMapper()
+
+        fun List<ValidationResult>.toMessages(): List<ValidationMessage> = flatMap { it.messages }.map {
+            ValidationMessage(
+                severity = it.severity.name,
+                location = it.locationString,
+                message = it.message,
+                messageId = it.messageId ?: "Generic",
+            )
+        }
     }
 }
 

@@ -82,42 +82,82 @@
                 
                     <tr>
                         <td><code>MedicationDispense.meta.source</code></td>
-                        <td class="INFO">Redact</td>
+                        <td class="INFO">Redact, 1 value(s)</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>MedicationDispense.text</code></td>
+                        <td class="INFO">Redact, 1 value(s)</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>MedicationDispense.contained</code></td>
+                        <td class="INFO">Redact, not present</td>
                     </tr>
                 
                     <tr>
                         <td><code>MedicationDispense.status</code></td>
-                        <td class="INFO">Anonymize</td>
+                        <td class="INFO">Anonymize, 1 value(s)</td>
                     </tr>
                 
                     <tr>
-                        <td><code>MedicationDispense.subject</code></td>
-                        <td class="INFO">Pseudonymize</td>
+                        <td><code>MedicationDispense.subject.display</code></td>
+                        <td class="INFO">Redact, 1 value(s)</td>
                     </tr>
                 
                     <tr>
                         <td><code>MedicationDispense.performer.actor.reference</code></td>
-                        <td class="INFO">Redact</td>
+                        <td class="INFO">Redact, 1 value(s)</td>
                     </tr>
                 
                     <tr>
                         <td><code>MedicationDispense.performer.actor.identifier</code></td>
-                        <td class="INFO">Redact</td>
+                        <td class="INFO">Redact, 1 value(s)</td>
                     </tr>
                 
                     <tr>
                         <td><code>MedicationDispense.performer.actor.display</code></td>
-                        <td class="INFO">Anonymize</td>
+                        <td class="INFO">Anonymize, 1 value(s)</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>MedicationDispense.location</code></td>
+                        <td class="INFO">Redact, 1 value(s)</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>MedicationDispense.destination</code></td>
+                        <td class="INFO">Redact, 1 value(s)</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>MedicationDispense.receiver</code></td>
+                        <td class="INFO">Redact, 1 value(s)</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>MedicationDispense.note</code></td>
+                        <td class="INFO">Redact, 1 value(s)</td>
                     </tr>
                 
                     <tr>
                         <td><code>MedicationDispense.dosageInstruction.text</code></td>
-                        <td class="INFO">Redact</td>
+                        <td class="INFO">Redact, 1 value(s)</td>
                     </tr>
                 
                     <tr>
                         <td><code>MedicationDispense.dosageInstruction.patientInstruction</code></td>
-                        <td class="INFO">Redact</td>
+                        <td class="INFO">Redact, not present</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>MedicationDispense.substitution.responsibleParty</code></td>
+                        <td class="INFO">Redact, 1 value(s)</td>
+                    </tr>
+                
+                    <tr>
+                        <td><code>MedicationDispense.subject</code></td>
+                        <td class="INFO">Pseudonymize, 1 value(s)</td>
                     </tr>
                 
                 </tbody>
@@ -237,6 +277,14 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedicationDispense für den eP
 * insert Meta
 * insert MetaSourceProfile
 
+// The narrative repeats the content of the resource in free text, including what is redacted below.
+* text 0..0
+  * insert PrivacyLabelRedact
+
+// No research profile describes resources contained here, so none may be passed on.
+* contained 0..0
+  * insert PrivacyLabelRedact
+
 // status ist 1..1 mit required binding — REDACT ist nicht möglich; der Platzhalter
 // muss ein gültiger Code aus medicationdispense-status sein.
 * status = #unknown
@@ -245,6 +293,8 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedicationDispense für den eP
 * subject
   * insert PrivacyLabelPseudonymize
 * subject.identifier only EPAResearchJobNumberIdentifier
+* subject.display 0..0
+  * insert PrivacyLabelRedact
 
 // performer is 1..1 in upstream EPAMedicationDispense — cannot be redacted to absence.
 // Approach 1 (leaf-level ANONY): keep the Reference structure, anonymize the
@@ -256,10 +306,25 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedicationDispense für den eP
 * performer.actor.identifier 0..0
   * insert PrivacyLabelRedact
 
+* location 0..0
+  * insert PrivacyLabelRedact
+
+* destination 0..0
+  * insert PrivacyLabelRedact
+
+* receiver 0..0
+  * insert PrivacyLabelRedact
+
+* note 0..0
+  * insert PrivacyLabelRedact
+
 * dosageInstruction.text 0..0
   * insert PrivacyLabelRedact
 
 * dosageInstruction.patientInstruction 0..0
+  * insert PrivacyLabelRedact
+
+* substitution.responsibleParty 0..0
   * insert PrivacyLabelRedact
 
 // Explicitly defined extension slices are copied; others are filtered out.
@@ -290,6 +355,13 @@ InstanceOf: EPAMedicationDispense
 Usage: #example
 Description: "Full Maaloxan MedicationDispense — pre-redaction reference."
 
+// meta.source names the originating system and is therefore redacted.
+* meta.source = "https://apotheke.example/fhir"
+
+// The narrative restates redacted content and is therefore redacted as a whole.
+* text.status = #generated
+* text.div = "&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;Abgabe Maaloxan an X110411319 durch gematik Apotheke: Morgens 1 Tablette einnehmen, mit etwas Wasser.&lt;/div&gt;"
+
 // Explicitly defined extension slices are copied; others are filtered out.
 * extension[rxPrescriptionProcessIdentifier].valueIdentifier.value = "160.100.000.000.010.12_20251027"
 * extension[renderedDosageInstruction].valueMarkdown = "Morgens 1 Tablette einnehmen, mit etwas Wasser."
@@ -306,6 +378,7 @@ Description: "Full Maaloxan MedicationDispense — pre-redaction reference."
 * subject.reference = "Patient/12c0c2a4-71a2-4d49-9e6f-9b7a3b4f0d11"
 * subject.identifier.system = "http://fhir.de/sid/gkv/kvid-10"
 * subject.identifier.value = "X110411319"
+* subject.display = "Erika Mustermann"
 
 * performer.actor.reference = "Organization/151f1697-7512-4e21-9466-1b75207475d8"
 * performer.actor.identifier
@@ -316,6 +389,8 @@ Description: "Full Maaloxan MedicationDispense — pre-redaction reference."
   * value = "9-2.58.00000023"
 * performer.actor.display = "gematik Apotheke"
 
+* location.display = "gematik Apotheke, Rosenthaler Straße 30, 10178 Berlin"
+
 * authorizingPrescription = Reference(ExampleEPAMedicationRequestMaaloxan)
 
 * quantity.value = 1
@@ -323,9 +398,15 @@ Description: "Full Maaloxan MedicationDispense — pre-redaction reference."
 
 * whenHandedOver = "2025-10-29"
 
+* destination.display = "Musterstraße 1, 10117 Berlin"
+* receiver.display = "Erika Mustermann (Angehörige)"
+
+* note.text = "Abholung durch Angehörige, Botendienst abgelehnt."
+
 * dosageInstruction.text = "Morgens 1 Tablette einnehmen, mit etwas Wasser."
 
 * substitution.wasSubstituted = false
+* substitution.responsibleParty.display = "Apothekerin Dr. Petra Beispiel"
 </code></pre>
                 </div>
             
@@ -376,7 +457,12 @@ Description: "Maaloxan MedicationDispense after EPAResearchMedicationDispense re
       "resourceType": "MedicationDispense",
       "id": "ExampleEPAMedicationDispenseMaaloxan",
       "meta": {
+        "source": "https://apotheke.example/fhir",
         "profile": [ "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense" ]
+      },
+      "text": {
+        "status": "generated",
+        "div": "&lt;div xmlns=\"http://www.w3.org/1999/xhtml\"&gt;Abgabe Maaloxan an X110411319 durch gematik Apotheke: Morgens 1 Tablette einnehmen, mit etwas Wasser.&lt;/div&gt;"
       },
       "extension": [ {
         "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension",
@@ -410,7 +496,8 @@ Description: "Maaloxan MedicationDispense after EPAResearchMedicationDispense re
         "identifier": {
           "system": "http://fhir.de/sid/gkv/kvid-10",
           "value": "X110411319"
-        }
+        },
+        "display": "Erika Mustermann"
       },
       "performer": [ {
         "actor": {
@@ -429,6 +516,9 @@ Description: "Maaloxan MedicationDispense after EPAResearchMedicationDispense re
           "display": "gematik Apotheke"
         }
       } ],
+      "location": {
+        "display": "gematik Apotheke, Rosenthaler Straße 30, 10178 Berlin"
+      },
       "authorizingPrescription": [ {
         "reference": "MedicationRequest/ExampleEPAMedicationRequestMaaloxan"
       } ],
@@ -437,11 +527,23 @@ Description: "Maaloxan MedicationDispense after EPAResearchMedicationDispense re
         "unit": "Packung"
       },
       "whenHandedOver": "2025-10-29",
+      "destination": {
+        "display": "Musterstraße 1, 10117 Berlin"
+      },
+      "receiver": [ {
+        "display": "Erika Mustermann (Angehörige)"
+      } ],
+      "note": [ {
+        "text": "Abholung durch Angehörige, Botendienst abgelehnt."
+      } ],
       "dosageInstruction": [ {
         "text": "Morgens 1 Tablette einnehmen, mit etwas Wasser."
       } ],
       "substitution": {
-        "wasSubstituted": false
+        "wasSubstituted": false,
+        "responsibleParty": [ {
+          "display": "Apothekerin Dr. Petra Beispiel"
+        } ]
       }
     }
   } ]
@@ -457,7 +559,7 @@ Description: "Maaloxan MedicationDispense after EPAResearchMedicationDispense re
             if (diffRendered) return;
             diffRendered = true;
             const targetElement = document.getElementById('bundleDiff');
-            const diffString = "--- FHIR.json\n+++ FHIR.json\n@@ -1,78 +1,52 @@\n {\n   \"resourceType\": \"Bundle\",\n   \"type\": \"collection\",\n   \"entry\": [ {\n     \"resource\": {\n       \"resourceType\": \"MedicationDispense\",\n       \"id\": \"ExampleEPAMedicationDispenseMaaloxan\",\n       \"meta\": {\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense\" ]\n-      },\n-      \"extension\": [ {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension\",\n-        \"valueIdentifier\": {\n-          \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier\",\n-          \"value\": \"160.100.000.000.010.12_20251027\"\n-        }\n-      }, {\n-        \"url\": \"http://hl7.org/fhir/5.0/StructureDefinition/extension-MedicationDispense.renderedDosageInstruction\",\n-        \"valueMarkdown\": \"Morgens 1 Tablette einnehmen, mit etwas Wasser.\"\n-      }, {\n-        \"url\": \"http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta\",\n-        \"extension\": [ {\n-          \"url\": \"language\",\n-          \"valueCode\": \"de-DE\"\n-        }, {\n-          \"url\": \"algorithmVersion\",\n-          \"valueString\": \"1.0.1\"\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-dispense\" ],\n+        \"security\": [ {\n+          \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ObservationValue\",\n+          \"code\": \"PSEUDED\",\n+          \"display\": \"pseudonymized\"\n+        } ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense\"\n         } ]\n-      } ],\n+      },\n       \"identifier\": [ {\n         \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier\",\n         \"value\": \"3a534e48-80e8-4bbb-a19e-43e83d6f3a3e_160.100.000.000.010.12\"\n       } ],\n-      \"status\": \"completed\",\n+      \"status\": \"unknown\",\n       \"medicationReference\": {\n         \"reference\": \"Medication/ExampleEPAMedicationMaaloxan\"\n       },\n       \"subject\": {\n-        \"reference\": \"Patient/12c0c2a4-71a2-4d49-9e6f-9b7a3b4f0d11\",\n         \"identifier\": {\n-          \"system\": \"http://fhir.de/sid/gkv/kvid-10\",\n-          \"value\": \"X110411319\"\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/job-number-identifier\",\n+          \"value\": \"PSEUDO-X110411319-9F2C\"\n         }\n       },\n       \"performer\": [ {\n         \"actor\": {\n-          \"reference\": \"Organization/151f1697-7512-4e21-9466-1b75207475d8\",\n-          \"identifier\": {\n-            \"type\": {\n-              \"coding\": [ {\n-                \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n-                \"code\": \"PRN\",\n-                \"display\": \"Provider number\"\n-              } ]\n-            },\n-            \"system\": \"https://gematik.de/fhir/sid/telematik-id\",\n-            \"value\": \"9-2.58.00000023\"\n-          },\n-          \"display\": \"gematik Apotheke\"\n+          \"display\": \"ANONYMIZED\"\n         }\n       } ],\n       \"authorizingPrescription\": [ {\n         \"reference\": \"MedicationRequest/ExampleEPAMedicationRequestMaaloxan\"\n       } ],\n       \"quantity\": {\n         \"value\": 1,\n         \"unit\": \"Packung\"\n       },\n       \"whenHandedOver\": \"2025-10-29\",\n-      \"dosageInstruction\": [ {\n-        \"text\": \"Morgens 1 Tablette einnehmen, mit etwas Wasser.\"\n-      } ],\n       \"substitution\": {\n         \"wasSubstituted\": false\n       }\n     }\n   } ]\n }";
+            const diffString = "--- FHIR.json\n+++ FHIR.json\n@@ -1,99 +1,52 @@\n {\n   \"resourceType\": \"Bundle\",\n   \"type\": \"collection\",\n   \"entry\": [ {\n     \"resource\": {\n       \"resourceType\": \"MedicationDispense\",\n       \"id\": \"ExampleEPAMedicationDispenseMaaloxan\",\n       \"meta\": {\n-        \"source\": \"https://apotheke.example/fhir\",\n-        \"profile\": [ \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense\" ]\n-      },\n-      \"text\": {\n-        \"status\": \"generated\",\n-        \"div\": \"<div xmlns=\\\"http://www.w3.org/1999/xhtml\\\">Abgabe Maaloxan an X110411319 durch gematik Apotheke: Morgens 1 Tablette einnehmen, mit etwas Wasser.</div>\"\n-      },\n-      \"extension\": [ {\n-        \"url\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension\",\n-        \"valueIdentifier\": {\n-          \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier\",\n-          \"value\": \"160.100.000.000.010.12_20251027\"\n-        }\n-      }, {\n-        \"url\": \"http://hl7.org/fhir/5.0/StructureDefinition/extension-MedicationDispense.renderedDosageInstruction\",\n-        \"valueMarkdown\": \"Morgens 1 Tablette einnehmen, mit etwas Wasser.\"\n-      }, {\n-        \"url\": \"http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta\",\n-        \"extension\": [ {\n-          \"url\": \"language\",\n-          \"valueCode\": \"de-DE\"\n-        }, {\n-          \"url\": \"algorithmVersion\",\n-          \"valueString\": \"1.0.1\"\n+        \"profile\": [ \"https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication-dispense\" ],\n+        \"security\": [ {\n+          \"system\": \"http://terminology.hl7.org/CodeSystem/v3-ObservationValue\",\n+          \"code\": \"PSEUDED\",\n+          \"display\": \"pseudonymized\"\n+        } ],\n+        \"tag\": [ {\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/source-profile\",\n+          \"code\": \"https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-dispense\"\n         } ]\n-      } ],\n+      },\n       \"identifier\": [ {\n         \"system\": \"https://gematik.de/fhir/epa-medication/sid/rx-originator-process-identifier\",\n         \"value\": \"3a534e48-80e8-4bbb-a19e-43e83d6f3a3e_160.100.000.000.010.12\"\n       } ],\n-      \"status\": \"completed\",\n+      \"status\": \"unknown\",\n       \"medicationReference\": {\n         \"reference\": \"Medication/ExampleEPAMedicationMaaloxan\"\n       },\n       \"subject\": {\n-        \"reference\": \"Patient/12c0c2a4-71a2-4d49-9e6f-9b7a3b4f0d11\",\n         \"identifier\": {\n-          \"system\": \"http://fhir.de/sid/gkv/kvid-10\",\n-          \"value\": \"X110411319\"\n-        },\n-        \"display\": \"Erika Mustermann\"\n+          \"system\": \"https://gematik.de/fhir/epa-research/sid/job-number-identifier\",\n+          \"value\": \"PSEUDO-X110411319-9F2C\"\n+        }\n       },\n       \"performer\": [ {\n         \"actor\": {\n-          \"reference\": \"Organization/151f1697-7512-4e21-9466-1b75207475d8\",\n-          \"identifier\": {\n-            \"type\": {\n-              \"coding\": [ {\n-                \"system\": \"http://terminology.hl7.org/CodeSystem/v2-0203\",\n-                \"code\": \"PRN\",\n-                \"display\": \"Provider number\"\n-              } ]\n-            },\n-            \"system\": \"https://gematik.de/fhir/sid/telematik-id\",\n-            \"value\": \"9-2.58.00000023\"\n-          },\n-          \"display\": \"gematik Apotheke\"\n+          \"display\": \"ANONYMIZED\"\n         }\n       } ],\n-      \"location\": {\n-        \"display\": \"gematik Apotheke, Rosenthaler Straße 30, 10178 Berlin\"\n-      },\n       \"authorizingPrescription\": [ {\n         \"reference\": \"MedicationRequest/ExampleEPAMedicationRequestMaaloxan\"\n       } ],\n       \"quantity\": {\n         \"value\": 1,\n         \"unit\": \"Packung\"\n       },\n       \"whenHandedOver\": \"2025-10-29\",\n-      \"destination\": {\n-        \"display\": \"Musterstraße 1, 10117 Berlin\"\n-      },\n-      \"receiver\": [ {\n-        \"display\": \"Erika Mustermann (Angehörige)\"\n-      } ],\n-      \"note\": [ {\n-        \"text\": \"Abholung durch Angehörige, Botendienst abgelehnt.\"\n-      } ],\n-      \"dosageInstruction\": [ {\n-        \"text\": \"Morgens 1 Tablette einnehmen, mit etwas Wasser.\"\n-      } ],\n       \"substitution\": {\n-        \"wasSubstituted\": false,\n-        \"responsibleParty\": [ {\n-          \"display\": \"Apothekerin Dr. Petra Beispiel\"\n-        } ]\n+        \"wasSubstituted\": false\n       }\n     }\n   } ]\n }";
             const diff2htmlUi = new Diff2HtmlUI(targetElement, diffString, {
                 drawFileList: false,
                 fileListToggle: false,
@@ -477,9 +579,6 @@ Description: "Maaloxan MedicationDispense after EPAResearchMedicationDispense re
         
         document.addEventListener('DOMContentLoaded', renderBundleDiff);
     </script>
-
-    
-
 
 </div>
 

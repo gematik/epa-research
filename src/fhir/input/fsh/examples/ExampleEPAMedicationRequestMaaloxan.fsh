@@ -7,6 +7,10 @@ Description: "Full Maaloxan MedicationRequest — pre-redaction reference."
 // meta.source names the originating system and is therefore redacted.
 * meta.source = "https://praxis-mustermann.example/fhir"
 
+// The narrative restates redacted content and is therefore redacted as a whole.
+* text.status = #generated
+* text.div = "<div xmlns=\"http://www.w3.org/1999/xhtml\">Verordnung Maaloxan für X110411319 durch Dr. Max Manfred Mustermann: Morgens 1 Tablette einnehmen</div>"
+
 // Explicitly defined extension slices are copied; others are filtered out.
 * extension[multiplePrescription].extension[indicator].valueBoolean = false
 * extension[isBvg].valueBoolean = false
@@ -26,11 +30,14 @@ Description: "Full Maaloxan MedicationRequest — pre-redaction reference."
 * subject.reference = "Patient/12c0c2a4-71a2-4d49-9e6f-9b7a3b4f0d11"
 * subject.identifier.system = "http://fhir.de/sid/gkv/kvid-10"
 * subject.identifier.value = "X110411319"
+* subject.display = "Erika Mustermann"
 
 * authoredOn = "2025-09-06"
 
 * requester.reference = "PractitionerRole/73a551f8-d8cd-4b44-823d-ab5f8aeab1aa"
 * requester.display = "Dr. Max Manfred Mustermann / Praxis Dr. med. Max Mustermann"
+
+* recorder.display = "Dr. Max Manfred Mustermann"
 
 * dosageInstruction.text = "Morgens 1 Tablette einnehmen"
 * dosageInstruction.timing.repeat
@@ -45,6 +52,7 @@ Description: "Full Maaloxan MedicationRequest — pre-redaction reference."
 
 * dispenseRequest.quantity.value = 1
 * dispenseRequest.quantity.unit = "Packung"
+* dispenseRequest.performer.display = "gematik Apotheke"
 
 * substitution.allowedBoolean = true
 

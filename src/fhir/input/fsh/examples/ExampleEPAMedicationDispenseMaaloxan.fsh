@@ -4,6 +4,13 @@ InstanceOf: EPAMedicationDispense
 Usage: #example
 Description: "Full Maaloxan MedicationDispense — pre-redaction reference."
 
+// meta.source names the originating system and is therefore redacted.
+* meta.source = "https://apotheke.example/fhir"
+
+// The narrative restates redacted content and is therefore redacted as a whole.
+* text.status = #generated
+* text.div = "<div xmlns=\"http://www.w3.org/1999/xhtml\">Abgabe Maaloxan an X110411319 durch gematik Apotheke: Morgens 1 Tablette einnehmen, mit etwas Wasser.</div>"
+
 // Explicitly defined extension slices are copied; others are filtered out.
 * extension[rxPrescriptionProcessIdentifier].valueIdentifier.value = "160.100.000.000.010.12_20251027"
 * extension[renderedDosageInstruction].valueMarkdown = "Morgens 1 Tablette einnehmen, mit etwas Wasser."
@@ -20,6 +27,7 @@ Description: "Full Maaloxan MedicationDispense — pre-redaction reference."
 * subject.reference = "Patient/12c0c2a4-71a2-4d49-9e6f-9b7a3b4f0d11"
 * subject.identifier.system = "http://fhir.de/sid/gkv/kvid-10"
 * subject.identifier.value = "X110411319"
+* subject.display = "Erika Mustermann"
 
 * performer.actor.reference = "Organization/151f1697-7512-4e21-9466-1b75207475d8"
 * performer.actor.identifier
@@ -30,6 +38,8 @@ Description: "Full Maaloxan MedicationDispense — pre-redaction reference."
   * value = "9-2.58.00000023"
 * performer.actor.display = "gematik Apotheke"
 
+* location.display = "gematik Apotheke, Rosenthaler Straße 30, 10178 Berlin"
+
 * authorizingPrescription = Reference(ExampleEPAMedicationRequestMaaloxan)
 
 * quantity.value = 1
@@ -37,6 +47,12 @@ Description: "Full Maaloxan MedicationDispense — pre-redaction reference."
 
 * whenHandedOver = "2025-10-29"
 
+* destination.display = "Musterstraße 1, 10117 Berlin"
+* receiver.display = "Erika Mustermann (Angehörige)"
+
+* note.text = "Abholung durch Angehörige, Botendienst abgelehnt."
+
 * dosageInstruction.text = "Morgens 1 Tablette einnehmen, mit etwas Wasser."
 
 * substitution.wasSubstituted = false
+* substitution.responsibleParty.display = "Apothekerin Dr. Petra Beispiel"

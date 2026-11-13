@@ -9,7 +9,6 @@ Description: "Maaloxan MedicationRequest after EPAResearchMedicationRequest reda
 
 // Explicitly defined extension slices are copied; others are filtered out.
 * extension[multiplePrescription].extension[indicator].valueBoolean = false
-* extension[isBvg].valueBoolean = false
 
 // identifier carries no privacy label and is therefore preserved unchanged.
 * identifier[0].system = "https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier"

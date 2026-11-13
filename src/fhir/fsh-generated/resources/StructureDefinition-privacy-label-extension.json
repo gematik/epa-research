@@ -2,12 +2,12 @@
   "resourceType": "StructureDefinition",
   "id": "privacy-label-extension",
   "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension",
-  "version": "1.2.0",
+  "version": "1.3.1",
   "name": "PrivacyLabelExtension",
   "title": "Privacy Label Extension",
   "status": "active",
   "experimental": false,
-  "date": "2026-09-01",
+  "date": "2026-11-13",
   "publisher": "gematik GmbH",
   "description": "Element-Ebene-Annotation zur Deklaration der Pseudonymisierungs-Behandlung eines FHIR-Elements innerhalb eines P-Profils. Trägt einen obligationPolicy-Code (PSEUD / REDACT / ANONY aus HL7 v3) und einen optionalen dummyValue für die Anonymisierung primitiver Elemente. Erscheint ausschließlich in StructureDefinitions, niemals in Instanzdaten.",
   "fhirVersion": "4.0.1",
@@ -60,8 +60,7 @@
             "severity": "error",
             "human": "Must have either extensions or value[x], not both",
             "expression": "extension.exists() != value.exists()",
-            "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])",
-            "source": "http://hl7.org/fhir/StructureDefinition/Extension"
+            "xpath": "exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])"
           }
         ],
         "isModifier": false,
@@ -343,6 +342,8 @@
           }
         ],
         "fixedUri": "obligationPolicy",
+        "isModifier": false,
+        "isSummary": false,
         "mapping": [
           {
             "identity": "rim",
@@ -367,9 +368,6 @@
             "code": "Coding"
           }
         ],
-        "condition": [
-          "ele-1"
-        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -381,15 +379,12 @@
           }
         ],
         "isModifier": false,
+        "isSummary": false,
         "binding": {
           "strength": "required",
           "valueSet": "http://terminology.hl7.org/ValueSet/v3-ObligationPolicy"
         },
         "mapping": [
-          {
-            "identity": "rim",
-            "map": "n/a"
-          },
           {
             "identity": "rim",
             "map": "N/A"
@@ -569,6 +564,8 @@
           }
         ],
         "fixedUri": "dummyValue",
+        "isModifier": false,
+        "isSummary": false,
         "mapping": [
           {
             "identity": "rim",
@@ -740,9 +737,6 @@
             "code": "Meta"
           }
         ],
-        "condition": [
-          "ele-1"
-        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -754,11 +748,8 @@
           }
         ],
         "isModifier": false,
+        "isSummary": false,
         "mapping": [
-          {
-            "identity": "rim",
-            "map": "n/a"
-          },
           {
             "identity": "rim",
             "map": "N/A"
@@ -793,6 +784,8 @@
           }
         ],
         "fixedUri": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension",
+        "isModifier": false,
+        "isSummary": false,
         "mapping": [
           {
             "identity": "rim",
@@ -964,9 +957,6 @@
             "code": "Meta"
           }
         ],
-        "condition": [
-          "ele-1"
-        ],
         "constraint": [
           {
             "key": "ele-1",
@@ -978,11 +968,8 @@
           }
         ],
         "isModifier": false,
+        "isSummary": false,
         "mapping": [
-          {
-            "identity": "rim",
-            "map": "n/a"
-          },
           {
             "identity": "rim",
             "map": "N/A"

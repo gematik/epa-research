@@ -21,25 +21,15 @@
 
 package de.gematik.epa.poc.privacy
 
-import org.junit.jupiter.api.Test
-import java.security.SecureRandom
-import java.security.spec.KeySpec
-import java.util.*
-import javax.crypto.*
-import javax.crypto.spec.GCMParameterSpec
-import javax.crypto.spec.IvParameterSpec
-import javax.crypto.spec.PBEKeySpec
-import javax.crypto.spec.SecretKeySpec
+import org.hl7.fhir.r4.model.Resource
 
+private const val RESEARCH_PROFILE_BASE = "https://gematik.de/fhir/epa-research/StructureDefinition"
 
-class CryptoTest {
-    @Test fun testEncryption() {
-        val encKey = Crypto.deriveKey("always use secret passwords in production", "and take cale of salt")
-        val encrypted = Crypto.encryptString("Hello, World!", encKey)
-        println(encrypted)
-        val decrypted = Crypto.decryptString(encrypted, encKey)
-        println(decrypted)
-        assert(decrypted == "Hello, World!")
-    }
+private val RESEARCH_PROFILE_URLS = mapOf(
+    "Medication" to "$RESEARCH_PROFILE_BASE/epa-research-medication",
+    "MedicationRequest" to "$RESEARCH_PROFILE_BASE/epa-research-medication-request",
+    "MedicationDispense" to "$RESEARCH_PROFILE_BASE/epa-research-medication-dispense",
+)
 
-}
+/** Canonical URL of the research profile for a resource, or null when its type must not be exported. */
+fun researchProfileUrlFor(resource: Resource): String? = RESEARCH_PROFILE_URLS[resource.fhirType()]

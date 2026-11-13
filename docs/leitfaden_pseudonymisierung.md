@@ -1,8 +1,8 @@
 
 
-Version: 1.1 (ePA Pre-Release 3.1.0)
+Version: 1.1.2 (ePA Pre-Release 3.1.0)
 
-Veröffentlichung vom 24.06.2026
+Veröffentlichung vom 13.11.2026
 
 Herausgeber: [gematik GmbH](https://www.gematik.de/)
 
@@ -101,7 +101,7 @@ Wenn `PSEUD` an einer `Reference(Patient)` angegeben ist (z. B. `MedicationReque
    - `system` = `https://gematik.de/fhir/epa-research/sid/job-number-identifier`
    - `value` = die generierte Arbeitsnummer (gemäß RKI-Pseudonymisierungskonzept).
 3. Vorhandene `Reference.identifier` mit System `http://fhir.de/sid/gkv/kvid-10` werden dadurch ersetzt; jeglicher KVNR-Wert wird durch die zugehörige Arbeitsnummer ausgetauscht.
-4. `Reference.display` bleibt erhalten, sofern es keine personenbezogenen Inhalte enthält — andernfalls ist es separat mit `REDACT` oder `ANONY` zu markieren.
+4. `Reference.display` wird immer entfernt — der Anzeigetext einer Patienten-Referenz kann den Namen der versicherten Person enthalten. Die P-Profile markieren `display` an der pseudonymisierten `Reference` dazu zusätzlich mit `REDACT`.
 
 
 Beispiel
@@ -164,7 +164,9 @@ Meta-Header der pseudonymisierten FHIR-Ressource-Instanz
 }
 ```
 
-Extensions, die nicht als Teil des P-Profils spezifiziert sind, müssen aus der Instanz entfernt werden.
+Extensions, die nicht als Teil des P-Profils spezifiziert sind, müssen aus der Instanz entfernt werden. Das gilt für Extensions an allen Elementen der Instanz, nicht nur auf Ebene der Ressource.
+
+Enthaltene Ressourcen (`contained`) werden wie eigenständige Instanzen behandelt: Das P-Profil einer enthaltenen Ressource wird wie oben beschrieben anhand ihres Quell-Profils bzw. ihres Ressourcen-Typs ermittelt; das P-Profil der umgebenden Ressource gibt es nicht vor. Sie erhält ebenfalls `meta.profile` und den Meta-Tag mit dem ursprünglichen Profil, jedoch kein Security Label, da FHIR Security Labels an enthaltenen Ressourcen nicht zulässt. Enthaltene Ressourcen, für deren Ressourcen-Typ kein P-Profil existiert oder die das P-Profil der umgebenden Ressource ausschließt (`contained` mit `max = 0`), dürfen nicht ausgeleitet werden.
 
 Nach erfolgreicher Pseudonymisierung wird in der Ressourcen-Instanz das Security Label `PSEUDED` aus dem CodeSystem `http://terminology.hl7.org/CodeSystem/v3-ObservationValue` auf `meta.security` gesetzt (siehe [Security Label](#security-label) für Bedeutung).
 

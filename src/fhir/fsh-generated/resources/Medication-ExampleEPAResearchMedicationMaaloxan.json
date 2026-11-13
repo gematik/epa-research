@@ -19,6 +19,31 @@
       "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication"
     ]
   },
+  "extension": [
+    {
+      "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/medication-id-vaccine-extension",
+      "valueBoolean": false
+    },
+    {
+      "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/drug-category-extension",
+      "valueCoding": {
+        "system": "https://gematik.de/fhir/epa-medication/CodeSystem/epa-drug-category-cs",
+        "code": "00"
+      }
+    },
+    {
+      "url": "http://fhir.de/StructureDefinition/normgroesse",
+      "valueCode": "N1"
+    },
+    {
+      "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-type-extension",
+      "valueCoding": {
+        "system": "http://snomed.info/sct",
+        "code": "781405001",
+        "display": "Medicinal product package"
+      }
+    }
+  ],
   "code": {
     "coding": [
       {
@@ -27,17 +52,14 @@
         "display": "Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon"
       },
       {
-        "system": "http://fhir.de/CodeSystem/bfarm/atc",
-        "version": "2024",
-        "code": "A02AD10",
-        "display": "Aluminiumoxid in Kombination mit Magnesiumhydroxid"
-      },
-      {
         "system": "http://fhir.de/CodeSystem/ask",
         "code": "02250",
         "display": "Magnesiumhydroxid"
       }
     ]
+  },
+  "manufacturer": {
+    "display": "Sanofi-Aventis Deutschland GmbH"
   },
   "form": {
     "coding": [
@@ -75,12 +97,6 @@
             "system": "http://fhir.de/CodeSystem/ask",
             "code": "2250",
             "display": "Magnesiumhydroxid"
-          },
-          {
-            "system": "http://fhir.de/CodeSystem/bfarm/atc",
-            "version": "2024",
-            "code": "A02AA04",
-            "display": "Magnesiumhydroxid"
           }
         ]
       },
@@ -106,12 +122,6 @@
             "system": "http://fhir.de/CodeSystem/ask",
             "code": "01253",
             "display": "Algeldrat"
-          },
-          {
-            "system": "http://fhir.de/CodeSystem/bfarm/atc",
-            "version": "2024",
-            "code": "A02AB01",
-            "display": "Aluminiumhydroxid"
           }
         ]
       },
@@ -132,6 +142,7 @@
     }
   ],
   "batch": {
+    "lotNumber": "LOT-2024-A0042",
     "expirationDate": "2026-12-31"
   }
 }

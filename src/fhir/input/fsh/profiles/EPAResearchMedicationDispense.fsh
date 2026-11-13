@@ -7,6 +7,14 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedicationDispense für den eP
 * insert Meta
 * insert MetaSourceProfile
 
+// The narrative repeats the content of the resource in free text, including what is redacted below.
+* text 0..0
+  * insert PrivacyLabelRedact
+
+// No research profile describes resources contained here, so none may be passed on.
+* contained 0..0
+  * insert PrivacyLabelRedact
+
 // status ist 1..1 mit required binding — REDACT ist nicht möglich; der Platzhalter
 // muss ein gültiger Code aus medicationdispense-status sein.
 * status = #unknown
@@ -15,6 +23,8 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedicationDispense für den eP
 * subject
   * insert PrivacyLabelPseudonymize
 * subject.identifier only EPAResearchJobNumberIdentifier
+* subject.display 0..0
+  * insert PrivacyLabelRedact
 
 // performer is 1..1 in upstream EPAMedicationDispense — cannot be redacted to absence.
 // Approach 1 (leaf-level ANONY): keep the Reference structure, anonymize the
@@ -26,10 +36,25 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedicationDispense für den eP
 * performer.actor.identifier 0..0
   * insert PrivacyLabelRedact
 
+* location 0..0
+  * insert PrivacyLabelRedact
+
+* destination 0..0
+  * insert PrivacyLabelRedact
+
+* receiver 0..0
+  * insert PrivacyLabelRedact
+
+* note 0..0
+  * insert PrivacyLabelRedact
+
 * dosageInstruction.text 0..0
   * insert PrivacyLabelRedact
 
 * dosageInstruction.patientInstruction 0..0
+  * insert PrivacyLabelRedact
+
+* substitution.responsibleParty 0..0
   * insert PrivacyLabelRedact
 
 // Explicitly defined extension slices are copied; others are filtered out.

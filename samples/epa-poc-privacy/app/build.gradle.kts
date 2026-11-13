@@ -9,8 +9,6 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("reflect"))
-
     implementation(libs.hapi.base)
     implementation(libs.hapi.structures.r4)
     implementation(libs.hapi.validation)
