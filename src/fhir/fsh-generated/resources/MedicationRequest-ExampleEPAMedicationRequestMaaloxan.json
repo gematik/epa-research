@@ -56,6 +56,10 @@
       "value": "59b9fa64-4ca1-4bd2-8388-652d0fec32b2_160.100.000.000.011.09"
     }
   ],
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Verordnung Maaloxan für X110411319 durch Dr. Max Manfred Mustermann: Morgens 1 Tablette einnehmen</div>"
+  },
   "status": "completed",
   "intent": "filler-order",
   "medicationReference": {

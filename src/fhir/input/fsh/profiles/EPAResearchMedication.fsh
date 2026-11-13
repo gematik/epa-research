@@ -7,6 +7,13 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedication für den ePA-Forsch
 * insert Meta
 * insert MetaSourceProfile
 
+// The narrative repeats the content of the resource in free text, including what is redacted below.
+* text 0..0
+  * insert PrivacyLabelRedact
+
+// Contained medications (PZN ingredients, pharmaceutical products) are pseudonymised by the same rules.
+* contained only EPAResearchMedication
+
 // only Medication's status is 0..1 and can be redacted to absence
 * status 0..0
   * insert PrivacyLabelRedact

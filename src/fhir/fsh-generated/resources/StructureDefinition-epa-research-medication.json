@@ -968,6 +968,20 @@
       },
       {
         "id": "Medication.text",
+        "extension": [
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "REDACT",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
+          }
+        ],
         "path": "Medication.text",
         "short": "Text summary of the resource, for human interpretation",
         "definition": "A human-readable narrative that contains a summary of the resource and can be used to represent the content of the resource to a human. The narrative need not encode all the structured data, but is required to contain sufficient detail to make it \"clinically safe\" for a human to just read the narrative. Resource definitions may define what content should be represented in the narrative to ensure clinical safety.",
@@ -979,7 +993,7 @@
           "display"
         ],
         "min": 0,
-        "max": "1",
+        "max": "0",
         "base": {
           "path": "DomainResource.text",
           "min": 0,
@@ -1029,7 +1043,10 @@
         },
         "type": [
           {
-            "code": "Resource"
+            "code": "Medication",
+            "profile": [
+              "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication"
+            ]
           }
         ],
         "isModifier": false,
@@ -3561,6 +3578,37 @@
         "path": "Medication.meta.tag.code",
         "min": 1,
         "mustSupport": true
+      },
+      {
+        "id": "Medication.text",
+        "extension": [
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "REDACT",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
+          }
+        ],
+        "path": "Medication.text",
+        "max": "0"
+      },
+      {
+        "id": "Medication.contained",
+        "path": "Medication.contained",
+        "type": [
+          {
+            "code": "Medication",
+            "profile": [
+              "https://gematik.de/fhir/epa-research/StructureDefinition/epa-research-medication"
+            ]
+          }
+        ]
       },
       {
         "id": "Medication.extension",

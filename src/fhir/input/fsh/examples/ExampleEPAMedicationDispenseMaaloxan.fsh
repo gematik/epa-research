@@ -4,6 +4,13 @@ InstanceOf: EPAMedicationDispense
 Usage: #example
 Description: "Full Maaloxan MedicationDispense — pre-redaction reference."
 
+// meta.source names the originating system and is therefore redacted.
+* meta.source = "https://apotheke.example/fhir"
+
+// The narrative restates redacted content and is therefore redacted as a whole.
+* text.status = #generated
+* text.div = "<div xmlns=\"http://www.w3.org/1999/xhtml\">Abgabe Maaloxan an X110411319 durch gematik Apotheke: Morgens 1 Tablette einnehmen, mit etwas Wasser.</div>"
+
 // Explicitly defined extension slices are copied; others are filtered out.
 * extension[rxPrescriptionProcessIdentifier].valueIdentifier.value = "160.100.000.000.010.12_20251027"
 * extension[renderedDosageInstruction].valueMarkdown = "Morgens 1 Tablette einnehmen, mit etwas Wasser."

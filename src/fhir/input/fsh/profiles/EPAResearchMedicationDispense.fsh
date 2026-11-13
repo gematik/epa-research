@@ -7,6 +7,14 @@ Description: "Pseudonymisiertes Gegenstück zu EPAMedicationDispense für den eP
 * insert Meta
 * insert MetaSourceProfile
 
+// The narrative repeats the content of the resource in free text, including what is redacted below.
+* text 0..0
+  * insert PrivacyLabelRedact
+
+// No research profile describes resources contained here, so none may be passed on.
+* contained 0..0
+  * insert PrivacyLabelRedact
+
 // status ist 1..1 mit required binding — REDACT ist nicht möglich; der Platzhalter
 // muss ein gültiger Code aus medicationdispense-status sein.
 * status = #unknown

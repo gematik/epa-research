@@ -2,6 +2,7 @@
   "resourceType": "Medication",
   "id": "ExampleEPAMedicationMaaloxan",
   "meta": {
+    "source": "https://apotheke.example/fhir",
     "profile": [
       "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication"
     ]
@@ -66,6 +67,10 @@
       }
     ],
     "text": "Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon"
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon, Sanofi-Aventis Deutschland GmbH, Charge LOT-2024-A0042</div>"
   },
   "status": "active",
   "manufacturer": {

@@ -981,6 +981,20 @@
       },
       {
         "id": "MedicationRequest.text",
+        "extension": [
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "REDACT",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
+          }
+        ],
         "path": "MedicationRequest.text",
         "short": "Text summary of the resource, for human interpretation",
         "definition": "A human-readable narrative that contains a summary of the resource and can be used to represent the content of the resource to a human. The narrative need not encode all the structured data, but is required to contain sufficient detail to make it \"clinically safe\" for a human to just read the narrative. Resource definitions may define what content should be represented in the narrative to ensure clinical safety.",
@@ -992,7 +1006,7 @@
           "display"
         ],
         "min": 0,
-        "max": "1",
+        "max": "0",
         "base": {
           "path": "DomainResource.text",
           "min": 0,
@@ -1024,6 +1038,20 @@
       },
       {
         "id": "MedicationRequest.contained",
+        "extension": [
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "REDACT",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
+          }
+        ],
         "path": "MedicationRequest.contained",
         "short": "Contained, inline Resources",
         "definition": "These resources do not have an independent existence apart from the resource that contains them - they cannot be identified independently, and nor can they have their own independent transaction scope.",
@@ -1034,7 +1062,7 @@
           "contained resources"
         ],
         "min": 0,
-        "max": "*",
+        "max": "0",
         "base": {
           "path": "DomainResource.contained",
           "min": 0,
@@ -5095,6 +5123,44 @@
         "path": "MedicationRequest.meta.tag.code",
         "min": 1,
         "mustSupport": true
+      },
+      {
+        "id": "MedicationRequest.text",
+        "extension": [
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "REDACT",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
+          }
+        ],
+        "path": "MedicationRequest.text",
+        "max": "0"
+      },
+      {
+        "id": "MedicationRequest.contained",
+        "extension": [
+          {
+            "extension": [
+              {
+                "url": "obligationPolicy",
+                "valueCoding": {
+                  "code": "REDACT",
+                  "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                }
+              }
+            ],
+            "url": "https://gematik.de/fhir/epa-research/StructureDefinition/privacy-label-extension"
+          }
+        ],
+        "path": "MedicationRequest.contained",
+        "max": "0"
       },
       {
         "id": "MedicationRequest.extension",

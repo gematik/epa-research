@@ -4,6 +4,13 @@ InstanceOf: EPAMedication
 Usage: #example
 Description: "Full Maaloxan EPAMedication — pre-redaction reference."
 
+// meta.source names the originating system and is therefore redacted.
+* meta.source = "https://apotheke.example/fhir"
+
+// The narrative restates redacted content and is therefore redacted as a whole.
+* text.status = #generated
+* text.div = "<div xmlns=\"http://www.w3.org/1999/xhtml\">Maaloxan® 25 mVal Sodbrennen Kautabletten Lemon, Sanofi-Aventis Deutschland GmbH, Charge LOT-2024-A0042</div>"
+
 // Explicitly defined extension slices are copied; others are filtered out.
 * extension[rxPrescriptionProcessIdentifier].valueIdentifier.system = "https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier"
 * extension[rxPrescriptionProcessIdentifier].valueIdentifier.value = "160.100.000.000.011.09_20250906"

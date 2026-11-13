@@ -4,15 +4,17 @@
 ## Release 1.3.0
 - package de.gematik.epa.research 1.3.0
 ### changes
+- all research profiles: the narrative (`text`) is redacted
 - EPAResearchMedication
+  - contained medications must conform to EPAResearchMedication and are pseudonymised by the same rules
   - `code.coding[atc-de]` and `ingredient.itemCodeableConcept.coding[atc-de]` are redacted again
   - `manufacturer` and `batch.lotNumber` are no longer redacted
   - extensions `isVaccine`, `drugCategory`, `normSizeCode` and `type` are retained
 - EPAResearchMedicationRequest
-  - `recorder` and `dispenseRequest.performer` are redacted
+  - `recorder`, `dispenseRequest.performer` and `contained` are redacted
   - extension `isBvg` is no longer retained
 - EPAResearchMedicationDispense
-  - `location`, `destination`, `receiver`, `note` and `substitution.responsibleParty` are redacted
+  - `location`, `destination`, `receiver`, `note`, `substitution.responsibleParty` and `contained` are redacted
 ## Release 3.1.0
 - release ePA-3.1.0
 ## Release 3.1.0-rc

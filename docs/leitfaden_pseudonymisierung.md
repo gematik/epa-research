@@ -1,8 +1,8 @@
 
 
-Version: 1.1 (ePA Pre-Release 3.1.0)
+Version: 1.1.1 (ePA Pre-Release 3.1.0)
 
-Veröffentlichung vom 24.06.2026
+Veröffentlichung vom 13.11.2026
 
 Herausgeber: [gematik GmbH](https://www.gematik.de/)
 
@@ -164,7 +164,9 @@ Meta-Header der pseudonymisierten FHIR-Ressource-Instanz
 }
 ```
 
-Extensions, die nicht als Teil des P-Profils spezifiziert sind, müssen aus der Instanz entfernt werden.
+Extensions, die nicht als Teil des P-Profils spezifiziert sind, müssen aus der Instanz entfernt werden. Das gilt für Extensions an allen Elementen der Instanz, nicht nur auf Ebene der Ressource.
+
+Enthaltene Ressourcen (`contained`) werden wie eigenständige Instanzen behandelt: Gibt das P-Profil für `contained` ein P-Profil vor, ist die enthaltene Ressource nach diesem P-Profil zu pseudonymisieren. Sie erhält ebenfalls `meta.profile` und den Meta-Tag mit dem ursprünglichen Profil, jedoch kein Security Label, da FHIR Security Labels an enthaltenen Ressourcen nicht zulässt. Enthaltene Ressourcen, für die das P-Profil kein P-Profil vorgibt, dürfen nicht ausgeleitet werden.
 
 Nach erfolgreicher Pseudonymisierung wird in der Ressourcen-Instanz das Security Label `PSEUDED` aus dem CodeSystem `http://terminology.hl7.org/CodeSystem/v3-ObservationValue` auf `meta.security` gesetzt (siehe [Security Label](#security-label) für Bedeutung).
 

@@ -7,6 +7,10 @@ Description: "Full Maaloxan MedicationRequest — pre-redaction reference."
 // meta.source names the originating system and is therefore redacted.
 * meta.source = "https://praxis-mustermann.example/fhir"
 
+// The narrative restates redacted content and is therefore redacted as a whole.
+* text.status = #generated
+* text.div = "<div xmlns=\"http://www.w3.org/1999/xhtml\">Verordnung Maaloxan für X110411319 durch Dr. Max Manfred Mustermann: Morgens 1 Tablette einnehmen</div>"
+
 // Explicitly defined extension slices are copied; others are filtered out.
 * extension[multiplePrescription].extension[indicator].valueBoolean = false
 * extension[isBvg].valueBoolean = false
